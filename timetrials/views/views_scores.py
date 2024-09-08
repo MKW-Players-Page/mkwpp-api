@@ -24,7 +24,10 @@ class PostFilterBackend(filters.DjangoFilterBackend):
 
 class CategoryFilter(django_filters.FilterSet):
     """Filter by category by properly following fallthrough rules as well as by course or lap."""
-    category = django_filters.CharFilter(method=category_filter)
+    category = django_filters.ChoiceFilter(
+        choices=models.CategoryChoices.choices,
+        method=category_filter,
+    )
 
     class Meta:
         model = models.Score
