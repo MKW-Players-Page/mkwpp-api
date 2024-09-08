@@ -1,0 +1,308 @@
+[
+{
+    "model": "timetrials.standardlevel",
+    "pk": 1,
+    "fields": {
+        "name": "God",
+        "value": 0,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 2,
+    "fields": {
+        "name": "Myth A",
+        "value": 1,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 3,
+    "fields": {
+        "name": "Myth B",
+        "value": 2,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 4,
+    "fields": {
+        "name": "Myth C",
+        "value": 3,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 5,
+    "fields": {
+        "name": "Myth D",
+        "value": 4,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 6,
+    "fields": {
+        "name": "Legend A",
+        "value": 5,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 7,
+    "fields": {
+        "name": "Legend B",
+        "value": 6,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 8,
+    "fields": {
+        "name": "Legend C",
+        "value": 7,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 9,
+    "fields": {
+        "name": "Legend D",
+        "value": 8,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 10,
+    "fields": {
+        "name": "King A",
+        "value": 9,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 11,
+    "fields": {
+        "name": "King B",
+        "value": 10,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 12,
+    "fields": {
+        "name": "King C",
+        "value": 11,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 13,
+    "fields": {
+        "name": "King D",
+        "value": 12,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 14,
+    "fields": {
+        "name": "Hero A",
+        "value": 13,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 15,
+    "fields": {
+        "name": "Hero B",
+        "value": 14,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 16,
+    "fields": {
+        "name": "Hero C",
+        "value": 15,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 17,
+    "fields": {
+        "name": "Hero D",
+        "value": 16,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 18,
+    "fields": {
+        "name": "Expert A",
+        "value": 17,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 19,
+    "fields": {
+        "name": "Expert B",
+        "value": 18,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 20,
+    "fields": {
+        "name": "Expert C",
+        "value": 19,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 21,
+    "fields": {
+        "name": "Expert D",
+        "value": 20,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 22,
+    "fields": {
+        "name": "Intermediate A",
+        "value": 21,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 23,
+    "fields": {
+        "name": "Intermediate B",
+        "value": 22,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 24,
+    "fields": {
+        "name": "Intermediate C",
+        "value": 23,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 25,
+    "fields": {
+        "name": "Intermediate D",
+        "value": 24,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 26,
+    "fields": {
+        "name": "Apprentice A",
+        "value": 25,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 27,
+    "fields": {
+        "name": "Apprentice B",
+        "value": 26,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 28,
+    "fields": {
+        "name": "Apprentice C",
+        "value": 27,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 29,
+    "fields": {
+        "name": "Apprentice D",
+        "value": 28,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 30,
+    "fields": {
+        "name": "Beginner A",
+        "value": 29,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 31,
+    "fields": {
+        "name": "Beginner B",
+        "value": 30,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 32,
+    "fields": {
+        "name": "Beginner C",
+        "value": 31,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 33,
+    "fields": {
+        "name": "Beginner D",
+        "value": 32,
+        "is_legacy": true
+    }
+},
+{
+    "model": "timetrials.standardlevel",
+    "pk": 34,
+    "fields": {
+        "name": "Newbie",
+        "value": 33,
+        "is_legacy": true
+    }
+}
+]

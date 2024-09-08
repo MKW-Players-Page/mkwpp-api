@@ -1,0 +1,15 @@
+[flake8]
+
+exclude =
+    # Skip files that aren't part of the project
+    .git,
+    .venv,
+    __pycache__,
+    # Migration files are auto-generated and shouldn't be checked
+    migrations
+
+per-file-ignores =
+    # Ignore unused imports in __init__.py files
+    __init__.py:F401
+
+max-line-length = 100
