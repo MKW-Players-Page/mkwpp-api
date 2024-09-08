@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from timetrials.models.categories import CategoryChoices
+from timetrials.models.categories import CategoryChoices, eligible_categories
 from timetrials.models.players import Player
 from timetrials.models.tracks import Track
 
@@ -25,15 +25,19 @@ class Score(models.Model):
 
     comment = models.CharField(max_length=128, null=True, blank=True)
 
-    @property
-    def related_by_track(self):
-        """Return a queryset of scores sharing the same track, category and is_lap values."""
-        return Score.objects.filter(track=self.track, category=self.category, is_lap=self.is_lap)
+    def rank_for_category(self, category: CategoryChoices):
+        """Compute the rank of this score by counting scores with value lower than self."""
+        return Score.objects.filter(
+            track=self.track,
+            category__in=eligible_categories(category),
+            is_lap=self.is_lap,
+            value__lt=self.value,
+        ).order_by('player').distinct('player').count() + 1
 
     @property
     def rank(self) -> int:
         """Compute the rank of this score by counting scores with value lower than self."""
-        return self.related_by_track.filter(value__lt=self.value).count() + 1
+        return self.rank_for_category(self.category)
 
     def __str__(self):
         return str(self.value)

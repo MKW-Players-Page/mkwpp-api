@@ -44,6 +44,31 @@ class PlayerSerializer(serializers.ModelSerializer):
 # Scores
 
 class ScoreSerializer(serializers.ModelSerializer):
+    rank = serializers.SerializerMethodField()
+
+    def _request_category(self):
+        """Get category from query params if present."""
+        if 'request' not in self.context:
+            return None
+
+        request = self.context['request']
+        if 'category' not in request.query_params:
+            return None
+
+        category = request.query_params['category']
+        if category not in models.CategoryChoices.values:
+            return None
+
+        return category
+
+    def get_rank(self, score: models.Score) -> int:
+        """Return category-aware rank if provided by context."""
+        category = self._request_category()
+        if category:
+            return score.rank_for_category(category)
+
+        return score.rank
+
     class Meta:
         model = models.Score
         fields = [
