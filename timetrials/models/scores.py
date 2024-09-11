@@ -34,11 +34,6 @@ class Score(models.Model):
             value__lt=self.value,
         ).order_by('player').distinct('player').count() + 1
 
-    @property
-    def rank(self) -> int:
-        """Compute the rank of this score by counting scores with value lower than self."""
-        return self.rank_for_category(self.category)
-
     def __str__(self):
         return str(self.value)
 

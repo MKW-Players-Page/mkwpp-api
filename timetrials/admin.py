@@ -3,6 +3,20 @@ from django.contrib import admin
 from timetrials import models
 
 
+class PlayerStatsInline(admin.TabularInline):
+    model = models.PlayerStats
+    classes = ['collapse']
+
+    def has_add_permission(self, *args, **kwargs):
+        return False
+
+    def has_change_permission(self, *args, **kwargs):
+        return False
+
+    def has_delete_permission(self, *args, **kwargs):
+        return False
+
+
 @admin.register(models.Player)
 class PlayerAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -10,6 +24,7 @@ class PlayerAdmin(admin.ModelAdmin):
         ("Other info", {'fields': ('alias', 'bio')}),
         ("Important dates", {'fields': ('joined_date', 'last_activity')}),
     )
+    inlines = (PlayerStatsInline,)
     list_display = ('id', 'name', 'region', 'user')
     list_display_links = ('name',)
     list_filter = ('region',)

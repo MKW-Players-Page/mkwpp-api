@@ -22,10 +22,3 @@ def eligible_categories(category: CategoryChoices):
     the most restrictive ruleset, and UNRESTRICTED returns all categories, since it has no rules.
     """
     return CategoryChoices.values[:CategoryChoices.values.index(category) + 1]
-
-
-def category_filter(queryset: models.QuerySet, name: str, value: CategoryChoices):
-    """Filter for all eligible categories for a given category."""
-    return queryset.filter(**{
-        f'{name}__in': eligible_categories(value),
-    })
