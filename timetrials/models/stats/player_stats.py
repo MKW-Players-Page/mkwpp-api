@@ -1,12 +1,12 @@
 from functools import reduce
 
-from django.db import models
+from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 
+from timetrials.queries import query_ranked_scores
 from timetrials.models.categories import CategoryChoices
 from timetrials.models.players import Player
 from timetrials.models.regions import Region
-from timetrials.models.scores import Score
 
 
 class PlayerStats(models.Model):
@@ -51,40 +51,69 @@ class PlayerStats(models.Model):
             "Overall" if self.is_lap is None else "Lap" if self.is_lap else "Course"
         )
 
+    @classmethod
+    def get_or_new(cls, player: Player, category: CategoryChoices, is_lap: bool):
+        """Get or create a PlayerStats instance *without saving to the DB*."""
+        return (
+            player.stats.filter(category=category, is_lap=is_lap).first()
+            or
+            PlayerStats(
+                player=player,
+                player_name=player.name,
+                player_region=player.region,
+                category=category,
+                is_lap=is_lap,
+            )
+        )
+
     class Meta:
         verbose_name = _("player stats")
         verbose_name_plural = _("player stats")
 
 
-def generate_player_stats(player: Player):
+def generate_all_player_stats():
+    """Recalculate player stats for all players"""
+
+    mapped_scores = dict()
+
     for category in CategoryChoices.values:
-        for is_lap in [None, False, True]:
-            stats = player.stats.filter(category=category, is_lap=is_lap).first()
-            if not stats:
-                stats = PlayerStats(
-                    player=player,
-                    player_name=player.name,
-                    player_region=player.region,
-                    category=category,
-                    is_lap=is_lap,
-                )
+        scores = query_ranked_scores(category).order_by('player', 'is_lap')
+        for score in scores:
+            if score.player_id not in mapped_scores:
+                mapped_scores[score.player_id] = dict()
+            player_bucket = mapped_scores[score.player_id]
 
-            scores = player.scores_for_category(category)
-            if is_lap is not None:
-                scores = scores.filter(is_lap=is_lap)
+            if category not in player_bucket:
+                player_bucket[category] = dict()
+            category_bucket = player_bucket[category]
 
-            stats.score_count = scores.count()
-            if stats.score_count > 0:
-                stats.total_score = (
-                    Score.objects
-                    .filter(pk__in=models.Subquery(scores.values('pk')))
-                    .aggregate(models.Sum('value'))['value__sum']
-                )
-                stats.total_rank = reduce(
-                    lambda total, score: total + score.rank_for_category(category), scores, 0
-                )
-            else:
-                stats.total_score = 0
-                stats.total_rank = 0
+            if score.is_lap not in category_bucket:
+                category_bucket[score.is_lap] = list()
+            lap_bucket = category_bucket[score.is_lap]
 
-            stats.save()
+            lap_bucket.append(score)
+
+    for player_id, player_buckets in mapped_scores.items():
+        player = Player.objects.filter(id=player_id).first()
+
+        with transaction.atomic():
+            for category, category_buckets in player_buckets.items():
+                overall_stats = PlayerStats.get_or_new(player, category, None)
+                overall_stats.score_count = 0
+                overall_stats.total_score = 0
+                overall_stats.total_rank = 0
+
+                for is_lap, scores in category_buckets.items():
+                    stats = PlayerStats.get_or_new(player, category, is_lap)
+
+                    stats.score_count = len(scores)
+                    stats.total_score = reduce(lambda total, score: total + score.value, scores, 0)
+                    stats.total_rank = reduce(lambda total, score: total + score.rank, scores, 0)
+
+                    overall_stats.score_count += stats.score_count
+                    overall_stats.total_score += stats.total_score
+                    overall_stats.total_rank += stats.total_rank
+
+                    stats.save()
+
+                overall_stats.save()

@@ -2,12 +2,16 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from django_cte import CTEManager
+
 from timetrials.models.categories import CategoryChoices, eligible_categories
 from timetrials.models.players import Player
 from timetrials.models.tracks import Track
 
 
 class Score(models.Model):
+    objects = CTEManager()
+
     value = models.PositiveIntegerField(
         help_text=_("Finish time in milliseconds (e.g. 69999 for 1:09.999).")
     )
