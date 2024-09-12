@@ -93,7 +93,14 @@ class StandardSerializer(serializers.ModelSerializer):
 
 
 class StandardLevelSerializer(serializers.ModelSerializer):
-    standards = StandardSerializer(many=True)
+    standards = serializers.SerializerMethodField()
+
+    def get_standards(self, level: models.StandardLevel):
+        return StandardSerializer(
+            level.standards.order_by('category', 'track', 'is_lap'),
+            many=True,
+            context=self.context
+        ).data
 
     class Meta:
         model = models.StandardLevel
