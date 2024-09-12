@@ -1,3 +1,5 @@
+from drf_spectacular.utils import extend_schema_field
+
 from rest_framework import serializers
 
 from timetrials import models
@@ -53,6 +55,7 @@ class PlayerStats(serializers.ModelSerializer):
             'score_count',
             'total_score',
             'total_rank',
+            'total_standard',
             'player',
             'player_name',
             'player_region',
@@ -95,6 +98,7 @@ class StandardSerializer(serializers.ModelSerializer):
 class StandardLevelSerializer(serializers.ModelSerializer):
     standards = serializers.SerializerMethodField()
 
+    @extend_schema_field(StandardSerializer(many=True))
     def get_standards(self, level: models.StandardLevel):
         return StandardSerializer(
             level.standards.order_by('category', 'track', 'is_lap'),

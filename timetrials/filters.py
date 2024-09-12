@@ -47,10 +47,12 @@ class PlayerStatsFilter(CategoryFilter):
     metric = django_filters.OrderingFilter(
         fields={
             'total_rank': 'average_finish',
+            'total_standard': 'average_standard',
             'total_score': 'total_score',
         },
         choices=(
             ('average_finish', "Average finish"),
+            ('average_standard', "Average standard"),
             ('total_score', "Total time"),
         ),
         required=True

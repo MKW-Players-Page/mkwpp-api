@@ -3,10 +3,11 @@ from functools import reduce
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 
-from timetrials.queries import query_ranked_scores
+from timetrials.queries import annotate_scores_standard, query_ranked_scores
 from timetrials.models.categories import CategoryChoices
 from timetrials.models.players import Player
 from timetrials.models.regions import Region
+from timetrials.models.standards import Standard
 
 
 class PlayerStats(models.Model):
@@ -29,6 +30,8 @@ class PlayerStats(models.Model):
     total_score = models.IntegerField(help_text=_("Sum of all lowest scores"))
 
     total_rank = models.IntegerField(help_text=_("Sum of the rank of all lowest scores"))
+
+    total_standard = models.IntegerField(help_text=_("Sum of the standard of all lowest scores"))
 
     # Embedded player info
 
@@ -74,10 +77,19 @@ class PlayerStats(models.Model):
 def generate_all_player_stats():
     """Recalculate player stats for all players"""
 
+    # Map each standard's id to the value of its related level
+    standard_values = dict((id, value) for [id, value] in Standard.objects.filter(
+        level__is_legacy=True
+    ).select_related('level').annotate(
+        level_value=models.F('level__value')
+    ).values_list('id', 'level_value'))
+
     mapped_scores = dict()
 
     for category in CategoryChoices.values:
         scores = query_ranked_scores(category).order_by('player', 'is_lap')
+        scores = annotate_scores_standard(scores, category, legacy=True)
+
         for score in scores:
             if score.player_id not in mapped_scores:
                 mapped_scores[score.player_id] = dict()
@@ -102,6 +114,7 @@ def generate_all_player_stats():
                 overall_stats.score_count = 0
                 overall_stats.total_score = 0
                 overall_stats.total_rank = 0
+                overall_stats.total_standard = 0
 
                 for is_lap, scores in category_buckets.items():
                     stats = PlayerStats.get_or_new(player, category, is_lap)
@@ -109,10 +122,16 @@ def generate_all_player_stats():
                     stats.score_count = len(scores)
                     stats.total_score = reduce(lambda total, score: total + score.value, scores, 0)
                     stats.total_rank = reduce(lambda total, score: total + score.rank, scores, 0)
+                    stats.total_standard = reduce(
+                        lambda total, score: total + standard_values[score.standard],
+                        scores,
+                        0
+                    )
 
                     overall_stats.score_count += stats.score_count
                     overall_stats.total_score += stats.total_score
                     overall_stats.total_rank += stats.total_rank
+                    overall_stats.total_standard += stats.total_standard
 
                     stats.save()
 

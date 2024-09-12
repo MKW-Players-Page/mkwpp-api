@@ -1,4 +1,4 @@
-from django.db.models import Subquery, Window
+from django.db.models import Case, OuterRef, Q, QuerySet, Subquery, Value, When, Window
 from django.db.models.functions import Rank
 
 from django_cte import With
@@ -14,9 +14,9 @@ def query_ranked_scores(category: models.CategoryChoices):
     """
 
     player_records = models.Score.objects.distinct(
-        'track', 'is_lap', 'player'
+        'player', 'track', 'is_lap'
     ).order_by(
-        'track', 'is_lap', 'player', 'value'
+        'player', 'track', 'is_lap', 'value'
     ).filter(
         category__in=eligible_categories(category)
     ).values('pk')
@@ -33,3 +33,28 @@ def query_ranked_scores(category: models.CategoryChoices):
     )
 
     return ranked_scores.queryset().with_cte(ranked_scores)
+
+
+def annotate_scores_standard(scores: QuerySet, category: models.CategoryChoices, legacy=False):
+    """
+    Annotates each score within the queryset with the id of the highest standard level it qualifies
+    for given a category. Legacy standards may be used optionally.
+    """
+    return scores.annotate(
+        standard=Subquery(
+            models.Standard.objects.filter(
+                Q(value__gte=OuterRef('value')) | Q(value=None),
+                track=OuterRef('track'),
+                category__in=eligible_categories(category),
+                is_lap=OuterRef('is_lap'),
+                level__is_legacy=legacy,
+            ).order_by(
+                Case(
+                    When(category='unres', then=Value(1)),
+                    When(category='sc', then=Value(2)),
+                    When(category='nonsc', then=Value(3)),
+                ),
+                'value'
+            ).values('pk')[:1]
+        )
+    )
