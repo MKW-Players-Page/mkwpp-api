@@ -46,13 +46,15 @@ class CategoryFilter(django_filters.FilterSet):
 class PlayerStatsFilter(CategoryFilter):
     metric = django_filters.OrderingFilter(
         fields={
-            'total_rank': 'average_finish',
-            'total_standard': 'average_standard',
+            'total_rank': 'total_rank',
+            'total_standard': 'total_standard',
+            '-total_record_ratio': 'total_record_ratio',
             'total_score': 'total_score',
         },
         choices=(
-            ('average_finish', "Average finish"),
-            ('average_standard', "Average standard"),
+            ('total_rank', "Average finish"),
+            ('total_standard', "Average standard"),
+            ('total_record_ratio', "Personal record to world record ratio"),
             ('total_score', "Total time"),
         ),
         required=True

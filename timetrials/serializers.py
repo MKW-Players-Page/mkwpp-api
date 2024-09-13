@@ -56,6 +56,7 @@ class PlayerStats(serializers.ModelSerializer):
             'total_score',
             'total_rank',
             'total_standard',
+            'total_record_ratio',
             'player',
             'player_name',
             'player_region',
@@ -67,18 +68,20 @@ class PlayerStats(serializers.ModelSerializer):
 class ScoreSerializer(serializers.ModelSerializer):
     rank = serializers.IntegerField()
     standard = serializers.IntegerField()
+    record_ratio = serializers.FloatField()
 
     class Meta:
         model = models.Score
         fields = [
             'id',
             'rank',
-            'standard',
             'value',
             'player',
             'track',
             'category',
             'is_lap',
+            'standard',
+            'record_ratio',
             'date',
             'video_link',
             'ghost_link',

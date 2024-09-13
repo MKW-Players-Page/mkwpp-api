@@ -7,7 +7,7 @@ from rest_framework import generics
 
 from timetrials import filters, models, serializers
 from timetrials.models.categories import eligible_categories
-from timetrials.queries import annotate_scores_standard
+from timetrials.queries import annotate_scores_record_ratio, annotate_scores_standard
 
 
 @method_decorator(cache_page(60), name='list')
@@ -53,7 +53,10 @@ class PlayerScoreListView(generics.ListAPIView):
             'track', 'is_lap'
         )
 
-        return annotate_scores_standard(scores, category, legacy=True)
+        return annotate_scores_record_ratio(
+            annotate_scores_standard(scores, category, legacy=True),
+            category
+        )
 
 
 @method_decorator(cache_page(60), name='list')
@@ -67,6 +70,8 @@ class TrackScoreListView(generics.ListAPIView):
         return models.Score.objects.filter(track=self.kwargs['pk'])
 
     def post_filter_queryset(self, queryset: QuerySet):
+        category = self.request.query_params.get('category', models.CategoryChoices.NON_SHORTCUT)
+
         scores = models.Score.objects.filter(
             pk__in=Subquery(
                 queryset.order_by('player', 'value').distinct('player').values('pk')
@@ -75,10 +80,9 @@ class TrackScoreListView(generics.ListAPIView):
             'value', 'date'
         ).annotate(rank=Window(Rank(), order_by='value'))
 
-        return annotate_scores_standard(
-            scores,
-            self.request.query_params.get('category', models.CategoryChoices.NON_SHORTCUT),
-            legacy=True
+        return annotate_scores_record_ratio(
+            annotate_scores_standard(scores, category, legacy=True),
+            category
         )
 
 
@@ -102,7 +106,8 @@ class RecordListView(generics.ListAPIView):
         scores = models.Score.objects.filter(
             pk__in=Subquery(records.values('pk'))
         ).annotate(
-            rank=Value(1)
+            rank=Value(1),
+            record_ratio=Value(1),
         )
 
         return annotate_scores_standard(

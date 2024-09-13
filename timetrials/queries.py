@@ -1,10 +1,26 @@
-from django.db.models import Case, OuterRef, Q, QuerySet, Subquery, Value, When, Window
-from django.db.models.functions import Rank
+from django.db.models import (
+    Case, F, FloatField, OuterRef, Q, QuerySet, Subquery, Value, When, Window
+)
+from django.db.models.functions import Cast, Rank
 
 from django_cte import With
 
 from timetrials import models
 from timetrials.models.categories import eligible_categories
+
+
+def query_records(category: models.CategoryChoices):
+    """Query world records across all tracks for a given category."""
+
+    return models.Score.objects.distinct(
+        'track', 'is_lap'
+    ).order_by(
+        'track', 'is_lap', 'value'
+    ).filter(
+        category__in=eligible_categories(category)
+    ).annotate(
+        rank=Value(1)
+    )
 
 
 def query_ranked_scores(category: models.CategoryChoices):
@@ -40,6 +56,7 @@ def annotate_scores_standard(scores: QuerySet, category: models.CategoryChoices,
     Annotates each score within the queryset with the id of the highest standard level it qualifies
     for given a category. Legacy standards may be used optionally.
     """
+
     return scores.annotate(
         standard=Subquery(
             models.Standard.objects.filter(
@@ -57,4 +74,27 @@ def annotate_scores_standard(scores: QuerySet, category: models.CategoryChoices,
                 'value'
             ).values('pk')[:1]
         )
+    )
+
+
+def annotate_scores_record_ratio(scores: QuerySet, category: models.CategoryChoices):
+    """Annotate each score within the queryset with its record ratio."""
+
+    records = models.Score.objects.distinct(
+        'track', 'is_lap'
+    ).order_by(
+        'track', 'is_lap', 'value'
+    ).filter(
+        category__in=eligible_categories(category)
+    )
+
+    return scores.annotate(
+        record_ratio=Subquery(
+            models.Score.objects.filter(
+                pk__in=records.values('pk')
+            ).filter(
+                track=OuterRef('track'),
+                is_lap=OuterRef('is_lap')
+            ).values('value')
+        ) / Cast(F('value'), FloatField())
     )
