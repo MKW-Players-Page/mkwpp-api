@@ -66,12 +66,14 @@ class PlayerStats(serializers.ModelSerializer):
 
 class ScoreSerializer(serializers.ModelSerializer):
     rank = serializers.IntegerField()
+    standard = serializers.IntegerField()
 
     class Meta:
         model = models.Score
         fields = [
             'id',
             'rank',
+            'standard',
             'value',
             'player',
             'track',

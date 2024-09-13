@@ -1,12 +1,16 @@
 from django.db.models import OuterRef, QuerySet, Subquery, Value, Window
 from django.db.models.functions import NullIf, Rank
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 from rest_framework import generics
 
 from timetrials import filters, models, serializers
 from timetrials.models.categories import eligible_categories
+from timetrials.queries import annotate_scores_standard
 
 
+@method_decorator(cache_page(60), name='list')
 class PlayerScoreListView(generics.ListAPIView):
     queryset = models.Score.objects.none()
     serializer_class = serializers.ScoreSerializer
@@ -17,9 +21,7 @@ class PlayerScoreListView(generics.ListAPIView):
         return models.Score.objects.filter(player=self.kwargs['pk'])
 
     def post_filter_queryset(self, queryset: QuerySet):
-        categories = eligible_categories(
-            self.request.query_params.get('category', models.CategoryChoices.NON_SHORTCUT)
-        )
+        category = self.request.query_params.get('category', models.CategoryChoices.NON_SHORTCUT)
 
         # Get the player's lowest score on each track for both course and lap
         player_scores = queryset.order_by('track', 'is_lap', 'value').distinct('track', 'is_lap')
@@ -28,7 +30,7 @@ class PlayerScoreListView(generics.ListAPIView):
         # on that same track and category
         track_scores = models.Score.objects.filter(
             track=OuterRef(OuterRef('track')),
-            category__in=categories,
+            category__in=eligible_categories(category),
             is_lap=OuterRef(OuterRef('is_lap'))
         ).order_by('player', 'value').distinct('player')
 
@@ -43,7 +45,7 @@ class PlayerScoreListView(generics.ListAPIView):
         ).values('rank')[:1]
 
         # Annotate the player's lowest scores with their rank and order by track and lap count
-        return models.Score.objects.filter(
+        scores = models.Score.objects.filter(
             pk__in=Subquery(player_scores.values('pk'))
         ).annotate(
             rank=Subquery(rank_subquery)
@@ -51,7 +53,10 @@ class PlayerScoreListView(generics.ListAPIView):
             'track', 'is_lap'
         )
 
+        return annotate_scores_standard(scores, category, legacy=True)
 
+
+@method_decorator(cache_page(60), name='list')
 class TrackScoreListView(generics.ListAPIView):
     queryset = models.Score.objects.none()
     serializer_class = serializers.ScoreWithPlayerSerializer
@@ -62,7 +67,7 @@ class TrackScoreListView(generics.ListAPIView):
         return models.Score.objects.filter(track=self.kwargs['pk'])
 
     def post_filter_queryset(self, queryset: QuerySet):
-        return models.Score.objects.filter(
+        scores = models.Score.objects.filter(
             pk__in=Subquery(
                 queryset.order_by('player', 'value').distinct('player').values('pk')
             )
@@ -70,7 +75,14 @@ class TrackScoreListView(generics.ListAPIView):
             'value', 'date'
         ).annotate(rank=Window(Rank(), order_by='value'))
 
+        return annotate_scores_standard(
+            scores,
+            self.request.query_params.get('category', models.CategoryChoices.NON_SHORTCUT),
+            legacy=True
+        )
 
+
+@method_decorator(cache_page(60), name='list')
 class RecordListView(generics.ListAPIView):
     queryset = models.Score.objects.none()
     serializer_class = serializers.ScoreWithPlayerSerializer
@@ -78,8 +90,23 @@ class RecordListView(generics.ListAPIView):
     filterset_class = filters.CategoryFilter
 
     def get_queryset(self):
-        return models.Score.objects.order_by(
+        return models.Score.objects.all()
+
+    def post_filter_queryset(self, queryset: QuerySet):
+        records = queryset.order_by(
             'track', 'is_lap', 'value', 'date'
         ).distinct(
             'track', 'is_lap'
-        ).annotate(rank=Value(1))
+        )
+
+        scores = models.Score.objects.filter(
+            pk__in=Subquery(records.values('pk'))
+        ).annotate(
+            rank=Value(1)
+        )
+
+        return annotate_scores_standard(
+            scores,
+            self.request.query_params.get('category', models.CategoryChoices.NON_SHORTCUT),
+            legacy=True
+        )

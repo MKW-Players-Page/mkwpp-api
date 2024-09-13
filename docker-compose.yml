@@ -11,6 +11,13 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
+  cache:
+    image: memcached:latest
+    ports:
+      - "11211:11211"
+    command:
+      - "-m 128"
+
   app:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -24,3 +31,4 @@ services:
       - POSTGRES_PASSWORD=postgres
     depends_on:
       - db
+      - cache
