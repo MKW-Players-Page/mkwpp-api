@@ -5,8 +5,9 @@
     "fields": {
         "type": "world",
         "name": "World",
-        "code": "WOR",
-        "parent": null
+        "code": "WORLD",
+        "parent": null,
+        "is_ranked": true
     }
 },
 {
@@ -16,7 +17,8 @@
         "type": "continent",
         "name": "America",
         "code": "AME",
-        "parent": 1
+        "parent": 1,
+        "is_ranked": true
     }
 },
 {
@@ -26,7 +28,8 @@
         "type": "continent",
         "name": "Europe",
         "code": "EUR",
-        "parent": 1
+        "parent": 1,
+        "is_ranked": true
     }
 },
 {
@@ -36,7 +39,8 @@
         "type": "continent",
         "name": "Asia",
         "code": "ASI",
-        "parent": 1
+        "parent": 1,
+        "is_ranked": true
     }
 },
 {
@@ -46,7 +50,8 @@
         "type": "continent",
         "name": "Oceania",
         "code": "OCE",
-        "parent": 1
+        "parent": 1,
+        "is_ranked": true
     }
 },
 {
@@ -56,7 +61,8 @@
         "type": "continent",
         "name": "Africa",
         "code": "AFR",
-        "parent": 1
+        "parent": 1,
+        "is_ranked": false
     }
 },
 {
@@ -66,7 +72,8 @@
         "type": "continent",
         "name": "Antarctica",
         "code": "ANT",
-        "parent": 1
+        "parent": 1,
+        "is_ranked": false
     }
 },
 {
@@ -76,7 +83,8 @@
         "type": "country",
         "name": "Afghanistan",
         "code": "AF",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -86,7 +94,8 @@
         "type": "country",
         "name": "Albania",
         "code": "AL",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -96,7 +105,8 @@
         "type": "country",
         "name": "Algeria",
         "code": "DZ",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -106,7 +116,8 @@
         "type": "country",
         "name": "American Samoa",
         "code": "AS",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -116,7 +127,8 @@
         "type": "country",
         "name": "Andorra",
         "code": "AD",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -126,7 +138,8 @@
         "type": "country",
         "name": "Angola",
         "code": "AO",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -136,7 +149,8 @@
         "type": "country",
         "name": "Antigua and Barbuda",
         "code": "AG",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -146,7 +160,8 @@
         "type": "country",
         "name": "Azerbaijan",
         "code": "AZ",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -156,7 +171,8 @@
         "type": "country",
         "name": "Argentina",
         "code": "AR",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -166,7 +182,8 @@
         "type": "country",
         "name": "Australia",
         "code": "AU",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -176,7 +193,8 @@
         "type": "country",
         "name": "Austria",
         "code": "AT",
-        "parent": 3
+        "parent": 262,
+        "is_ranked": false
     }
 },
 {
@@ -186,7 +204,8 @@
         "type": "country",
         "name": "Bahamas",
         "code": "BS",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -196,7 +215,8 @@
         "type": "country",
         "name": "Bahrain",
         "code": "BH",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -206,7 +226,8 @@
         "type": "country",
         "name": "Bangladesh",
         "code": "BD",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -216,7 +237,8 @@
         "type": "country",
         "name": "Armenia",
         "code": "AM",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -226,7 +248,8 @@
         "type": "country",
         "name": "Barbados",
         "code": "BB",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -236,7 +259,8 @@
         "type": "country",
         "name": "Belgium",
         "code": "BE",
-        "parent": 3
+        "parent": 263,
+        "is_ranked": false
     }
 },
 {
@@ -246,7 +270,8 @@
         "type": "country",
         "name": "Bermuda",
         "code": "BM",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -256,7 +281,8 @@
         "type": "country",
         "name": "Bhutan",
         "code": "BT",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -266,7 +292,8 @@
         "type": "country",
         "name": "Bolivia",
         "code": "BO",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -276,7 +303,8 @@
         "type": "country",
         "name": "Bosnia and Herzegovina",
         "code": "BA",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -286,7 +314,8 @@
         "type": "country",
         "name": "Botswana",
         "code": "BW",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -296,7 +325,8 @@
         "type": "country",
         "name": "Bouvet Island",
         "code": "BV",
-        "parent": 7
+        "parent": 7,
+        "is_ranked": false
     }
 },
 {
@@ -306,7 +336,8 @@
         "type": "country",
         "name": "Brazil",
         "code": "BR",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -316,7 +347,8 @@
         "type": "country",
         "name": "Belize",
         "code": "BZ",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -326,7 +358,8 @@
         "type": "country",
         "name": "British Indian Ocean Territory",
         "code": "IO",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -336,7 +369,8 @@
         "type": "country",
         "name": "Solomon Islands",
         "code": "SB",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -346,7 +380,8 @@
         "type": "country",
         "name": "British Virgin Islands",
         "code": "VG",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -356,7 +391,8 @@
         "type": "country",
         "name": "Brunei",
         "code": "BN",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -366,7 +402,8 @@
         "type": "country",
         "name": "Bulgaria",
         "code": "BG",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -376,7 +413,8 @@
         "type": "country",
         "name": "Myanmar",
         "code": "MM",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -386,7 +424,8 @@
         "type": "country",
         "name": "Burundi",
         "code": "BI",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -396,7 +435,8 @@
         "type": "country",
         "name": "Belarus",
         "code": "BY",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -406,7 +446,8 @@
         "type": "country",
         "name": "Cambodia",
         "code": "KH",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -416,7 +457,8 @@
         "type": "country",
         "name": "Cameroon",
         "code": "CM",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -426,7 +468,8 @@
         "type": "country",
         "name": "Canada",
         "code": "CA",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": true
     }
 },
 {
@@ -436,7 +479,8 @@
         "type": "country",
         "name": "Cape Verde",
         "code": "CV",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -446,7 +490,8 @@
         "type": "country",
         "name": "Cayman Islands",
         "code": "KY",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -456,7 +501,8 @@
         "type": "country",
         "name": "Central African Republic",
         "code": "CF",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -466,7 +512,8 @@
         "type": "country",
         "name": "Sri Lanka",
         "code": "LK",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -476,7 +523,8 @@
         "type": "country",
         "name": "Chad",
         "code": "TD",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -486,7 +534,8 @@
         "type": "country",
         "name": "Chile",
         "code": "CL",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -496,7 +545,8 @@
         "type": "country",
         "name": "China",
         "code": "CN",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -506,7 +556,8 @@
         "type": "country",
         "name": "Taiwan",
         "code": "TW",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -516,7 +567,8 @@
         "type": "country",
         "name": "Christmas Island",
         "code": "CX",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -526,7 +578,8 @@
         "type": "country",
         "name": "Cocos Islands",
         "code": "CC",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -536,7 +589,8 @@
         "type": "country",
         "name": "Colombia",
         "code": "CO",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -546,7 +600,8 @@
         "type": "country",
         "name": "Comoros",
         "code": "KM",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -556,7 +611,8 @@
         "type": "country",
         "name": "Mayotte",
         "code": "YT",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -566,7 +622,8 @@
         "type": "country",
         "name": "Republic of the Congo",
         "code": "CG",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -576,7 +633,8 @@
         "type": "country",
         "name": "Cook Islands",
         "code": "CK",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -586,7 +644,8 @@
         "type": "country",
         "name": "Costa Rica",
         "code": "CR",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -596,7 +655,8 @@
         "type": "country",
         "name": "Croatia",
         "code": "HR",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -606,7 +666,8 @@
         "type": "country",
         "name": "Cuba",
         "code": "CU",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -616,7 +677,8 @@
         "type": "country",
         "name": "Cyprus",
         "code": "CY",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -626,7 +688,8 @@
         "type": "country",
         "name": "Czech Republic",
         "code": "CZ",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -636,7 +699,8 @@
         "type": "country",
         "name": "Benin",
         "code": "BJ",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -646,7 +710,8 @@
         "type": "country",
         "name": "Denmark",
         "code": "DK",
-        "parent": 3
+        "parent": 264,
+        "is_ranked": false
     }
 },
 {
@@ -656,7 +721,8 @@
         "type": "country",
         "name": "Dominica",
         "code": "DM",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -666,7 +732,8 @@
         "type": "country",
         "name": "Dominican Republic",
         "code": "DO",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -676,7 +743,8 @@
         "type": "country",
         "name": "Ecuador",
         "code": "EC",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -686,7 +754,8 @@
         "type": "country",
         "name": "El Salvador",
         "code": "SV",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -696,7 +765,8 @@
         "type": "country",
         "name": "Equatorial Guinea",
         "code": "GQ",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -706,7 +776,8 @@
         "type": "country",
         "name": "Ethiopia",
         "code": "ET",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -716,7 +787,8 @@
         "type": "country",
         "name": "Eritrea",
         "code": "ER",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -726,7 +798,8 @@
         "type": "country",
         "name": "Estonia",
         "code": "EE",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -736,7 +809,8 @@
         "type": "country",
         "name": "Faroe Islands",
         "code": "FO",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -746,7 +820,8 @@
         "type": "country",
         "name": "Falkland Islands",
         "code": "FK",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -756,7 +831,8 @@
         "type": "country",
         "name": "South Georgia and the South Sandwich Islands",
         "code": "GS",
-        "parent": 7
+        "parent": 7,
+        "is_ranked": false
     }
 },
 {
@@ -766,7 +842,8 @@
         "type": "country",
         "name": "Fiji",
         "code": "FJ",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -776,7 +853,8 @@
         "type": "country",
         "name": "Finland",
         "code": "FI",
-        "parent": 3
+        "parent": 264,
+        "is_ranked": false
     }
 },
 {
@@ -786,7 +864,8 @@
         "type": "country",
         "name": "Åland Islands",
         "code": "AX",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -796,7 +875,8 @@
         "type": "country",
         "name": "France",
         "code": "FR",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": true
     }
 },
 {
@@ -806,7 +886,8 @@
         "type": "country",
         "name": "French Guiana",
         "code": "GF",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -816,7 +897,8 @@
         "type": "country",
         "name": "French Polynesia",
         "code": "PF",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -826,7 +908,8 @@
         "type": "country",
         "name": "French Southern Territories",
         "code": "TF",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -836,7 +919,8 @@
         "type": "country",
         "name": "Djibouti",
         "code": "DJ",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -846,7 +930,8 @@
         "type": "country",
         "name": "Gabon",
         "code": "GA",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -856,7 +941,8 @@
         "type": "country",
         "name": "Georgia",
         "code": "GE",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -866,7 +952,8 @@
         "type": "country",
         "name": "Gambia",
         "code": "GM",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -876,7 +963,8 @@
         "type": "country",
         "name": "Germany",
         "code": "DE",
-        "parent": 3
+        "parent": 262,
+        "is_ranked": false
     }
 },
 {
@@ -886,7 +974,8 @@
         "type": "country",
         "name": "Ghana",
         "code": "GH",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -896,7 +985,8 @@
         "type": "country",
         "name": "Gibraltar",
         "code": "GI",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -906,7 +996,8 @@
         "type": "country",
         "name": "Kiribati",
         "code": "KI",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -916,7 +1007,8 @@
         "type": "country",
         "name": "Greece",
         "code": "GR",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -926,7 +1018,8 @@
         "type": "country",
         "name": "Greenland",
         "code": "GL",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -936,7 +1029,8 @@
         "type": "country",
         "name": "Grenada",
         "code": "GD",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -946,7 +1040,8 @@
         "type": "country",
         "name": "Guadeloupe",
         "code": "GP",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -956,7 +1051,8 @@
         "type": "country",
         "name": "Guam",
         "code": "GU",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -966,7 +1062,8 @@
         "type": "country",
         "name": "Guatemala",
         "code": "GT",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -976,7 +1073,8 @@
         "type": "country",
         "name": "Guinea",
         "code": "GN",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -986,7 +1084,8 @@
         "type": "country",
         "name": "Guyana",
         "code": "GY",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -996,7 +1095,8 @@
         "type": "country",
         "name": "Haiti",
         "code": "HT",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -1006,7 +1106,8 @@
         "type": "country",
         "name": "Heard Island and McDonald Islands",
         "code": "HM",
-        "parent": 7
+        "parent": 7,
+        "is_ranked": false
     }
 },
 {
@@ -1016,7 +1117,8 @@
         "type": "country",
         "name": "Vatican City",
         "code": "VA",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1026,7 +1128,8 @@
         "type": "country",
         "name": "Honduras",
         "code": "HN",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -1036,7 +1139,8 @@
         "type": "country",
         "name": "Hong Kong",
         "code": "HK",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1046,7 +1150,8 @@
         "type": "country",
         "name": "Hungary",
         "code": "HU",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1056,7 +1161,8 @@
         "type": "country",
         "name": "Iceland",
         "code": "IS",
-        "parent": 3
+        "parent": 264,
+        "is_ranked": false
     }
 },
 {
@@ -1066,7 +1172,8 @@
         "type": "country",
         "name": "India",
         "code": "IN",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1076,7 +1183,8 @@
         "type": "country",
         "name": "Indonesia",
         "code": "ID",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1086,7 +1194,8 @@
         "type": "country",
         "name": "Iran",
         "code": "IR",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1096,7 +1205,8 @@
         "type": "country",
         "name": "Iraq",
         "code": "IQ",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1106,7 +1216,8 @@
         "type": "country",
         "name": "Ireland",
         "code": "IE",
-        "parent": 3
+        "parent": 259,
+        "is_ranked": false
     }
 },
 {
@@ -1116,7 +1227,8 @@
         "type": "country",
         "name": "Israel",
         "code": "IL",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1126,7 +1238,8 @@
         "type": "country",
         "name": "Italy",
         "code": "IT",
-        "parent": 3
+        "parent": 261,
+        "is_ranked": false
     }
 },
 {
@@ -1136,7 +1249,8 @@
         "type": "country",
         "name": "Ivory Coast",
         "code": "CI",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1146,7 +1260,8 @@
         "type": "country",
         "name": "Jamaica",
         "code": "JM",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1156,7 +1271,8 @@
         "type": "country",
         "name": "Japan",
         "code": "JP",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1166,7 +1282,8 @@
         "type": "country",
         "name": "Kazakhstan",
         "code": "KZ",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1176,7 +1293,8 @@
         "type": "country",
         "name": "Jordan",
         "code": "JO",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1186,7 +1304,8 @@
         "type": "country",
         "name": "Kenya",
         "code": "KE",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1196,7 +1315,8 @@
         "type": "country",
         "name": "North Korea",
         "code": "KP",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1206,7 +1326,8 @@
         "type": "country",
         "name": "South Korea",
         "code": "KR",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1216,7 +1337,8 @@
         "type": "country",
         "name": "Kosovo",
         "code": "XK",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1226,7 +1348,8 @@
         "type": "country",
         "name": "Kuwait",
         "code": "KW",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1236,7 +1359,8 @@
         "type": "country",
         "name": "Kyrgyzstan",
         "code": "KG",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1246,7 +1370,8 @@
         "type": "country",
         "name": "Laos",
         "code": "LA",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1256,7 +1381,8 @@
         "type": "country",
         "name": "Lebanon",
         "code": "LB",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1266,7 +1392,8 @@
         "type": "country",
         "name": "Lesotho",
         "code": "LS",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1276,7 +1403,8 @@
         "type": "country",
         "name": "Latvia",
         "code": "LV",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1286,7 +1414,8 @@
         "type": "country",
         "name": "Liberia",
         "code": "LR",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1296,7 +1425,8 @@
         "type": "country",
         "name": "Libya",
         "code": "LY",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1306,7 +1436,8 @@
         "type": "country",
         "name": "Liechtenstein",
         "code": "LI",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1316,7 +1447,8 @@
         "type": "country",
         "name": "Lithuania",
         "code": "LT",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1326,7 +1458,8 @@
         "type": "country",
         "name": "Luxembourg",
         "code": "LU",
-        "parent": 3
+        "parent": 263,
+        "is_ranked": false
     }
 },
 {
@@ -1336,7 +1469,8 @@
         "type": "country",
         "name": "Madagascar",
         "code": "MG",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1346,7 +1480,8 @@
         "type": "country",
         "name": "Malawi",
         "code": "MW",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1356,7 +1491,8 @@
         "type": "country",
         "name": "Malaysia",
         "code": "MY",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1366,7 +1502,8 @@
         "type": "country",
         "name": "Maldives",
         "code": "MV",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1376,7 +1513,8 @@
         "type": "country",
         "name": "Mali",
         "code": "ML",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1386,7 +1524,8 @@
         "type": "country",
         "name": "Malta",
         "code": "MT",
-        "parent": 3
+        "parent": 261,
+        "is_ranked": false
     }
 },
 {
@@ -1396,7 +1535,8 @@
         "type": "country",
         "name": "Martinique",
         "code": "MQ",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1406,7 +1546,8 @@
         "type": "country",
         "name": "Mauritania",
         "code": "MR",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1416,7 +1557,8 @@
         "type": "country",
         "name": "Mauritius",
         "code": "MU",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1426,7 +1568,8 @@
         "type": "country",
         "name": "Mexico",
         "code": "MX",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -1436,7 +1579,8 @@
         "type": "country",
         "name": "Monaco",
         "code": "MC",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1446,7 +1590,8 @@
         "type": "country",
         "name": "Mongolia",
         "code": "MN",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1456,7 +1601,8 @@
         "type": "country",
         "name": "Moldova",
         "code": "MD",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1466,7 +1612,8 @@
         "type": "country",
         "name": "Montenegro",
         "code": "ME",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1476,7 +1623,8 @@
         "type": "country",
         "name": "Montserrat",
         "code": "MS",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1486,7 +1634,8 @@
         "type": "country",
         "name": "Morocco",
         "code": "MA",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1496,7 +1645,8 @@
         "type": "country",
         "name": "Mozambique",
         "code": "MZ",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1506,7 +1656,8 @@
         "type": "country",
         "name": "Oman",
         "code": "OM",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1516,7 +1667,8 @@
         "type": "country",
         "name": "Namibia",
         "code": "NA",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1526,7 +1678,8 @@
         "type": "country",
         "name": "Nauru",
         "code": "NR",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1536,7 +1689,8 @@
         "type": "country",
         "name": "Nepal",
         "code": "NP",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1546,7 +1700,8 @@
         "type": "country",
         "name": "Netherlands",
         "code": "NL",
-        "parent": 3
+        "parent": 263,
+        "is_ranked": false
     }
 },
 {
@@ -1556,7 +1711,8 @@
         "type": "country",
         "name": "Curaçao",
         "code": "CW",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1566,7 +1722,8 @@
         "type": "country",
         "name": "Aruba",
         "code": "AW",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1576,7 +1733,8 @@
         "type": "country",
         "name": "Sint Maarten",
         "code": "SX",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1586,7 +1744,8 @@
         "type": "country",
         "name": "Bonaire",
         "code": "BQ",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1596,7 +1755,8 @@
         "type": "country",
         "name": "New Caledonia",
         "code": "NC",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1606,7 +1766,8 @@
         "type": "country",
         "name": "Vanuatu",
         "code": "VU",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1616,7 +1777,8 @@
         "type": "country",
         "name": "New Zealand",
         "code": "NZ",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1626,7 +1788,8 @@
         "type": "country",
         "name": "Nicaragua",
         "code": "NI",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -1636,7 +1799,8 @@
         "type": "country",
         "name": "Niger",
         "code": "NE",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1646,7 +1810,8 @@
         "type": "country",
         "name": "Nigeria",
         "code": "NG",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1656,7 +1821,8 @@
         "type": "country",
         "name": "Niue",
         "code": "NU",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1666,7 +1832,8 @@
         "type": "country",
         "name": "Norfolk Island",
         "code": "NF",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1676,7 +1843,8 @@
         "type": "country",
         "name": "Norway",
         "code": "NO",
-        "parent": 3
+        "parent": 264,
+        "is_ranked": false
     }
 },
 {
@@ -1686,7 +1854,8 @@
         "type": "country",
         "name": "Northern Mariana Islands",
         "code": "MP",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1696,7 +1865,8 @@
         "type": "country",
         "name": "United States Minor Outlying Islands",
         "code": "UM",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1706,7 +1876,8 @@
         "type": "country",
         "name": "Micronesia",
         "code": "FM",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1716,7 +1887,8 @@
         "type": "country",
         "name": "Marshall Islands",
         "code": "MH",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1726,7 +1898,8 @@
         "type": "country",
         "name": "Palau",
         "code": "PW",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1736,7 +1909,8 @@
         "type": "country",
         "name": "Pakistan",
         "code": "PK",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1746,7 +1920,8 @@
         "type": "country",
         "name": "Palestine",
         "code": "PS",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1756,7 +1931,8 @@
         "type": "country",
         "name": "Panama",
         "code": "PA",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -1766,7 +1942,8 @@
         "type": "country",
         "name": "Papua New Guinea",
         "code": "PG",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1776,7 +1953,8 @@
         "type": "country",
         "name": "Paraguay",
         "code": "PY",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -1786,7 +1964,8 @@
         "type": "country",
         "name": "Peru",
         "code": "PE",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -1796,7 +1975,8 @@
         "type": "country",
         "name": "Philippines",
         "code": "PH",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1806,7 +1986,8 @@
         "type": "country",
         "name": "Pitcairn Islands",
         "code": "PN",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -1816,7 +1997,8 @@
         "type": "country",
         "name": "Poland",
         "code": "PL",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1826,7 +2008,8 @@
         "type": "country",
         "name": "Portugal",
         "code": "PT",
-        "parent": 3
+        "parent": 260,
+        "is_ranked": false
     }
 },
 {
@@ -1836,7 +2019,8 @@
         "type": "country",
         "name": "Guinea-Bissau",
         "code": "GW",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1846,7 +2030,8 @@
         "type": "country",
         "name": "East Timor",
         "code": "TL",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1856,7 +2041,8 @@
         "type": "country",
         "name": "Puerto Rico",
         "code": "PR",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -1866,7 +2052,8 @@
         "type": "country",
         "name": "Qatar",
         "code": "QA",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -1876,7 +2063,8 @@
         "type": "country",
         "name": "Reunion",
         "code": "RE",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1886,7 +2074,8 @@
         "type": "country",
         "name": "Romania",
         "code": "RO",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1896,7 +2085,8 @@
         "type": "country",
         "name": "Russian Federation",
         "code": "RU",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -1906,7 +2096,8 @@
         "type": "country",
         "name": "Rwanda",
         "code": "RW",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1916,7 +2107,8 @@
         "type": "country",
         "name": "Saint Barthelemy",
         "code": "BL",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1926,7 +2118,8 @@
         "type": "country",
         "name": "Saint Helena",
         "code": "SH",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -1936,7 +2129,8 @@
         "type": "country",
         "name": "Saint Kitts and Nevis",
         "code": "KN",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1946,7 +2140,8 @@
         "type": "country",
         "name": "Anguilla",
         "code": "AI",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1956,7 +2151,8 @@
         "type": "country",
         "name": "Saint Lucia",
         "code": "LC",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1966,7 +2162,8 @@
         "type": "country",
         "name": "Saint Martin",
         "code": "MF",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1976,7 +2173,8 @@
         "type": "country",
         "name": "Saint Pierre and Miquelon",
         "code": "PM",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1986,7 +2184,8 @@
         "type": "country",
         "name": "Saint Vincent and the Grenadines",
         "code": "VC",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -1996,7 +2195,8 @@
         "type": "country",
         "name": "San Marino",
         "code": "SM",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -2006,7 +2206,8 @@
         "type": "country",
         "name": "São Tomé and Príncipe",
         "code": "ST",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2016,7 +2217,8 @@
         "type": "country",
         "name": "Saudi Arabia",
         "code": "SA",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -2026,7 +2228,8 @@
         "type": "country",
         "name": "Senegal",
         "code": "SN",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2036,7 +2239,8 @@
         "type": "country",
         "name": "Serbia",
         "code": "RS",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -2046,7 +2250,8 @@
         "type": "country",
         "name": "Seychelles",
         "code": "SC",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2056,7 +2261,8 @@
         "type": "country",
         "name": "Sierra Leone",
         "code": "SL",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2066,7 +2272,8 @@
         "type": "country",
         "name": "Singapore",
         "code": "SG",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -2076,7 +2283,8 @@
         "type": "country",
         "name": "Slovakia",
         "code": "SK",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -2086,7 +2294,8 @@
         "type": "country",
         "name": "Vietnam",
         "code": "VN",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -2096,7 +2305,8 @@
         "type": "country",
         "name": "Slovenia",
         "code": "SI",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -2106,7 +2316,8 @@
         "type": "country",
         "name": "Somalia",
         "code": "SO",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2116,7 +2327,8 @@
         "type": "country",
         "name": "South Africa",
         "code": "ZA",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2126,7 +2338,8 @@
         "type": "country",
         "name": "Zimbabwe",
         "code": "ZW",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2136,7 +2349,8 @@
         "type": "country",
         "name": "Spain",
         "code": "ES",
-        "parent": 3
+        "parent": 260,
+        "is_ranked": false
     }
 },
 {
@@ -2146,7 +2360,8 @@
         "type": "country",
         "name": "South Sudan",
         "code": "SS",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2156,7 +2371,8 @@
         "type": "country",
         "name": "Sudan",
         "code": "SD",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2166,7 +2382,8 @@
         "type": "country",
         "name": "Sahrawi Arab Democratic Republic",
         "code": "EH",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2176,7 +2393,8 @@
         "type": "country",
         "name": "Suriname",
         "code": "SR",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -2186,7 +2404,8 @@
         "type": "country",
         "name": "Svalbard & Jan Mayen Islands",
         "code": "SJ",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -2196,7 +2415,8 @@
         "type": "country",
         "name": "Eswatini",
         "code": "SZ",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2206,7 +2426,8 @@
         "type": "country",
         "name": "Sweden",
         "code": "SE",
-        "parent": 3
+        "parent": 264,
+        "is_ranked": false
     }
 },
 {
@@ -2216,7 +2437,8 @@
         "type": "country",
         "name": "Switzerland",
         "code": "CH",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -2226,7 +2448,8 @@
         "type": "country",
         "name": "Syrian Arab Republic",
         "code": "SY",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -2236,7 +2459,8 @@
         "type": "country",
         "name": "Tajikistan",
         "code": "TJ",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -2246,7 +2470,8 @@
         "type": "country",
         "name": "Thailand",
         "code": "TH",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -2256,7 +2481,8 @@
         "type": "country",
         "name": "Togo",
         "code": "TG",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2266,7 +2492,8 @@
         "type": "country",
         "name": "Tokelau",
         "code": "TK",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -2276,7 +2503,8 @@
         "type": "country",
         "name": "Tonga",
         "code": "TO",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -2286,7 +2514,8 @@
         "type": "country",
         "name": "Trinidad and Tobago",
         "code": "TT",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -2296,7 +2525,8 @@
         "type": "country",
         "name": "United Arab Emirates",
         "code": "AE",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -2306,7 +2536,8 @@
         "type": "country",
         "name": "Tunisia",
         "code": "TN",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2316,7 +2547,8 @@
         "type": "country",
         "name": "Turkey",
         "code": "TR",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -2326,7 +2558,8 @@
         "type": "country",
         "name": "Turkmenistan",
         "code": "TM",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -2336,7 +2569,8 @@
         "type": "country",
         "name": "Turks and Caicos Islands",
         "code": "TC",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -2346,7 +2580,8 @@
         "type": "country",
         "name": "Tuvalu",
         "code": "TV",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -2356,7 +2591,8 @@
         "type": "country",
         "name": "Uganda",
         "code": "UG",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2366,7 +2602,8 @@
         "type": "country",
         "name": "Ukraine",
         "code": "UA",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -2376,7 +2613,8 @@
         "type": "country",
         "name": "North Macedonia",
         "code": "MK",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -2386,7 +2624,8 @@
         "type": "country",
         "name": "Egypt",
         "code": "EG",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2396,7 +2635,8 @@
         "type": "country",
         "name": "United Kingdom",
         "code": "GB",
-        "parent": 3
+        "parent": 259,
+        "is_ranked": false
     }
 },
 {
@@ -2406,7 +2646,8 @@
         "type": "country",
         "name": "Guernsey",
         "code": "GG",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -2416,7 +2657,8 @@
         "type": "country",
         "name": "Jersey",
         "code": "JE",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -2426,7 +2668,8 @@
         "type": "country",
         "name": "Isle of Man",
         "code": "IM",
-        "parent": 3
+        "parent": 3,
+        "is_ranked": false
     }
 },
 {
@@ -2436,7 +2679,8 @@
         "type": "country",
         "name": "Tanzania",
         "code": "TZ",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2446,7 +2690,8 @@
         "type": "country",
         "name": "United States",
         "code": "US",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -2456,7 +2701,8 @@
         "type": "country",
         "name": "United States Virgin Islands",
         "code": "VI",
-        "parent": 2
+        "parent": 2,
+        "is_ranked": false
     }
 },
 {
@@ -2466,7 +2712,8 @@
         "type": "country",
         "name": "Burkina Faso",
         "code": "BF",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
     }
 },
 {
@@ -2476,7 +2723,8 @@
         "type": "country",
         "name": "Uruguay",
         "code": "UY",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -2486,7 +2734,8 @@
         "type": "country",
         "name": "Uzbekistan",
         "code": "UZ",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -2496,7 +2745,8 @@
         "type": "country",
         "name": "Venezuela",
         "code": "VE",
-        "parent": 2
+        "parent": 258,
+        "is_ranked": false
     }
 },
 {
@@ -2506,7 +2756,8 @@
         "type": "country",
         "name": "Wallis and Futuna",
         "code": "WF",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -2516,7 +2767,8 @@
         "type": "country",
         "name": "Samoa",
         "code": "WS",
-        "parent": 5
+        "parent": 5,
+        "is_ranked": false
     }
 },
 {
@@ -2526,7 +2778,8 @@
         "type": "country",
         "name": "Yemen",
         "code": "YE",
-        "parent": 4
+        "parent": 4,
+        "is_ranked": false
     }
 },
 {
@@ -2536,7 +2789,85 @@
         "type": "country",
         "name": "Zambia",
         "code": "ZM",
-        "parent": 6
+        "parent": 6,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 258,
+    "fields": {
+        "type": "country_group",
+        "name": "Latin America",
+        "code": "LATAM",
+        "parent": 2,
+        "is_ranked": true
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 259,
+    "fields": {
+        "type": "country_group",
+        "name": "UK & Ireland",
+        "code": "GBIE",
+        "parent": 3,
+        "is_ranked": true
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 260,
+    "fields": {
+        "type": "country_group",
+        "name": "Spain & Portugal",
+        "code": "ESPT",
+        "parent": 3,
+        "is_ranked": true
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 261,
+    "fields": {
+        "type": "country_group",
+        "name": "Italy & Malta",
+        "code": "ITMT",
+        "parent": 3,
+        "is_ranked": true
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 262,
+    "fields": {
+        "type": "country_group",
+        "name": "Germany & Austria",
+        "code": "DEAT",
+        "parent": 3,
+        "is_ranked": true
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 263,
+    "fields": {
+        "type": "country_group",
+        "name": "Benelux",
+        "code": "BENELUX",
+        "parent": 3,
+        "is_ranked": true
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 264,
+    "fields": {
+        "type": "country_group",
+        "name": "Nordic",
+        "code": "NORDIC",
+        "parent": 3,
+        "is_ranked": true
     }
 }
 ]

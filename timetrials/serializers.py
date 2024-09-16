@@ -10,7 +10,7 @@ from timetrials import models
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Region
-        fields = ['id', 'type', 'name', 'code', 'parent']
+        fields = ['id', 'type', 'name', 'code', 'parent', 'is_ranked']
 
 
 # Tracks
@@ -45,11 +45,14 @@ class PlayerSerializer(serializers.ModelSerializer):
 
 class PlayerStats(serializers.ModelSerializer):
     rank = serializers.IntegerField()
+    player = PlayerBasicSerializer()
 
     class Meta:
         model = models.PlayerStats
         fields = [
             'rank',
+            'player',
+            'region',
             'category',
             'is_lap',
             'score_count',
@@ -57,9 +60,6 @@ class PlayerStats(serializers.ModelSerializer):
             'total_rank',
             'total_standard',
             'total_record_ratio',
-            'player',
-            'player_name',
-            'player_region',
         ]
 
 

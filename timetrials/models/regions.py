@@ -1,16 +1,20 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from tree_queries.models import TreeNode
+
 
 class RegionTypeChoices(models.TextChoices):
     WORLD = 'world', _("World")
     CONTINENT = 'continent', _("Continent")
+    COUNTRY_GROUP = 'country_group', _("Country Group")
     COUNTRY = 'country', _("Country")
+    SUBNATIONAL_GROUP = 'subnational_group', _("Subnational Group")
     SUBNATIONAL = 'subnational', _("Subnational")
 
 
-class Region(models.Model):
-    type = models.CharField(max_length=16, choices=RegionTypeChoices.choices)
+class Region(TreeNode):
+    type = models.CharField(max_length=32, choices=RegionTypeChoices.choices)
 
     name = models.CharField(max_length=64, unique=True)
 
@@ -27,6 +31,11 @@ class Region(models.Model):
         null=True,
         on_delete=models.CASCADE,
         help_text=_("Parent region, or blank for top-most region (i.e. World).")
+    )
+
+    is_ranked = models.BooleanField(
+        default=False,
+        help_text=_("Whether this region has a dedicated tops chart and player rankings.")
     )
 
     def __str__(self):

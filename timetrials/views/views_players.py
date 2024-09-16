@@ -29,7 +29,14 @@ class PlayerStatsListView(generics.ListAPIView):
         if 'is_lap' not in self.request.query_params:
             score_count = score_count * 2
 
-        return models.PlayerStats.objects.filter(score_count=score_count)
+        region = models.Region.objects.filter(
+            code__iexact=self.request.query_params.get('region', None)
+        ).first()
+
+        if not region:
+            region = models.Region.objects.filter(type=models.RegionTypeChoices.WORLD).first()
+
+        return models.PlayerStats.objects.filter(score_count=score_count, region=region)
 
     def post_filter_queryset(self, queryset: QuerySet):
         return queryset.annotate(
@@ -46,6 +53,14 @@ class PlayerStatsRetrieveView(generics.ListAPIView):
     do_not_expand_category = True
 
     def get_queryset(self):
+        region = models.Region.objects.filter(
+            code__iexact=self.request.query_params.get('region', None)
+        ).first()
+
+        if not region:
+            region = models.Region.objects.filter(type=models.RegionTypeChoices.WORLD).first()
+
         return models.PlayerStats.objects.filter(
-            player=self.kwargs['pk']
+            player=self.kwargs['pk'],
+            region=region,
         ).annotate(rank=Window(Rank(), order_by='total_score'))

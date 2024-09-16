@@ -7,7 +7,9 @@ from rest_framework import generics
 
 from timetrials import filters, models, serializers
 from timetrials.models.categories import eligible_categories
-from timetrials.queries import annotate_scores_record_ratio, annotate_scores_standard
+from timetrials.queries import (
+    annotate_scores_record_ratio, annotate_scores_standard, query_region_players
+)
 
 
 @method_decorator(cache_page(60), name='list')
@@ -84,6 +86,39 @@ class TrackScoreListView(generics.ListAPIView):
             annotate_scores_standard(scores, category, legacy=True),
             category
         )
+
+
+@method_decorator(cache_page(60), name='list')
+class TrackTopsListView(generics.ListAPIView):
+    queryset = models.Score.objects.none()
+    serializer_class = serializers.ScoreWithPlayerSerializer
+    filter_backends = (filters.TimeTrialsFilterBackend,)
+    filterset_class = filters.CategoryFilter
+
+    def get_queryset(self):
+        return models.Score.objects.filter(track=self.kwargs['pk'])
+
+    def post_filter_queryset(self, queryset: QuerySet):
+        region = models.Region.objects.filter(
+            code__iexact=self.request.query_params.get('region', None)
+        ).first()
+
+        scores = queryset.order_by(
+            'value', 'date'
+        ).annotate(
+            rank=Window(Rank(), order_by='value'),
+            record_ratio=Value(1),
+            standard=Value(1),
+        ).filter(
+            rank__lte=10
+        )
+
+        if region:
+            scores = scores.filter(
+                player__in=Subquery(query_region_players(region).values('pk'))
+            )
+
+        return scores
 
 
 @method_decorator(cache_page(60), name='list')

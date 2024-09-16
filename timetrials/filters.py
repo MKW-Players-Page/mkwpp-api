@@ -28,6 +28,9 @@ class TimeTrialsFilterBackend(filters.DjangoFilterBackend):
 
 class CategoryFilter(django_filters.FilterSet):
     """Filter by category by properly following fallthrough rules as well as by course or lap."""
+
+    region = django_filters.CharFilter(method='region_filter')
+
     category = django_filters.ChoiceFilter(
         choices=CategoryChoices.choices,
         method='category_filter',
@@ -35,6 +38,9 @@ class CategoryFilter(django_filters.FilterSet):
     )
 
     is_lap = django_filters.BooleanFilter()
+
+    def region_filter(self, queryset, name: str, value: str):
+        return queryset
 
     def category_filter(self, queryset, name: str, value: CategoryChoices):
         """Filter for all eligible categories for a given category."""

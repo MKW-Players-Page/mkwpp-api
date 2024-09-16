@@ -9,10 +9,21 @@ from timetrials import models
 from timetrials.models.categories import eligible_categories
 
 
-def query_records(category: models.CategoryChoices):
-    """Query world records across all tracks for a given category."""
+def query_region_players(region: models.Region):
+    """Query players from a given region, including all sub-regions."""
 
-    return models.Score.objects.distinct(
+    return models.Player.objects.filter(
+        region__in=region.descendants(include_self=True).values_list('pk', flat=True)
+    )
+
+
+def query_records(category: models.CategoryChoices, region: models.Region = None):
+    """
+    Query records across all tracks for a given category and region.
+    If no category is specified, the overall records will be queried.
+    """
+
+    records = models.Score.objects.distinct(
         'track', 'is_lap'
     ).order_by(
         'track', 'is_lap', 'value'
@@ -22,8 +33,15 @@ def query_records(category: models.CategoryChoices):
         rank=Value(1)
     )
 
+    if region:
+        records = records.filter(
+            player__in=Subquery(query_region_players(region).values('pk'))
+        )
 
-def query_ranked_scores(category: models.CategoryChoices):
+    return records
+
+
+def query_ranked_scores(category: models.CategoryChoices, region: models.Region = None):
     """
     Query all players' records across all tracks for a given category and
     annotate each score's rank.
@@ -37,12 +55,19 @@ def query_ranked_scores(category: models.CategoryChoices):
         category__in=eligible_categories(category)
     ).values('pk')
 
+    ranked_scores_query = models.Score.objects.order_by(
+        'track', 'is_lap'
+    ).filter(
+        pk__in=Subquery(player_records)
+    )
+
+    if region:
+        ranked_scores_query = ranked_scores_query.filter(
+            player__in=Subquery(query_region_players(region).values('pk'))
+        )
+
     ranked_scores = With(
-        models.Score.objects.order_by(
-            'track', 'is_lap'
-        ).filter(
-            pk__in=Subquery(player_records)
-        ).annotate(
+        ranked_scores_query.annotate(
             rank=Window(Rank(), partition_by=['track', 'is_lap'], order_by=['value'])
         ),
         name='ranked_scores'

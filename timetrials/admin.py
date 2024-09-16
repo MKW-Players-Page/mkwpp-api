@@ -25,21 +25,21 @@ class PlayerAdmin(admin.ModelAdmin):
         ("Important dates", {'fields': ('joined_date', 'last_activity')}),
     )
     inlines = (PlayerStatsInline,)
-    list_display = ('id', 'name', 'region', 'user')
+    list_display = ('id', 'name', 'alias', 'region', 'user')
     list_display_links = ('name',)
     list_filter = ('region',)
-    search_fields = ('name', 'user')
+    search_fields = ('name',)
     ordering = ('name',)
 
 
 @admin.register(models.Region)
 class RegionAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('type', 'name', 'code', 'parent')}),
+        (None, {'fields': ('type', 'name', 'code', 'parent', 'is_ranked')}),
     )
-    list_display = ('id', 'type', 'name', 'code', 'parent')
+    list_display = ('id', 'type', 'name', 'code', 'parent', 'is_ranked')
     list_display_links = ('name',)
-    list_filter = ('type', 'parent')
+    list_filter = ('type', 'is_ranked', 'parent')
     search_fields = ('name', 'code')
     ordering = ('type', 'parent', 'name')
 
