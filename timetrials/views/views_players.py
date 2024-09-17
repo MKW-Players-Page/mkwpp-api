@@ -1,5 +1,6 @@
-from django.db.models import QuerySet, Window
+from django.db.models import Value, Window
 from django.db.models.functions import Rank
+from django.shortcuts import get_object_or_404
 
 from rest_framework import generics
 
@@ -16,51 +17,40 @@ class PlayerRetrieveView(generics.RetrieveAPIView):
     serializer_class = serializers.PlayerSerializer
 
 
-class PlayerStatsListView(generics.ListAPIView):
-    queryset = models.PlayerStats.objects.none()
+@filters.extend_schema_with_filters
+class PlayerStatsListView(filters.FilterMixin, generics.ListAPIView):
     serializer_class = serializers.PlayerStats
-    filter_backends = (filters.TimeTrialsFilterBackend,)
-    filterset_class = filters.PlayerStatsFilter
-    is_lap_as_null_bool = True
-    do_not_expand_category = True
+    filter_fields = (
+        filters.CategoryFilter(expand=False),
+        filters.LapModeFilter(allow_overall=True),
+        filters.RegionFilter(expand=False, ranked_only=True),
+        filters.MetricOrderingFilter(),
+    )
 
     def get_queryset(self):
         score_count = models.Track.objects.count()
-        if 'is_lap' not in self.request.query_params:
+        if self.get_filter_value(filters.LapModeFilter) is None:
             score_count = score_count * 2
 
-        region = models.Region.objects.filter(
-            code__iexact=self.request.query_params.get('region', None)
-        ).first()
-
-        if not region:
-            region = models.Region.objects.filter(type=models.RegionTypeChoices.WORLD).first()
-
-        return models.PlayerStats.objects.filter(score_count=score_count, region=region)
-
-    def post_filter_queryset(self, queryset: QuerySet):
-        return queryset.annotate(
-            rank=Window(Rank(), order_by=queryset.query.order_by[0])
+        return self.filter(models.PlayerStats.objects.all()).filter(
+            score_count=score_count
+        ).annotate(
+            rank=Window(Rank(), order_by=self.get_filter_value(filters.MetricOrderingFilter))
         )
 
 
-class PlayerStatsRetrieveView(generics.ListAPIView):
-    queryset = models.PlayerStats.objects.none()
+@filters.extend_schema_with_filters
+class PlayerStatsRetrieveView(filters.FilterMixin, generics.RetrieveAPIView):
     serializer_class = serializers.PlayerStats
-    filter_backends = (filters.TimeTrialsFilterBackend,)
-    filterset_class = filters.CategoryFilter
-    is_lap_as_null_bool = True
-    do_not_expand_category = True
+    filter_fields = (
+        filters.CategoryFilter(expand=False),
+        filters.LapModeFilter(allow_overall=True),
+        filters.RegionFilter(expand=False, ranked_only=True),
+    )
 
     def get_queryset(self):
-        region = models.Region.objects.filter(
-            code__iexact=self.request.query_params.get('region', None)
-        ).first()
+        # Temporarily hardcode rank to 1
+        return self.filter(models.PlayerStats.objects.all()).annotate(rank=Value(1))
 
-        if not region:
-            region = models.Region.objects.filter(type=models.RegionTypeChoices.WORLD).first()
-
-        return models.PlayerStats.objects.filter(
-            player=self.kwargs['pk'],
-            region=region,
-        ).annotate(rank=Window(Rank(), order_by='total_score'))
+    def get_object(self):
+        return get_object_or_404(self.get_queryset(), player=self.kwargs['pk'])

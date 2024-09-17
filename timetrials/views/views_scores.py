@@ -1,4 +1,4 @@
-from django.db.models import OuterRef, QuerySet, Subquery, Value, Window
+from django.db.models import OuterRef, Subquery, Value, Window
 from django.db.models.functions import NullIf, Rank
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -13,20 +13,25 @@ from timetrials.queries import (
 
 
 @method_decorator(cache_page(60), name='list')
-class PlayerScoreListView(generics.ListAPIView):
-    queryset = models.Score.objects.none()
+@filters.extend_schema_with_filters
+class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
     serializer_class = serializers.ScoreSerializer
-    filter_backends = (filters.TimeTrialsFilterBackend,)
-    filterset_class = filters.CategoryFilter
+    filter_fields = (
+        filters.CategoryFilter(),
+        filters.LapModeFilter(required=False),
+    )
 
     def get_queryset(self):
-        return models.Score.objects.filter(player=self.kwargs['pk'])
-
-    def post_filter_queryset(self, queryset: QuerySet):
-        category = self.request.query_params.get('category', models.CategoryChoices.NON_SHORTCUT)
-
         # Get the player's lowest score on each track for both course and lap
-        player_scores = queryset.order_by('track', 'is_lap', 'value').distinct('track', 'is_lap')
+        player_scores = self.filter(models.Score.objects).filter(
+            player=self.kwargs['pk']
+        ).order_by(
+            'track', 'is_lap', 'value'
+        ).distinct(
+            'track', 'is_lap'
+        )
+
+        category = self.get_filter_value(filters.CategoryFilter)
 
         # For each of the player's scores, query the lowest score from every player
         # on that same track and category
@@ -62,25 +67,30 @@ class PlayerScoreListView(generics.ListAPIView):
 
 
 @method_decorator(cache_page(60), name='list')
-class TrackScoreListView(generics.ListAPIView):
-    queryset = models.Score.objects.none()
+@filters.extend_schema_with_filters
+class TrackScoreListView(filters.FilterMixin, generics.ListAPIView):
     serializer_class = serializers.ScoreWithPlayerSerializer
-    filter_backends = (filters.TimeTrialsFilterBackend,)
-    filterset_class = filters.CategoryFilter
+    filter_fields = (
+        filters.CategoryFilter(),
+        filters.LapModeFilter(),
+    )
 
     def get_queryset(self):
-        return models.Score.objects.filter(track=self.kwargs['pk'])
-
-    def post_filter_queryset(self, queryset: QuerySet):
-        category = self.request.query_params.get('category', models.CategoryChoices.NON_SHORTCUT)
-
         scores = models.Score.objects.filter(
             pk__in=Subquery(
-                queryset.order_by('player', 'value').distinct('player').values('pk')
+                self.filter(models.Score.objects).filter(
+                    track=self.kwargs['pk']
+                ).order_by(
+                    'player', 'value'
+                ).distinct(
+                    'player'
+                ).values('pk')
             )
         ).order_by(
             'value', 'date'
         ).annotate(rank=Window(Rank(), order_by='value'))
+
+        category = self.get_filter_value(filters.CategoryFilter)
 
         return annotate_scores_record_ratio(
             annotate_scores_standard(scores, category, legacy=True),
@@ -89,21 +99,19 @@ class TrackScoreListView(generics.ListAPIView):
 
 
 @method_decorator(cache_page(60), name='list')
-class TrackTopsListView(generics.ListAPIView):
-    queryset = models.Score.objects.none()
+@filters.extend_schema_with_filters
+class TrackTopsListView(filters.FilterMixin, generics.ListAPIView):
     serializer_class = serializers.ScoreWithPlayerSerializer
-    filter_backends = (filters.TimeTrialsFilterBackend,)
-    filterset_class = filters.CategoryFilter
+    filter_fields = (
+        filters.CategoryFilter(),
+        filters.LapModeFilter(),
+        filters.RegionFilter(ranked_only=True, auto=False, required=False),
+    )
 
     def get_queryset(self):
-        return models.Score.objects.filter(track=self.kwargs['pk'])
-
-    def post_filter_queryset(self, queryset: QuerySet):
-        region = models.Region.objects.filter(
-            code__iexact=self.request.query_params.get('region', None)
-        ).first()
-
-        scores = queryset.order_by(
+        scores = self.filter(models.Score.objects).filter(
+            track=self.kwargs['pk']
+        ).order_by(
             'value', 'date'
         ).annotate(
             rank=Window(Rank(), order_by='value'),
@@ -113,26 +121,32 @@ class TrackTopsListView(generics.ListAPIView):
             rank__lte=10
         )
 
-        if region:
+        region = self.get_filter_value(filters.RegionFilter)
+
+        if region and region.type != models.RegionTypeChoices.WORLD:
             scores = scores.filter(
                 player__in=Subquery(query_region_players(region).values('pk'))
             )
 
-        return scores
+        category = self.get_filter_value(filters.CategoryFilter)
+
+        return annotate_scores_record_ratio(
+            annotate_scores_standard(scores, category, legacy=True),
+            category
+        )
 
 
 @method_decorator(cache_page(60), name='list')
-class RecordListView(generics.ListAPIView):
-    queryset = models.Score.objects.none()
+@filters.extend_schema_with_filters
+class RecordListView(filters.FilterMixin, generics.ListAPIView):
     serializer_class = serializers.ScoreWithPlayerSerializer
-    filter_backends = (filters.TimeTrialsFilterBackend,)
-    filterset_class = filters.CategoryFilter
+    filter_fields = (
+        filters.CategoryFilter(),
+        filters.LapModeFilter(required=False),
+    )
 
     def get_queryset(self):
-        return models.Score.objects.all()
-
-    def post_filter_queryset(self, queryset: QuerySet):
-        records = queryset.order_by(
+        records = self.filter(models.Score.objects).order_by(
             'track', 'is_lap', 'value', 'date'
         ).distinct(
             'track', 'is_lap'
@@ -143,10 +157,12 @@ class RecordListView(generics.ListAPIView):
         ).annotate(
             rank=Value(1),
             record_ratio=Value(1),
+        ).order_by(
+            'track', 'is_lap'
         )
 
         return annotate_scores_standard(
             scores,
-            self.request.query_params.get('category', models.CategoryChoices.NON_SHORTCUT),
+            self.get_filter_value(filters.CategoryFilter),
             legacy=True
         )
