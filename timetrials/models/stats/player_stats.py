@@ -40,6 +40,10 @@ class PlayerStats(models.Model):
 
     total_record_ratio = models.FloatField(help_text=_("Sum of lowest score to record ratios"))
 
+    total_records = models.IntegerField(help_test=_("Sum of track records"))
+
+    leaderboard_points = models.IntegerField(help_text=_("Sum of leaderboard points"))
+
     def __str__(self):
         return "Stats for %s - %s %s" % (
             self.player.name,
@@ -144,6 +148,8 @@ def generate_all_player_stats():
                     overall_stats.total_rank = 0
                     overall_stats.total_standard = 0
                     overall_stats.total_record_ratio = 0
+                    overall_stats.total_records = 0
+                    overall_stats.leaderboard_points = 0
 
                     for is_lap, scores in category_bucket.items():
                         stats = PlayerStats(
@@ -176,12 +182,20 @@ def generate_all_player_stats():
                             scores,
                             0
                         )
+                        stats.total_records = reduce(
+
+                        )
+                        stats.leaderboard_points = reduce(
+                            
+                        )
 
                         overall_stats.score_count += stats.score_count
                         overall_stats.total_score += stats.total_score
                         overall_stats.total_rank += stats.total_rank
                         overall_stats.total_standard += stats.total_standard
                         overall_stats.total_record_ratio += stats.total_record_ratio
+                        overall_stats.total_records += stats.total_records
+                        overall_stats.leaderboard_points += stats.leaderboard_points
 
                         stats.save()
 

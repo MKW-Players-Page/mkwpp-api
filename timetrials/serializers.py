@@ -60,6 +60,8 @@ class PlayerStats(serializers.ModelSerializer):
             'total_rank',
             'total_standard',
             'total_record_ratio',
+            'total_records',
+            'leaderboard_points',
         ]
 
 
