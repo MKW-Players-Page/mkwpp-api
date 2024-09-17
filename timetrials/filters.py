@@ -1,67 +1,352 @@
-import django_filters
-from django_filters import rest_framework as filters
+from django.db.models import QuerySet
+
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+
+from rest_framework.exceptions import ValidationError
 
 from timetrials.models.categories import CategoryChoices, eligible_categories
+from timetrials.models.regions import Region
 
 
-class TimeTrialsFilterBackend(filters.DjangoFilterBackend):
-    """Allow filtering queryset after filterset."""
+class FilterMixin:
 
-    def filter_queryset(self, request, queryset, view, no_post=False):
-        qs = super().filter_queryset(request, queryset, view)
+    def filter(self, queryset: QuerySet) -> QuerySet:
+        for filter_field in self.filter_fields:
+            if not filter_field.auto:
+                continue
 
-        is_lap_as_null_bool = getattr(view, 'is_lap_as_null_bool', False)
-        if is_lap_as_null_bool:
-            if 'is_lap' not in request.query_params:
-                qs = qs.filter(is_lap=None)
+            if not filter_field.required and not filter_field.has_value(self.request):
+                continue
 
-        do_not_expand_category = getattr(view, 'do_not_expand_category', False)
-        if do_not_expand_category:
-            qs = qs.filter(category=request.query_params.get('category'))
+            queryset = filter_field.filter(self.request, queryset)
 
-        post_filter_queryset = getattr(view, 'post_filter_queryset', None)
-        if post_filter_queryset:
-            return post_filter_queryset(qs)
-
-        return qs
-
-
-class CategoryFilter(django_filters.FilterSet):
-    """Filter by category by properly following fallthrough rules as well as by course or lap."""
-
-    region = django_filters.CharFilter(method='region_filter')
-
-    category = django_filters.ChoiceFilter(
-        choices=CategoryChoices.choices,
-        method='category_filter',
-        required=True,
-    )
-
-    is_lap = django_filters.BooleanFilter()
-
-    def region_filter(self, queryset, name: str, value: str):
         return queryset
 
-    def category_filter(self, queryset, name: str, value: CategoryChoices):
-        """Filter for all eligible categories for a given category."""
+    def get_filter_value(self, filter_class):
+        for filter_field in self.filter_fields:
+            if isinstance(filter_field, filter_class):
+                return filter_field.get_filter_value(self.request)
+
+        raise TypeError(f"No filter fields of type {filter_class.__name__}")
+
+
+def extend_schema_with_filters(view):
+    return extend_schema(
+        parameters=list(map(lambda field: field.open_api_param, view.filter_fields))
+    )(view)
+
+
+class FilterBase:
+    default_error_messages = {
+        'missing_required_param': "Required parameter '%s' is missing from query string.",
+        'invalid_value': "Invalid value for parameter '%s': %s",
+    }
+
+    def __init__(self, *, field_name: str, request_field: str, auto=False, required=False):
+        """
+        Parameters
+        ----------
+        field_name : str
+            The name of the field on the model to apply the filter to
+        request_field : str
+            The name of the query param of the request to get the filter value from
+        auto : bool
+            Whether this filter should be applied by FilterMixin.filter
+        required : bool
+            Whether this filter is required to be present in the query params
+        """
+        self.field_name = field_name
+        self.request_field = request_field
+        self.auto = auto
+        self.required = required
+
+    def validation_error(self, code: str, *args):
+        """Raise a `ValidationError`."""
+        if code in self.default_error_messages:
+            detail = self.default_error_messages[code] % args
+        else:
+            detail = code
+
+        raise ValidationError(detail=detail, code=code)
+
+    def validate_filter_value(self, value: str):
+        """Validate filter value and convert to expected type."""
+        return value
+
+    def has_value(self, request):
+        """Return whether the filter is present in the query params of the request."""
+        return self.request_field in request.query_params
+
+    def get_filter_value(self, request):
+        """Get the filter value from the query params of the request."""
+        if not self.has_value(request):
+            if self.required:
+                raise self.validation_error('missing_required_param', self.request_field)
+            else:
+                return None
+
+        value = request.query_params[self.request_field]
+
+        return self.validate_filter_value(value)
+
+    def filter(self, request, queryset: QuerySet) -> QuerySet:
+        """Filter the queryset."""
         return queryset.filter(**{
-            f'{name}__in': eligible_categories(value),
+            self.field_name: self.get_filter_value(request),
         })
 
+    @property
+    def open_api_param(self) -> OpenApiParameter:
+        """The OpenAPI parameter schema definition."""
+        raise NotImplementedError
 
-class PlayerStatsFilter(CategoryFilter):
-    metric = django_filters.OrderingFilter(
-        fields={
-            'total_rank': 'total_rank',
-            'total_standard': 'total_standard',
-            '-total_record_ratio': 'total_record_ratio',
-            'total_score': 'total_score',
-        },
-        choices=(
-            ('total_rank', "Average finish"),
-            ('total_standard', "Average standard"),
-            ('total_record_ratio', "Personal record to world record ratio"),
-            ('total_score', "Total time"),
-        ),
-        required=True
-    )
+
+class OrderingFilterBase(FilterBase):
+
+    def __init__(self, *,
+                 fields: dict[str, str],
+                 request_field: str,
+                 auto=True,
+                 required=True):
+        """
+        Parameters
+        ----------
+        fields : dict of {str: str}
+            Mapping of query param value to model field name to order by
+        request_field : str
+            The name of the query param of the request to get the filter value from
+        auto : bool
+            Whether this filter should be applied by FilterMixin.filter
+        required : bool
+            Whether this filter is required to be present in the query params
+        """
+        super().__init__(
+            field_name='',
+            request_field=request_field,
+            auto=auto,
+            required=required
+        )
+
+        self.fields = fields
+
+    def validate_filter_value(self, value: str):
+        if value not in self.fields:
+            self.validation_error('invalid_value', self.request_field, value)
+
+        return self.fields[value]
+
+    def filter(self, request, queryset: QuerySet) -> QuerySet:
+        """Sort the queryset."""
+        return queryset.order_by(self.get_filter_value(request))
+
+
+class CategoryFilter(FilterBase):
+
+    def __init__(self, *,
+                 expand=True,
+                 field_name='category',
+                 request_field='category',
+                 auto=True,
+                 required=True):
+        """
+        Parameters
+        ----------
+        expand : bool
+            Whether to also filter for more restricted categories (e.g., include `NON_SHORTCUT`
+            with `SHORTCUT`)
+        field_name : str
+            The name of the field on the model to apply the filter to
+        request_field : str
+            The name of the query param of the request to get the filter value from
+        auto : bool
+            Whether this filter should be applied by FilterMixin.filter
+        required : bool
+            Whether this filter is required to be present in the query params
+        """
+        super().__init__(
+            field_name=field_name,
+            request_field=request_field,
+            auto=auto,
+            required=required
+        )
+
+        self.expand = expand
+
+    def validate_filter_value(self, value: str):
+        if value not in CategoryChoices.values:
+            self.validation_error('invalid_value', self.request_field, value)
+
+        return value
+
+    def filter(self, request, queryset: QuerySet) -> QuerySet:
+        if self.expand:
+            return queryset.filter(**{
+                f'{self.field_name}__in': eligible_categories(self.get_filter_value(request))
+            })
+
+        else:
+            return super().filter(request, queryset)
+
+    @property
+    def open_api_param(self) -> OpenApiParameter:
+        return OpenApiParameter(
+            self.request_field,
+            type=str,
+            enum=CategoryChoices.values,
+            required=self.required,
+            allow_blank=False,
+        )
+
+
+class LapModeFilter(FilterBase):
+
+    def __init__(self, *,
+                 allow_overall=False,
+                 field_name='is_lap',
+                 request_field='lap_mode',
+                 auto=True,
+                 required=True):
+        """
+        Parameters
+        ----------
+        allow_overall : bool
+            Whether to allow 'overall' as param value to filter for `None`
+        field_name : str
+            The name of the field on the model to apply the filter to
+        request_field : str
+            The name of the query param of the request to get the filter value from
+        auto : bool
+            Whether this filter should be applied by FilterMixin.filter
+        required : bool
+            Whether this filter is required to be present in the query params
+        """
+        super().__init__(
+            field_name=field_name,
+            request_field=request_field,
+            auto=auto,
+            required=required
+        )
+
+        self.choices = {
+            'course': False,
+            'lap': True
+        }
+        if allow_overall:
+            self.choices['overall'] = None
+
+    def validate_filter_value(self, value: str):
+        if value not in self.choices:
+            self.validation_error('invalid_value', self.request_field, value)
+
+        return self.choices[value]
+
+    @property
+    def open_api_param(self) -> OpenApiParameter:
+        return OpenApiParameter(
+            self.request_field,
+            type=str,
+            enum=self.choices.keys(),
+            required=self.required,
+            allow_blank=False,
+        )
+
+
+class RegionFilter(FilterBase):
+
+    def __init__(self, *,
+                 expand=True,
+                 ranked_only=False,
+                 field_name='region',
+                 request_field='region',
+                 auto=True,
+                 required=True):
+        """
+        Parameters
+        ----------
+        ranked_only : bool
+            Whether to only allow filtering by ranked regions
+        field_name : str
+            The name of the field on the model to apply the filter to
+        request_field : str
+            The name of the query param of the request to get the filter value from
+        auto : bool
+            Whether this filter should be applied by FilterMixin.filter
+        required : bool
+            Whether this filter is required to be present in the query params
+        """
+        super().__init__(
+            field_name=field_name,
+            request_field=request_field,
+            auto=auto,
+            required=required
+        )
+
+        self.expand = expand
+        self.ranked_only = ranked_only
+
+    def validate_filter_value(self, value: str):
+        try:
+            region_id = int(value)
+        except ValueError:
+            self.validation_error('invalid_value', self.request_field, value)
+
+        region = Region.objects.filter(id=region_id)
+
+        if self.ranked_only:
+            region = region.filter(is_ranked=True)
+
+        if not region.exists():
+            self.validation_error('invalid_value', self.request_field, value)
+
+        return region.first()
+
+    def filter(self, request, queryset: QuerySet) -> QuerySet:
+        if self.expand:
+            return queryset.filter(**{
+                f'{self.field_name}__in': (
+                    self.get_filter_value(request).descendants(
+                        include_self=True
+                    ).values_list('pk', flat=True)
+                ),
+            })
+
+        else:
+            return super().filter(request, queryset)
+
+    @property
+    def open_api_param(self) -> OpenApiParameter:
+        return OpenApiParameter(
+            self.request_field,
+            type=int,
+            required=self.required,
+            allow_blank=False,
+        )
+
+
+class MetricOrderingFilter(OrderingFilterBase):
+
+    def __init__(self, *,
+                 request_field='metric',
+                 auto=True,
+                 required=True):
+        super().__init__(
+            fields={
+                'total_rank': 'total_rank',
+                'total_score': 'total_score',
+                'total_standard': 'total_standard',
+                'total_record_ratio': '-total_record_ratio',
+            },
+            request_field=request_field,
+            auto=auto,
+            required=required,
+        )
+
+    @property
+    def open_api_param(self) -> OpenApiParameter:
+        return OpenApiParameter(
+            self.request_field,
+            type=str,
+            enum=self.fields.keys(),
+            required=self.required,
+            allow_blank=False,
+        )
