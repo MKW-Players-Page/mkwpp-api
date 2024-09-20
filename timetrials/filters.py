@@ -335,6 +335,8 @@ class MetricOrderingFilter(OrderingFilterBase):
                 'total_score': 'total_score',
                 'total_standard': 'total_standard',
                 'total_record_ratio': '-total_record_ratio',
+                'total_records': 'total_records',
+                'leaderboard_points': 'leaderboard_points',
             },
             request_field=request_field,
             auto=auto,
