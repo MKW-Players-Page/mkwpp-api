@@ -40,7 +40,7 @@ class PlayerStats(models.Model):
 
     total_record_ratio = models.FloatField(help_text=_("Sum of lowest score to record ratios"))
 
-    total_records = models.IntegerField(help_test=_("Sum of track records"))
+    total_records = models.IntegerField(help_text=_("Sum of track records"))
 
     leaderboard_points = models.IntegerField(help_text=_("Sum of leaderboard points"))
 
@@ -182,12 +182,10 @@ def generate_all_player_stats():
                             scores,
                             0
                         )
-                        stats.total_records = reduce(
 
-                        )
-                        stats.leaderboard_points = reduce(
-                            
-                        )
+                        stats.total_records = len(list(filter(lambda score: score.rank == 1, scores)))
+
+                        stats.leaderboard_points = sum(map(lambda score: max(11 - score.rank, 0), scores))
 
                         overall_stats.score_count += stats.score_count
                         overall_stats.total_score += stats.total_score
