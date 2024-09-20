@@ -183,9 +183,13 @@ def generate_all_player_stats():
                             0
                         )
 
-                        stats.total_records = len(list(filter(lambda score: score.rank == 1, scores)))
+                        stats.total_records = len(list(filter(
+                            lambda score: score.rank == 1, scores
+                        )))
 
-                        stats.leaderboard_points = sum(map(lambda score: max(11 - score.rank, 0), scores))
+                        stats.leaderboard_points = sum(map(
+                            lambda score: max(11 - score.rank, 0), scores
+                        ))
 
                         overall_stats.score_count += stats.score_count
                         overall_stats.total_score += stats.total_score
