@@ -4,7 +4,6 @@ from rest_framework import serializers
 
 from timetrials import models
 
-
 # Regions
 
 class RegionSerializer(serializers.ModelSerializer):
@@ -116,3 +115,10 @@ class StandardLevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.StandardLevel
         fields = ['id', 'name', 'value', 'is_legacy', 'standards']
+
+#Site Champion
+
+class SiteChampionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SiteChampion
+        fields = ['id', 'player', 'date_became_champion', 'category']
