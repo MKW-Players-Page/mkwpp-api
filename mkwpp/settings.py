@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'knox',
     'multiselectfield',
     'core',
     'timetrials',
@@ -145,6 +146,7 @@ USE_TZ = True
 # https://www.django-rest-framework.org/api-guide/settings/
 
 REST_FRAMEWORK = {
+  'DEFAULT_AUTHENTICATION_CLASSES': [],
   'DEFAULT_PARSER_CLASSES': [
     'rest_framework.parsers.JSONParser',
   ],
