@@ -1,3 +1,5 @@
+from django.contrib.auth.password_validation import validate_password
+
 from rest_framework import generics, permissions, serializers
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 
@@ -31,9 +33,33 @@ class CoreLogoutView(LogoutView):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    player = serializers.SerializerMethodField(read_only=True)
+
+    def get_player(self, user: User) -> int:
+        return user.player.id if hasattr(user, 'player') else 0
+
+    def validate_password(self, value):
+        validate_password(value)
+        return value
+
+    def create(self, validated_data):
+        user = User(**validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+
     class Meta:
         model = User
-        fields = ['username', 'email', 'player']
+        fields = ['username', 'email', 'password', 'player']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
+
+
+@extend_schema(operation_id='create_user')
+class CreateUserView(generics.CreateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = (permissions.AllowAny,)
 
 
 @extend_schema(operation_id='current_user')

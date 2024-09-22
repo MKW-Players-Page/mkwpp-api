@@ -13,6 +13,7 @@ class CoreUserAdmin(UserAdmin):
             {
                 'fields': (
                     'is_active',
+                    'is_verified',
                     'is_staff',
                     'is_superuser',
                     'groups',
@@ -37,7 +38,7 @@ class CoreUserAdmin(UserAdmin):
             },
         ),
     )
-    list_display = ('username', 'email', 'is_staff', 'is_superuser')
+    list_display = ('username', 'email', 'is_verified', 'is_staff', 'is_superuser')
     search_fields = ('username', 'email')
     ordering = ('username',)
 
