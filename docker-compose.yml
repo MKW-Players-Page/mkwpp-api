@@ -1,11 +1,14 @@
 volumes:
   postgres:
+  smtp4dev:
 
 services:
   db:
     image: postgres
     volumes:
       - postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
@@ -17,6 +20,18 @@ services:
       - "11211:11211"
     command:
       - "-m 128"
+
+  smtp:
+    image: rnwood/smtp4dev:latest
+    volumes:
+      - smtp4dev:/smtp4dev
+    ports:
+      - "5000:80"
+      - "25:25"
+      - "143:143"
+    environment:
+      - ServerOptions__Urls=http://*:80
+      - ServerOptions__HostName=smtp4dev
 
   app:
     build: .
@@ -32,3 +47,4 @@ services:
     depends_on:
       - db
       - cache
+      - smtp

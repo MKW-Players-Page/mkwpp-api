@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost']
 
+FRONTEND_URL = 'http://localhost:3000'
+
 
 # Application definition
 
@@ -173,6 +175,14 @@ SPECTACULAR_SETTINGS = {
       'CategoryEnum': 'timetrials.models.categories.CategoryChoices',
     },
 }
+
+
+# Email
+# https://docs.djangoproject.com/en/5.1/ref/settings/#email
+
+EMAIL_HOST = 'smtp'
+EMAIL_PORT = 25
+DEFAULT_FROM_EMAIL = "noreply@mariokart64.com"
 
 
 # Static files (CSS, JavaScript, Images)
