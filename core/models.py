@@ -7,6 +7,11 @@ class User(AbstractUser):
     # Make email required and add unique constraint
     email = models.EmailField(_("email address"), unique=True)
 
+    is_verified = models.BooleanField(
+        default=False,
+        help_text=_("Whether the user completed email verification."),
+    )
+
     # Remove unwanted fields from AbstractUser
     first_name = None
     last_name = None
