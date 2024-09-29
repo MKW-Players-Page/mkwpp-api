@@ -87,11 +87,39 @@ class ScoreSerializer(serializers.ModelSerializer):
             'date',
             'video_link',
             'ghost_link',
+            'comment',
         ]
 
 
 class ScoreWithPlayerSerializer(ScoreSerializer):
     player = PlayerBasicSerializer()
+
+
+class ScoreSubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Score
+        fields = [
+            'id',
+            'value',
+            'player',
+            'track',
+            'category',
+            'is_lap',
+            'date',
+            'video_link',
+            'ghost_link',
+            'comment',
+            'status',
+            'time_submitted',
+            'time_reviewed',
+            'reviewed_by',
+        ]
+        extra_kwargs = {
+            'status': {'read_only': True},
+            'time_submitted': {'read_only': True},
+            'time_reviewed': {'read_only': True},
+            'reviewed_by': {'read_only': True},
+        }
 
 
 # Standards
