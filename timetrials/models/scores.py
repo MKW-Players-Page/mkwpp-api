@@ -11,10 +11,10 @@ from timetrials.models.players import Player
 from timetrials.models.tracks import Track
 
 
-class ScoreSubmissionStatus(models.TextChoices):
-    PENDING = 'pending'
-    ACCEPTED = 'accepted'
-    REJECTED = 'rejected'
+class ScoreSubmissionStatus(models.IntegerChoices):
+    PENDING = 0
+    ACCEPTED = 1
+    REJECTED = 2
 
 
 class Score(models.Model):
@@ -39,7 +39,7 @@ class Score(models.Model):
 
     # Submission fields
 
-    status = models.CharField(
+    status = models.IntegerField(
         choices=ScoreSubmissionStatus.choices,
         default=ScoreSubmissionStatus.PENDING,
     )
@@ -51,7 +51,7 @@ class Score(models.Model):
     reviewed_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return str(self.value)
+        return f"{self.value // 60000}'{(self.value % 60000) // 1000:02}\"{self.value % 1000:03}"
 
     class Meta:
         verbose_name = _("score")

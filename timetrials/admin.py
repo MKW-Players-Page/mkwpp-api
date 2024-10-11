@@ -51,8 +51,8 @@ class ScoreAdmin(admin.ModelAdmin):
         ("Other info", {'fields': ('date', 'video_link', 'ghost_link')}),
         ("Submission", {'fields': ('status', 'time_submitted', 'time_reviewed', 'reviewed_by')}),
     )
-    list_display = ('id', 'track', 'category', 'is_lap', 'value', 'player', 'status')
-    list_display_links = ('value',)
+    list_display = ('id', 'track', 'category', 'is_lap', '__str__', 'player', 'status')
+    list_display_links = ('__str__',)
     list_filter = ('track', 'category', 'is_lap', 'status')
     search_fields = ('player__name',)
     ordering = ('track', 'category', 'is_lap', 'value')
