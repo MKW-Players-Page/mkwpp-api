@@ -121,9 +121,8 @@ class ScoreWithPlayerSerializer(ScoreSerializer):
 
 
 class ScoreSubmissionSerializer(serializers.ModelSerializer):
-    player = PlayerBasicSerializer()
-
-    status = ScoreSubmissionStatusField()
+    player = PlayerBasicSerializer(read_only=True)
+    status = ScoreSubmissionStatusField(read_only=True)
 
     class Meta:
         model = models.Score
@@ -144,7 +143,6 @@ class ScoreSubmissionSerializer(serializers.ModelSerializer):
             'reviewed_by',
         ]
         extra_kwargs = {
-            'status': {'read_only': True},
             'time_submitted': {'read_only': True},
             'time_reviewed': {'read_only': True},
             'reviewed_by': {'read_only': True},

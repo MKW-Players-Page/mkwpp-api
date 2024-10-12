@@ -5,7 +5,8 @@ from django.views.decorators.cache import cache_page
 
 from knox.auth import TokenAuthentication
 
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
 
 from timetrials import filters, models, serializers
 from timetrials.models.categories import eligible_categories
@@ -187,6 +188,20 @@ class RecordListView(filters.FilterMixin, generics.ListAPIView):
 
 class ScoreSubmissionCreateView(generics.CreateAPIView):
     serializer_class = serializers.ScoreSubmissionSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        if not hasattr(request.user, 'player'):
+            return Response(
+                {'non_field_errors': ['No player associated with current user.']},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return super().post(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        return serializer.save(player=self.request.user.player)
 
 
 class UserSubmissionListView(generics.ListAPIView):
