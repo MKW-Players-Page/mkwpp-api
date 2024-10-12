@@ -62,7 +62,7 @@
         "name": "Africa",
         "code": "AFR",
         "parent": 1,
-        "is_ranked": false
+        "is_ranked": true
     }
 },
 {
@@ -183,7 +183,7 @@
         "name": "Australia",
         "code": "AU",
         "parent": 5,
-        "is_ranked": false
+        "is_ranked": true
     }
 },
 {
@@ -1238,8 +1238,8 @@
         "type": "country",
         "name": "Italy",
         "code": "IT",
-        "parent": 261,
-        "is_ranked": false
+        "parent": 3,
+        "is_ranked": true
     }
 },
 {
@@ -1272,7 +1272,7 @@
         "name": "Japan",
         "code": "JP",
         "parent": 4,
-        "is_ranked": false
+        "is_ranked": true
     }
 },
 {
@@ -1524,7 +1524,7 @@
         "type": "country",
         "name": "Malta",
         "code": "MT",
-        "parent": 261,
+        "parent": 3,
         "is_ranked": false
     }
 },
@@ -2691,7 +2691,7 @@
         "name": "United States",
         "code": "US",
         "parent": 2,
-        "is_ranked": false
+        "is_ranked": true
     }
 },
 {
@@ -2822,17 +2822,6 @@
         "type": "country_group",
         "name": "Spain & Portugal",
         "code": "ESPT",
-        "parent": 3,
-        "is_ranked": true
-    }
-},
-{
-    "model": "timetrials.region",
-    "pk": 261,
-    "fields": {
-        "type": "country_group",
-        "name": "Italy & Malta",
-        "code": "ITMT",
         "parent": 3,
         "is_ranked": true
     }
