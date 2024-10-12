@@ -3,6 +3,31 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from timetrials import models
+from timetrials.models.scores import ScoreSubmissionStatus
+
+
+# Custom fields
+
+def map_enum_field(mapping: dict):
+    reverse = {v: k for k, v in mapping.items()}
+
+    @extend_schema_field(serializers.ChoiceField(choices=mapping.values()))
+    class MappedEnumField(serializers.Field):
+
+        def to_representation(self, value):
+            return mapping.get(value, None)
+
+        def to_internal_value(self, data):
+            return reverse.get(data, None)
+
+    return MappedEnumField
+
+
+ScoreSubmissionStatusField = map_enum_field({
+    ScoreSubmissionStatus.PENDING: 'pending',
+    ScoreSubmissionStatus.ACCEPTED: 'accepted',
+    ScoreSubmissionStatus.REJECTED: 'rejected',
+})
 
 
 # Regions
@@ -96,6 +121,10 @@ class ScoreWithPlayerSerializer(ScoreSerializer):
 
 
 class ScoreSubmissionSerializer(serializers.ModelSerializer):
+    player = PlayerBasicSerializer()
+
+    status = ScoreSubmissionStatusField()
+
     class Meta:
         model = models.Score
         fields = [

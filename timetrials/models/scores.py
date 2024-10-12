@@ -12,9 +12,9 @@ from timetrials.models.tracks import Track
 
 
 class ScoreSubmissionStatus(models.IntegerChoices):
-    PENDING = 0
-    ACCEPTED = 1
-    REJECTED = 2
+    PENDING = 0, _("Pending")
+    ACCEPTED = 1, _("Accepted")
+    REJECTED = 2, _("Rejected")
 
 
 class Score(models.Model):
