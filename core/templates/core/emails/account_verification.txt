@@ -1,0 +1,9 @@
+Hi {{ user.username }},
+
+Your Mario Kart Wii Players' Page account has been successfully created.
+
+To activate your account, please visit the following link:
+
+{{ frontend_url }}/mkw/activate?token={{ token }}
+
+Happy karting!

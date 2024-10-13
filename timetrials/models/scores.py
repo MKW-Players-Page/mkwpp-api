@@ -4,9 +4,17 @@ from django.utils.translation import gettext_lazy as _
 
 from django_cte import CTEManager
 
-from timetrials.models.categories import CategoryChoices, eligible_categories
+from core.models import User
+
+from timetrials.models.categories import CategoryChoices
 from timetrials.models.players import Player
 from timetrials.models.tracks import Track
+
+
+class ScoreSubmissionStatus(models.IntegerChoices):
+    PENDING = 0, _("Pending")
+    ACCEPTED = 1, _("Accepted")
+    REJECTED = 2, _("Rejected")
 
 
 class Score(models.Model):
@@ -29,17 +37,21 @@ class Score(models.Model):
 
     comment = models.CharField(max_length=128, null=True, blank=True)
 
-    def rank_for_category(self, category: CategoryChoices):
-        """Compute the rank of this score by counting scores with value lower than self."""
-        return Score.objects.filter(
-            track=self.track,
-            category__in=eligible_categories(category),
-            is_lap=self.is_lap,
-            value__lt=self.value,
-        ).order_by('player').distinct('player').count() + 1
+    # Submission fields
+
+    status = models.IntegerField(
+        choices=ScoreSubmissionStatus.choices,
+        default=ScoreSubmissionStatus.PENDING,
+    )
+
+    time_submitted = models.DateTimeField(default=timezone.now)
+
+    time_reviewed = models.DateTimeField(null=True, blank=True)
+
+    reviewed_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return str(self.value)
+        return f"{self.value // 60000}'{(self.value % 60000) // 1000:02}\"{self.value % 1000:03}"
 
     class Meta:
         verbose_name = _("score")

@@ -3,10 +3,14 @@ from django.db.models.functions import NullIf, Rank
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
-from rest_framework import generics
+from knox.auth import TokenAuthentication
+
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
 
 from timetrials import filters, models, serializers
 from timetrials.models.categories import eligible_categories
+from timetrials.models.scores import ScoreSubmissionStatus
 from timetrials.queries import (
     annotate_scores_record_ratio, annotate_scores_standard, query_region_players
 )
@@ -24,7 +28,8 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
     def get_queryset(self):
         # Get the player's lowest score on each track for both course and lap
         player_scores = self.filter(models.Score.objects).filter(
-            player=self.kwargs['pk']
+            player=self.kwargs['pk'],
+            status=ScoreSubmissionStatus.ACCEPTED,
         ).order_by(
             'track', 'is_lap', 'value'
         ).distinct(
@@ -38,7 +43,8 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
         track_scores = models.Score.objects.filter(
             track=OuterRef(OuterRef('track')),
             category__in=eligible_categories(category),
-            is_lap=OuterRef(OuterRef('is_lap'))
+            is_lap=OuterRef(OuterRef('is_lap')),
+            status=ScoreSubmissionStatus.ACCEPTED,
         ).order_by('player', 'value').distinct('player')
 
         # Calculate the rank of each score from the previous query and extract only
@@ -73,13 +79,15 @@ class TrackScoreListView(filters.FilterMixin, generics.ListAPIView):
     filter_fields = (
         filters.CategoryFilter(),
         filters.LapModeFilter(),
+        filters.RegionFilter(auto=False, required=False),
     )
 
     def get_queryset(self):
         scores = models.Score.objects.filter(
             pk__in=Subquery(
                 self.filter(models.Score.objects).filter(
-                    track=self.kwargs['pk']
+                    track=self.kwargs['pk'],
+                    status=ScoreSubmissionStatus.ACCEPTED,
                 ).order_by(
                     'player', 'value'
                 ).distinct(
@@ -89,6 +97,13 @@ class TrackScoreListView(filters.FilterMixin, generics.ListAPIView):
         ).order_by(
             'value', 'date'
         ).annotate(rank=Window(Rank(), order_by='value'))
+
+        region = self.get_filter_value(filters.RegionFilter)
+
+        if region and region.type != models.RegionTypeChoices.WORLD:
+            scores = scores.filter(
+                player__in=Subquery(query_region_players(region).values('pk'))
+            )
 
         category = self.get_filter_value(filters.CategoryFilter)
 
@@ -109,8 +124,17 @@ class TrackTopsListView(filters.FilterMixin, generics.ListAPIView):
     )
 
     def get_queryset(self):
-        scores = self.filter(models.Score.objects).filter(
-            track=self.kwargs['pk']
+        scores = models.Score.objects.filter(
+            pk__in=Subquery(
+                self.filter(models.Score.objects).filter(
+                    track=self.kwargs['pk'],
+                    status=ScoreSubmissionStatus.ACCEPTED,
+                ).order_by(
+                    'player', 'value'
+                ).distinct(
+                    'player'
+                ).values('pk')
+            )
         ).order_by(
             'value', 'date'
         ).annotate(
@@ -146,7 +170,9 @@ class RecordListView(filters.FilterMixin, generics.ListAPIView):
     )
 
     def get_queryset(self):
-        records = self.filter(models.Score.objects).order_by(
+        records = self.filter(models.Score.objects).filter(
+            status=ScoreSubmissionStatus.ACCEPTED
+        ).order_by(
             'track', 'is_lap', 'value', 'date'
         ).distinct(
             'track', 'is_lap'
@@ -165,4 +191,36 @@ class RecordListView(filters.FilterMixin, generics.ListAPIView):
             scores,
             self.get_filter_value(filters.CategoryFilter),
             legacy=True
+        )
+
+
+class ScoreSubmissionCreateView(generics.CreateAPIView):
+    serializer_class = serializers.ScoreSubmissionSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        if not hasattr(request.user, 'player'):
+            return Response(
+                {'non_field_errors': ['No player associated with current user.']},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return super().post(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        return serializer.save(player=self.request.user.player)
+
+
+class UserSubmissionListView(generics.ListAPIView):
+    serializer_class = serializers.ScoreSubmissionSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        if not hasattr(self.request.user, 'player'):
+            return models.Score.objects.none()
+        return models.Score.objects.filter(
+            player=self.request.user.player,
+            status=ScoreSubmissionStatus.PENDING,
         )

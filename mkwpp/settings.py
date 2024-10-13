@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost']
 
+FRONTEND_URL = 'http://localhost:3000'
+
 
 # Application definition
 
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'knox',
     'multiselectfield',
     'core',
     'timetrials',
@@ -145,6 +148,7 @@ USE_TZ = True
 # https://www.django-rest-framework.org/api-guide/settings/
 
 REST_FRAMEWORK = {
+  'DEFAULT_AUTHENTICATION_CLASSES': [],
   'DEFAULT_PARSER_CLASSES': [
     'rest_framework.parsers.JSONParser',
   ],
@@ -171,6 +175,14 @@ SPECTACULAR_SETTINGS = {
       'CategoryEnum': 'timetrials.models.categories.CategoryChoices',
     },
 }
+
+
+# Email
+# https://docs.djangoproject.com/en/5.1/ref/settings/#email
+
+EMAIL_HOST = 'smtp'
+EMAIL_PORT = 25
+DEFAULT_FROM_EMAIL = "noreply@mariokart64.com"
 
 
 # Static files (CSS, JavaScript, Images)

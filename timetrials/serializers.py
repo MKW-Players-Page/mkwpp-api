@@ -3,6 +3,31 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from timetrials import models
+from timetrials.models.scores import ScoreSubmissionStatus
+
+
+# Custom fields
+
+def map_enum_field(mapping: dict):
+    reverse = {v: k for k, v in mapping.items()}
+
+    @extend_schema_field(serializers.ChoiceField(choices=mapping.values()))
+    class MappedEnumField(serializers.Field):
+
+        def to_representation(self, value):
+            return mapping.get(value, None)
+
+        def to_internal_value(self, data):
+            return reverse.get(data, None)
+
+    return MappedEnumField
+
+
+ScoreSubmissionStatusField = map_enum_field({
+    ScoreSubmissionStatus.PENDING: 'pending',
+    ScoreSubmissionStatus.ACCEPTED: 'accepted',
+    ScoreSubmissionStatus.REJECTED: 'rejected',
+})
 
 # Regions
 
@@ -86,11 +111,41 @@ class ScoreSerializer(serializers.ModelSerializer):
             'date',
             'video_link',
             'ghost_link',
+            'comment',
         ]
 
 
 class ScoreWithPlayerSerializer(ScoreSerializer):
     player = PlayerBasicSerializer()
+
+
+class ScoreSubmissionSerializer(serializers.ModelSerializer):
+    player = PlayerBasicSerializer(read_only=True)
+    status = ScoreSubmissionStatusField(read_only=True)
+
+    class Meta:
+        model = models.Score
+        fields = [
+            'id',
+            'value',
+            'player',
+            'track',
+            'category',
+            'is_lap',
+            'date',
+            'video_link',
+            'ghost_link',
+            'comment',
+            'status',
+            'time_submitted',
+            'time_reviewed',
+            'reviewed_by',
+        ]
+        extra_kwargs = {
+            'time_submitted': {'read_only': True},
+            'time_reviewed': {'read_only': True},
+            'reviewed_by': {'read_only': True},
+        }
 
 
 # Standards
