@@ -79,6 +79,7 @@ class TrackScoreListView(filters.FilterMixin, generics.ListAPIView):
     filter_fields = (
         filters.CategoryFilter(),
         filters.LapModeFilter(),
+        filters.RegionFilter(auto=False, required=False),
     )
 
     def get_queryset(self):
@@ -96,6 +97,13 @@ class TrackScoreListView(filters.FilterMixin, generics.ListAPIView):
         ).order_by(
             'value', 'date'
         ).annotate(rank=Window(Rank(), order_by='value'))
+
+        region = self.get_filter_value(filters.RegionFilter)
+
+        if region and region.type != models.RegionTypeChoices.WORLD:
+            scores = scores.filter(
+                player__in=Subquery(query_region_players(region).values('pk'))
+            )
 
         category = self.get_filter_value(filters.CategoryFilter)
 
