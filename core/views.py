@@ -195,3 +195,8 @@ class BlogPostSerializer(serializers.ModelSerializer):
 class LatestBlogPostListView(generics.ListAPIView):
     serializer_class = BlogPostSerializer
     queryset = BlogPost.objects.filter(is_published=True).order_by('-published_at')[:5]
+
+
+class BlogPostRetrieveView(generics.RetrieveAPIView):
+    serializer_class = BlogPostSerializer
+    queryset = BlogPost.objects.filter(is_published=True)
