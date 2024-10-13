@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from core.models import User
+from core.models import BlogPost, User
 
 
+@admin.register(User)
 class CoreUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
@@ -43,4 +44,13 @@ class CoreUserAdmin(UserAdmin):
     ordering = ('username',)
 
 
-admin.site.register(User, CoreUserAdmin)
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('author', 'title', 'content', 'is_published', 'published_at')}),
+    )
+    list_display = ('author', 'is_published', 'title')
+    list_display_links = ('title',)
+    list_filter = ('is_published',)
+    search_fields = ('title',)
+    ordering = ('-id',)

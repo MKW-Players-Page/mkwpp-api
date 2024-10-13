@@ -15,8 +15,10 @@ from drf_spectacular.utils import extend_schema, OpenApiResponse
 from knox.auth import TokenAuthentication
 from knox.views import LoginView, LogoutView
 
-from core.models import User
+from core.models import BlogPost, User
 
+
+# Authentication
 
 ACCOUNT_VERIFICATION_SALT = 'account_verification'
 MAX_TOKEN_AGE = int(timedelta(days=2).total_seconds())
@@ -178,3 +180,18 @@ class CurrentUserView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+# Blog posts
+
+class BlogPostSerializer(serializers.ModelSerializer):
+    author = UserSerializer()
+
+    class Meta:
+        model = BlogPost
+        fields = ['id', 'author', 'title', 'content', 'published_at']
+
+
+class LatestBlogPostListView(generics.ListAPIView):
+    serializer_class = BlogPostSerializer
+    queryset = BlogPost.objects.filter(is_published=True).order_by('-published_at')[:5]
