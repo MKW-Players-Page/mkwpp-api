@@ -184,12 +184,25 @@ class CurrentUserView(generics.RetrieveAPIView):
 
 # Blog posts
 
+class BlogPostSummarySerializer(serializers.ModelSerializer):
+    author = UserSerializer()
+
+    class Meta:
+        model = BlogPost
+        fields = ['id', 'author', 'title', 'published_at']
+
+
 class BlogPostSerializer(serializers.ModelSerializer):
     author = UserSerializer()
 
     class Meta:
         model = BlogPost
         fields = ['id', 'author', 'title', 'content', 'published_at']
+
+
+class BlogPostListView(generics.ListAPIView):
+    serializer_class = BlogPostSummarySerializer
+    queryset = BlogPost.objects.filter(is_published=True).order_by('-published_at')
 
 
 class LatestBlogPostListView(generics.ListAPIView):
