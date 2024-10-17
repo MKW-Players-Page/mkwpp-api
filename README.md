@@ -12,7 +12,7 @@ that, simply navigate to the root of the repository where the `Dockerfile` is lo
 following command:
 
 ```.sh
-docker-compose up -d
+docker compose up -d
 ```
 
 This will run the app. On your first time running this, the required images will be downloaded and
@@ -27,7 +27,7 @@ The first thing you'll need to do is run the migrations. This will create all th
 needed by the application.
 
 ```.sh
-docker-compose exec app python manage.py migrate
+docker compose exec app python manage.py migrate
 ```
 
 If you now go to http://localhost:8000/admin/ on your browser, you should be greeted by the Django
@@ -39,7 +39,7 @@ Next, you'll need an admin account to be able to log in. Run the following comma
 prompts.
 
 ```.sh
-docker-compose exec app python manage.py createsuperuser
+docker compose exec app python manage.py createsuperuser
 ```
 
 You should now be able to log into the admin site using the credentials of the new superuser.
@@ -51,13 +51,13 @@ some data. This project comes with fixtures for required data such as tracks and
 as player and score data extracted from the existing Players' Page.
 
 ```.sh
-docker-compose exec app python manage.py loaddata regions trackcups tracks standardlevels standards players scores
+docker compose exec app python manage.py loaddata regions trackcups tracks standardlevels standards players scores
 ```
 
 Once that is done, you will need to generate playerstats, which can be done by running:
 
 ```.sh
-docker-compose exec app python manage.py generate_playerstats
+docker compose exec app python manage.py generate_playerstats
 ```
 
 These are pretty heavy operations and may take up to a few minutes to run depending on your machine.
@@ -88,8 +88,8 @@ To add and external library to the project, install the package within the Docke
 pip, then freeze the requirements.
 
 ```.sh
-docker-compose exec app pip install <package>
-docker-compose exec app pip freeze > requirements.txt
+docker compose exec app pip install <package>
+docker compose exec app pip freeze > requirements.txt
 ```
 
 ### Sharing database changes
@@ -98,14 +98,14 @@ If you create or update entries in the database and wish to share those changes,
 command:
 
 ```.sh
-docker-compose exec app python manage.py dumpdata <app_label>.<model_name> --indent 4 > <app_label>/fixtures/<model_name>.json
+docker compose exec app python manage.py dumpdata <app_label>.<model_name> --indent 4 > <app_label>/fixtures/<model_name>.json
 ```
 
 You would replace all instances of `<model_name>` with the (lowercase) name of the model and
 `<app_label>` with the name of the app the model belongs to. For example, to dump all standards:
 
 ```.sh
-docker-compose exec app python manage.py dumpdata timetrials.standard --indent 4 > timetrials/fixtures/standards.json
+docker compose exec app python manage.py dumpdata timetrials.standard --indent 4 > timetrials/fixtures/standards.json
 ```
 
 Note that the plural form is used for the JSON file names.
