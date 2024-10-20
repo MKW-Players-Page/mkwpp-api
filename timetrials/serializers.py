@@ -68,7 +68,7 @@ class PlayerSerializer(serializers.ModelSerializer):
         fields = PlayerBasicSerializer.Meta.fields + ['bio']
 
 
-class PlayerStats(serializers.ModelSerializer):
+class PlayerStatsSerializer(serializers.ModelSerializer):
     rank = serializers.IntegerField()
     player = PlayerBasicSerializer()
 
@@ -88,6 +88,41 @@ class PlayerStats(serializers.ModelSerializer):
             'total_records',
             'leaderboard_points',
         ]
+
+
+class PlayerMatchupScoreSerializer(serializers.ModelSerializer):
+    difference = serializers.IntegerField(allow_null=True)
+
+    class Meta:
+        model = models.Score
+        fields = [
+            'id',
+            'value',
+            'difference',
+            'player',
+            'track',
+            'category',
+            'is_lap',
+            'date',
+            'video_link',
+            'ghost_link',
+            'comment',
+        ]
+
+
+class PlayerMatchupPlayerSerializer(serializers.ModelSerializer):
+    scores = PlayerMatchupScoreSerializer(many=True, source='player_scores')
+    total_wins = serializers.IntegerField()
+    total_ties = serializers.IntegerField()
+
+    class Meta:
+        model = models.Player
+        fields = ['id', 'name', 'region', 'alias', 'scores', 'total_wins', 'total_ties']
+
+
+class PlayerMatchupSerializer(serializers.Serializer):
+    p1 = PlayerMatchupPlayerSerializer()
+    p2 = PlayerMatchupPlayerSerializer()
 
 
 # Scores
