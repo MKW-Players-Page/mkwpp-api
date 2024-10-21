@@ -110,14 +110,29 @@ class PlayerMatchupScoreSerializer(serializers.ModelSerializer):
         ]
 
 
+class PlayerMatchupStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.PlayerStats
+        fields = [
+            'score_count',
+            'total_score',
+            'total_rank',
+            'total_standard',
+            'total_record_ratio',
+            'total_records',
+            'leaderboard_points',
+        ]
+
+
 class PlayerMatchupPlayerSerializer(serializers.ModelSerializer):
     scores = PlayerMatchupScoreSerializer(many=True, source='player_scores')
+    stats = PlayerMatchupStatsSerializer(source='player_stats')
     total_wins = serializers.IntegerField()
     total_ties = serializers.IntegerField()
 
     class Meta:
         model = models.Player
-        fields = ['id', 'name', 'region', 'alias', 'scores', 'total_wins', 'total_ties']
+        fields = ['id', 'name', 'region', 'alias', 'scores', 'stats', 'total_wins', 'total_ties']
 
 
 class PlayerMatchupSerializer(serializers.Serializer):

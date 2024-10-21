@@ -9,6 +9,7 @@ from rest_framework import generics, status, views
 from rest_framework.response import Response
 
 from timetrials import filters, models, serializers
+from timetrials.models.regions import RegionTypeChoices
 from timetrials.models.scores import ScoreSubmissionStatus
 
 
@@ -66,6 +67,7 @@ class PlayerMatchupRetrieveView(filters.FilterMixin, views.APIView):
     serializer_class = serializers.PlayerMatchupSerializer
     filter_fields = (
         filters.CategoryFilter(),
+        filters.LapModeFilter(allow_overall=True, auto=False)
     )
 
     def get_player(self, index):
@@ -81,6 +83,19 @@ class PlayerMatchupRetrieveView(filters.FilterMixin, views.APIView):
         ).order_by(
             'track', 'is_lap', 'value'
         )
+
+        lap_mode = self.get_filter_value(filters.LapModeFilter)
+        if lap_mode is not None:
+            player.player_scores = player.player_scores.filter(is_lap=lap_mode)
+
+        world = models.Region.objects.filter(type=RegionTypeChoices.WORLD).first()
+
+        player.player_stats = models.PlayerStats.objects.filter(
+            player=player,
+            region=world,
+            is_lap=lap_mode,
+            category=self.get_filter_value(filters.CategoryFilter),
+        ).first()
 
         return player
 
