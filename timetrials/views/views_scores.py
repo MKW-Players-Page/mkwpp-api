@@ -23,7 +23,7 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
     filter_fields = (
         filters.CategoryFilter(),
         filters.LapModeFilter(required=False),
-        filters.RegionFilter(expand=False, ranked_only=False, required=False, auto=False),
+        filters.RegionFilter(ranked_only=False, required=False, auto=False),
     )
 
     def get_queryset(self):
@@ -39,7 +39,6 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
 
         category = self.get_filter_value(filters.CategoryFilter)
 
-                    
         # For each of the player's scores, query the lowest score from every player
         # on that same track and category
         track_scores = models.Score.objects.filter(
@@ -47,7 +46,6 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
             category__in=eligible_categories(category),
             is_lap=OuterRef(OuterRef('is_lap')),
             status=ScoreSubmissionStatus.ACCEPTED,
-            
         ).order_by('player', 'value').distinct('player')
 
         region = self.get_filter_value(filters.RegionFilter)
@@ -55,8 +53,7 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
             track_scores = track_scores.filter(
                 player__in=Subquery(query_region_players(region).values('pk'))
             )
-            
-            
+
         # Calculate the rank of each score from the previous query and extract only
         # the rank of the player's score
         rank_subquery = models.Score.objects.filter(

@@ -105,7 +105,9 @@ def annotate_scores_standard(scores: QuerySet, category: models.CategoryChoices,
     )
 
 
-def annotate_scores_record_ratio(scores: QuerySet, category: models.CategoryChoices, region: models.Region | None = None):
+def annotate_scores_record_ratio(scores: QuerySet,
+                                 category: models.CategoryChoices,
+                                 region: models.Region | None = None):
     """Annotate each score within the queryset with its record ratio."""
 
     records = models.Score.objects.distinct(
@@ -115,7 +117,7 @@ def annotate_scores_record_ratio(scores: QuerySet, category: models.CategoryChoi
     ).filter(
         category__in=eligible_categories(category)
     )
-    
+
     if region is not None:
         if region.type != models.RegionTypeChoices.WORLD:
             records = records.filter(
