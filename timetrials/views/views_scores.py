@@ -23,6 +23,7 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
     filter_fields = (
         filters.CategoryFilter(),
         filters.LapModeFilter(required=False),
+        filters.RegionFilter(ranked_only=False, required=False, auto=False),
     )
 
     def get_queryset(self):
@@ -47,6 +48,12 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
             status=ScoreSubmissionStatus.ACCEPTED,
         ).order_by('player', 'value').distinct('player')
 
+        region = self.get_filter_value(filters.RegionFilter)
+        if region and region.type != models.RegionTypeChoices.WORLD:
+            track_scores = track_scores.filter(
+                player__in=Subquery(query_region_players(region).values('pk'))
+            )
+
         # Calculate the rank of each score from the previous query and extract only
         # the rank of the player's score
         rank_subquery = models.Score.objects.filter(
@@ -68,7 +75,7 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
 
         return annotate_scores_record_ratio(
             annotate_scores_standard(scores, category, legacy=True),
-            category
+            category, region
         )
 
 
