@@ -7,6 +7,8 @@ urlpatterns = [
     path('regions/', views.RegionListView.as_view(), name='region-list'),
     path('standards/', views.StandardListView.as_view(), name='standard-list'),
     path('cups/', views.TrackCupListView.as_view(), name='trackcup-list'),
+    path('matchups/<int:pk1>/<int:pk2>/', views.PlayerMatchupRetrieveView.as_view(),
+         name='player-matchup'),
     path('tracks/', views.TrackListView.as_view(), name='track-list'),
     path('tracks/<int:pk>/scores/', views.TrackScoreListView.as_view(), name='track-score-list'),
     path('tracks/<int:pk>/tops/', views.TrackTopsListView.as_view(), name='track-tops-list'),
