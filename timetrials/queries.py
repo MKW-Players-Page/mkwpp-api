@@ -91,11 +91,6 @@ def annotate_scores_standard(scores: QuerySet, category: models.CategoryChoices,
                 is_lap=OuterRef('is_lap'),
                 level__is_legacy=legacy,
             ).order_by(
-                # Case(
-                #     When(category='unres', then=Value(1)),
-                #     When(category='sc', then=Value(2)),
-                #     When(category='nonsc', then=Value(3)),
-                # ),
                 '-category',
                 'value'
             ).values('pk')[:1]
