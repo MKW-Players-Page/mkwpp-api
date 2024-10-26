@@ -20,7 +20,10 @@ class PlayerStats(models.Model):
 
     region = models.ForeignKey(Region, related_name='playerstats', on_delete=models.CASCADE)
 
-    category = models.CharField(choices=CategoryChoices.choices)
+    category = models.IntegerField(
+        choices=CategoryChoices.choices,
+        default=CategoryChoices.NON_SHORTCUT,
+    )
 
     is_lap = models.BooleanField(
         null=True,

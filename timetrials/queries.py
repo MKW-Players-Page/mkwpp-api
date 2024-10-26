@@ -1,12 +1,9 @@
-from django.db.models import (
-    Case, F, FloatField, OuterRef, Q, QuerySet, Subquery, Value, When, Window
-)
+from django.db.models import F, FloatField, OuterRef, Q, QuerySet, Subquery, Value, Window
 from django.db.models.functions import Cast, Rank
 
 from django_cte import With
 
 from timetrials import models
-from timetrials.models.categories import eligible_categories
 from timetrials.models.scores import ScoreSubmissionStatus
 
 
@@ -29,7 +26,7 @@ def query_records(category: models.CategoryChoices, region: models.Region = None
     ).order_by(
         'track', 'is_lap', 'value'
     ).filter(
-        category__in=eligible_categories(category),
+        category__lte=category,
         status=ScoreSubmissionStatus.ACCEPTED,
     ).annotate(
         rank=Value(1)
@@ -54,7 +51,7 @@ def query_ranked_scores(category: models.CategoryChoices, region: models.Region 
     ).order_by(
         'player', 'track', 'is_lap', 'value'
     ).filter(
-        category__in=eligible_categories(category),
+        category__lte=category,
         status=ScoreSubmissionStatus.ACCEPTED,
     ).values('pk')
 
@@ -90,15 +87,11 @@ def annotate_scores_standard(scores: QuerySet, category: models.CategoryChoices,
             models.Standard.objects.filter(
                 Q(value__gte=OuterRef('value')) | Q(value=None),
                 track=OuterRef('track'),
-                category__in=eligible_categories(category),
+                category__lte=category,
                 is_lap=OuterRef('is_lap'),
                 level__is_legacy=legacy,
             ).order_by(
-                Case(
-                    When(category='unres', then=Value(1)),
-                    When(category='sc', then=Value(2)),
-                    When(category='nonsc', then=Value(3)),
-                ),
+                '-category',
                 'value'
             ).values('pk')[:1]
         )
@@ -115,7 +108,7 @@ def annotate_scores_record_ratio(scores: QuerySet,
     ).order_by(
         'track', 'is_lap', 'value'
     ).filter(
-        category__in=eligible_categories(category)
+        category__lte=category
     )
 
     if region is not None:

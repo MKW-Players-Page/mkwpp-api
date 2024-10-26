@@ -37,7 +37,11 @@ class Standard(models.Model):
         on_delete=models.CASCADE,
     )
 
-    category = models.CharField(choices=CategoryChoices.choices)
+    category = models.IntegerField(
+        choices=CategoryChoices.choices,
+        default=CategoryChoices.NON_SHORTCUT,
+    )
+
     is_lap = models.BooleanField(default=False, help_text=_("Off for 3lap, on for flap."))
 
     value = models.IntegerField(
