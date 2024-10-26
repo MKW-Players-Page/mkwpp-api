@@ -174,6 +174,7 @@ class RecordListView(filters.FilterMixin, generics.ListAPIView):
     filter_fields = (
         filters.CategoryFilter(),
         filters.LapModeFilter(required=False),
+        filters.RegionFilter(auto=False, required=False),
     )
 
     def get_queryset(self):
@@ -184,6 +185,13 @@ class RecordListView(filters.FilterMixin, generics.ListAPIView):
         ).distinct(
             'track', 'is_lap'
         )
+
+        region = self.get_filter_value(filters.RegionFilter)
+
+        if region and region.type != models.RegionTypeChoices.WORLD:
+            records = records.filter(
+                player__in=Subquery(query_region_players(region).values('pk'))
+            )
 
         scores = models.Score.objects.filter(
             pk__in=Subquery(records.values('pk'))
