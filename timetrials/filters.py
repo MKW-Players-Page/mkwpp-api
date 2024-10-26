@@ -4,8 +4,9 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from rest_framework.exceptions import ValidationError
 
-from timetrials.models.categories import CategoryChoices, eligible_categories
+from timetrials.models.categories import CategoryChoices
 from timetrials.models.regions import Region
+from timetrials.serializers import CategoryField
 
 
 class FilterMixin:
@@ -173,15 +174,17 @@ class CategoryFilter(FilterBase):
         self.expand = expand
 
     def validate_filter_value(self, value: str):
-        if value not in CategoryChoices.values:
+        category = CategoryField().to_internal_value(value)
+
+        if category not in CategoryChoices.values:
             self.validation_error('invalid_value', self.request_field, value)
 
-        return value
+        return category
 
     def filter(self, request, queryset: QuerySet) -> QuerySet:
         if self.expand:
             return queryset.filter(**{
-                f'{self.field_name}__in': eligible_categories(self.get_filter_value(request))
+                f'{self.field_name}__lte': self.get_filter_value(request)
             })
 
         else:
@@ -192,7 +195,7 @@ class CategoryFilter(FilterBase):
         return OpenApiParameter(
             self.request_field,
             type=str,
-            enum=CategoryChoices.values,
+            enum=CategoryField.values(),
             required=self.required,
             allow_blank=False,
         )

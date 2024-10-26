@@ -3,6 +3,7 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from timetrials import models
+from timetrials.models.categories import CategoryChoices
 from timetrials.models.scores import ScoreSubmissionStatus
 
 
@@ -20,7 +21,35 @@ def map_enum_field(mapping: dict):
         def to_internal_value(self, data):
             return reverse.get(data, None)
 
+        @classmethod
+        def values(cls):
+            return mapping.values()
+
     return MappedEnumField
+
+
+CategoryField = map_enum_field({
+    CategoryChoices.NON_SHORTCUT: 'nonsc',
+    CategoryChoices.SHORTCUT: 'sc',
+    CategoryChoices.UNRESTRICTED: 'unres',
+})
+
+
+class MultiCategoryField(serializers.MultipleChoiceField):
+
+    def __init__(self, **kwargs):
+        kwargs = {'choices': CategoryChoices.choices, **kwargs}
+        super().__init__(**kwargs)
+
+    def to_representation(self, value):
+        field = CategoryField()
+        values = super().to_representation(value)
+        return [field.to_representation(value) for value in values]
+
+    def to_internal_value(self, data):
+        field = CategoryField()
+        values = super().to_internal_value(data)
+        return [field.to_internal_value(value) for value in values]
 
 
 ScoreSubmissionStatusField = map_enum_field({
@@ -41,7 +70,7 @@ class RegionSerializer(serializers.ModelSerializer):
 # Tracks
 
 class TrackSerializer(serializers.ModelSerializer):
-    categories = serializers.MultipleChoiceField(choices=models.CategoryChoices.choices)
+    categories = MultiCategoryField()
 
     class Meta:
         model = models.Track
@@ -71,6 +100,7 @@ class PlayerSerializer(serializers.ModelSerializer):
 class PlayerStatsSerializer(serializers.ModelSerializer):
     rank = serializers.IntegerField()
     player = PlayerBasicSerializer()
+    category = CategoryField()
 
     class Meta:
         model = models.PlayerStats
@@ -92,6 +122,7 @@ class PlayerStatsSerializer(serializers.ModelSerializer):
 
 class PlayerMatchupScoreSerializer(serializers.ModelSerializer):
     difference = serializers.IntegerField(allow_null=True)
+    category = CategoryField()
 
     class Meta:
         model = models.Score
@@ -144,6 +175,7 @@ class PlayerMatchupSerializer(serializers.Serializer):
 
 class ScoreSerializer(serializers.ModelSerializer):
     rank = serializers.IntegerField()
+    category = CategoryField()
     standard = serializers.IntegerField()
     record_ratio = serializers.FloatField()
 
@@ -172,6 +204,7 @@ class ScoreWithPlayerSerializer(ScoreSerializer):
 
 class ScoreSubmissionSerializer(serializers.ModelSerializer):
     player = PlayerBasicSerializer(read_only=True)
+    category = CategoryField()
     status = ScoreSubmissionStatusField(read_only=True)
 
     class Meta:
@@ -202,6 +235,8 @@ class ScoreSubmissionSerializer(serializers.ModelSerializer):
 # Standards
 
 class StandardSerializer(serializers.ModelSerializer):
+    category = CategoryField()
+
     class Meta:
         model = models.Standard
         fields = ['id', 'level', 'track', 'category', 'is_lap', 'value']

@@ -9,7 +9,6 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from timetrials import filters, models, serializers
-from timetrials.models.categories import eligible_categories
 from timetrials.models.scores import ScoreSubmissionStatus
 from timetrials.queries import (
     annotate_scores_record_ratio, annotate_scores_standard, query_region_players
@@ -43,7 +42,7 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
         # on that same track and category
         track_scores = models.Score.objects.filter(
             track=OuterRef(OuterRef('track')),
-            category__in=eligible_categories(category),
+            category__lte=category,
             is_lap=OuterRef(OuterRef('is_lap')),
             status=ScoreSubmissionStatus.ACCEPTED,
         ).order_by('player', 'value').distinct('player')
