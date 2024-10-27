@@ -2,7 +2,7 @@ from timetrials.views.views_players import (
     PlayerListView, PlayerMatchupRetrieveView, PlayerRetrieveView, PlayerStatsListView,
     PlayerStatsRetrieveView
 )
-from timetrials.views.views_regions import RegionListView
+from timetrials.views.views_regions import RegionListView, RegionStatsListView
 from timetrials.views.views_scores import (
     PlayerScoreListView, RecordListView, ScoreSubmissionCreateView, TrackScoreListView,
     TrackTopsListView, UserSubmissionListView

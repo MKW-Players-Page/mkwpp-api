@@ -5,7 +5,8 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.exceptions import ValidationError
 
 from timetrials.models.categories import CategoryChoices
-from timetrials.models.regions import Region
+from timetrials.models.regions import Region, RegionTypeChoices
+from timetrials.models.stats.region_stats import MAX_TOP_SCORE_COUNT
 from timetrials.serializers import CategoryField
 
 
@@ -315,6 +316,96 @@ class RegionFilter(FilterBase):
 
         else:
             return super().filter(request, queryset)
+
+    @property
+    def open_api_param(self) -> OpenApiParameter:
+        return OpenApiParameter(
+            self.request_field,
+            type=int,
+            required=self.required,
+            allow_blank=False,
+        )
+
+
+class RegionTypeFilter(FilterBase):
+
+    def __init__(self, *,
+                 field_name='type',
+                 request_field='type',
+                 auto=True,
+                 required=True):
+        """
+        Parameters
+        ----------
+        field_name : str
+            The name of the field on the model to apply the filter to
+        request_field : str
+            The name of the query param of the request to get the filter value from
+        auto : bool
+            Whether this filter should be applied by FilterMixin.filter
+        required : bool
+            Whether this filter is required to be present in the query params
+        """
+        super().__init__(
+            field_name=field_name,
+            request_field=request_field,
+            auto=auto,
+            required=required
+        )
+
+        self.choices = [
+            RegionTypeChoices.CONTINENT,
+            RegionTypeChoices.COUNTRY,
+            RegionTypeChoices.SUBNATIONAL,
+        ]
+
+    @property
+    def open_api_param(self) -> OpenApiParameter:
+        return OpenApiParameter(
+            self.request_field,
+            type=str,
+            enum=self.choices,
+            required=self.required,
+            allow_blank=False,
+        )
+
+
+class RegionStatsTopScoreCountFilter(FilterBase):
+
+    def __init__(self, *,
+                 field_name='top_score_count',
+                 request_field='top',
+                 auto=True,
+                 required=True):
+        """
+        Parameters
+        ----------
+        field_name : str
+            The name of the field on the model to apply the filter to
+        request_field : str
+            The name of the query param of the request to get the filter value from
+        auto : bool
+            Whether this filter should be applied by FilterMixin.filter
+        required : bool
+            Whether this filter is required to be present in the query params
+        """
+        super().__init__(
+            field_name=field_name,
+            request_field=request_field,
+            auto=auto,
+            required=required
+        )
+
+    def validate_filter_value(self, value: str):
+        try:
+            top_score_count = int(value)
+        except ValueError:
+            self.validation_error('invalid_value', self.request_field, value)
+
+        if top_score_count <= 0 or top_score_count > MAX_TOP_SCORE_COUNT:
+            self.validation_error('invalid_value', self.request_field, value)
+
+        return top_score_count
 
     @property
     def open_api_param(self) -> OpenApiParameter:

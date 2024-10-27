@@ -5,6 +5,7 @@ from timetrials import views
 
 urlpatterns = [
     path('regions/', views.RegionListView.as_view(), name='region-list'),
+    path('regions/rankings/', views.RegionStatsListView.as_view(), name='region-stats-list'),
     path('standards/', views.StandardListView.as_view(), name='standard-list'),
     path('cups/', views.TrackCupListView.as_view(), name='trackcup-list'),
     path('matchups/<int:pk1>/<int:pk2>/', views.PlayerMatchupRetrieveView.as_view(),

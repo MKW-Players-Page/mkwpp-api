@@ -67,6 +67,28 @@ class RegionSerializer(serializers.ModelSerializer):
         fields = ['id', 'type', 'name', 'code', 'parent', 'is_ranked']
 
 
+class RegionStatsSerializer(serializers.ModelSerializer):
+    region = RegionSerializer()
+    rank = serializers.IntegerField()
+
+    class Meta:
+        model = models.RegionStats
+        fields = [
+            'region',
+            'top_score_count',
+            'category',
+            'is_lap',
+            'rank',
+            'participation_count',
+            'score_count',
+            'total_score',
+            'total_rank',
+            'total_standard',
+            'total_record_ratio',
+            'total_records',
+        ]
+
+
 # Tracks
 
 class TrackSerializer(serializers.ModelSerializer):
