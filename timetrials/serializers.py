@@ -69,6 +69,7 @@ class RegionSerializer(serializers.ModelSerializer):
 
 class RegionStatsSerializer(serializers.ModelSerializer):
     region = RegionSerializer()
+    category = CategoryField()
     rank = serializers.IntegerField()
 
     class Meta:
