@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 
 from timetrials.models.categories import CategoryChoices
 from timetrials.models.regions import Region, RegionTypeChoices
-from timetrials.models.stats.region_stats import MAX_TOP_SCORE_COUNT
+from timetrials.models.stats.region_stats import TopScoreCountChoices
 from timetrials.serializers import CategoryField
 
 
@@ -402,7 +402,7 @@ class RegionStatsTopScoreCountFilter(FilterBase):
         except ValueError:
             self.validation_error('invalid_value', self.request_field, value)
 
-        if top_score_count <= 0 or top_score_count > MAX_TOP_SCORE_COUNT:
+        if top_score_count not in TopScoreCountChoices.values:
             self.validation_error('invalid_value', self.request_field, value)
 
         return top_score_count
@@ -412,6 +412,7 @@ class RegionStatsTopScoreCountFilter(FilterBase):
         return OpenApiParameter(
             self.request_field,
             type=int,
+            enum=TopScoreCountChoices.values,
             required=self.required,
             allow_blank=False,
         )

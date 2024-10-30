@@ -10,7 +10,12 @@ from timetrials.models.standards import Standard
 from timetrials.queries import query_ranked_scores, query_records, query_region_players
 
 
-MAX_TOP_SCORE_COUNT = 3
+class TopScoreCountChoices(models.IntegerChoices):
+    ALL = 0, _("Every regional score (minimum of 3 to count)")
+    TOP_1 = 1, _("Regional record only")
+    TOP_3 = 3, _("Top 3 regional scores")
+    TOP_5 = 5, _("Top 5 regional scores")
+    TOP_10 = 10, _("Top 10 regional scores")
 
 
 class RegionStats(models.Model):
@@ -18,7 +23,11 @@ class RegionStats(models.Model):
 
     # Category information
 
-    top_score_count = models.IntegerField(help_text=_("Number of top region score per track"))
+    top_score_count = models.IntegerField(
+        choices=TopScoreCountChoices.choices,
+        default=TopScoreCountChoices.ALL,
+        help_text=_("Number of top region score per track"),
+    )
 
     category = models.IntegerField(
         choices=CategoryChoices.choices,
@@ -39,15 +48,15 @@ class RegionStats(models.Model):
 
     score_count = models.IntegerField(help_text=_("Number of scores qualifying for the category"))
 
-    total_score = models.IntegerField(help_text=_("Sum of all lowest scores"))
+    total_score = models.BigIntegerField(help_text=_("Sum of all lowest scores"))
 
-    total_rank = models.IntegerField(help_text=_("Sum of the rank of all lowest scores"))
+    total_rank = models.BigIntegerField(help_text=_("Sum of the rank of all lowest scores"))
 
-    total_standard = models.IntegerField(help_text=_("Sum of the standard of all lowest scores"))
+    total_standard = models.BigIntegerField(help_text=_("Sum of the standard of all lowest scores"))
 
     total_record_ratio = models.FloatField(help_text=_("Sum of lowest score to record ratios"))
 
-    total_records = models.IntegerField(help_text=_("Sum of track records"))
+    total_records = models.IntegerField(help_text=_("Number of records"))
 
     def __str__(self):
         return "Region stats for %s - %s %s" % (
@@ -123,15 +132,14 @@ def generate_all_region_stats():
                     lap_bucket[score.track_id] = list()
                 track_bucket = lap_bucket[score.track_id]
 
-                if len(track_bucket) < MAX_TOP_SCORE_COUNT:
-                    track_bucket.append(score)
+                track_bucket.append(score)
 
     RegionStats.objects.all().delete()
 
     for region_id, region_bucket in mapped_scores.items():
         with transaction.atomic():
             for category, category_bucket in region_bucket.items():
-                for top_score_count in range(1, MAX_TOP_SCORE_COUNT + 1):
+                for top_score_count in TopScoreCountChoices.values:
                     overall_stats = RegionStats(
                         region_id=region_id,
                         top_score_count=top_score_count,
@@ -155,17 +163,22 @@ def generate_all_region_stats():
                         )
 
                         stats.participation_count = len(list(filter(
-                            lambda bucket: len(bucket) >= top_score_count, lap_bucket.values()
+                            lambda bucket:
+                                len(bucket) >= (top_score_count if top_score_count > 0 else 3),
+                            lap_bucket.values()
                         )))
                         stats.score_count = reduce(
-                            lambda total, bucket: total + min(len(bucket), top_score_count),
+                            lambda total, bucket: total + (
+                                min(len(bucket), top_score_count) if top_score_count > 0
+                                else len(bucket)
+                            ),
                             lap_bucket.values(),
                             0
                         )
                         stats.total_score = reduce(
                             lambda total, bucket: total + reduce(
                                 lambda total, score: total + score.value,
-                                bucket[:top_score_count],
+                                bucket[:top_score_count] if top_score_count > 0 else bucket,
                                 0
                             ),
                             lap_bucket.values(),
@@ -174,7 +187,7 @@ def generate_all_region_stats():
                         stats.total_rank = reduce(
                             lambda total, bucket: total + reduce(
                                 lambda total, score: total + score.rank,
-                                bucket[:top_score_count],
+                                bucket[:top_score_count] if top_score_count > 0 else bucket,
                                 0
                             ),
                             lap_bucket.values(),
@@ -186,7 +199,7 @@ def generate_all_region_stats():
                                     lambda std: std.value is None or std.value >= score.value,
                                     mapped_standards[score.track_id][category][score.is_lap]
                                 )).level.value,
-                                bucket[:top_score_count],
+                                bucket[:top_score_count] if top_score_count > 0 else bucket,
                                 0
                             ),
                             lap_bucket.values(),
@@ -198,7 +211,7 @@ def generate_all_region_stats():
                                     total
                                     + mapped_records[score.track_id][category][score.is_lap]
                                     / score.value,
-                                bucket[:top_score_count],
+                                bucket[:top_score_count] if top_score_count > 0 else bucket,
                                 0
                             ),
                             lap_bucket.values(),
@@ -206,8 +219,9 @@ def generate_all_region_stats():
                         )
                         stats.total_records = reduce(
                             lambda total, bucket: total + (
-                                1 if any(score.rank == 1 for score in bucket[:top_score_count])
-                                else 0
+                                1 if any(score.rank == 1 for score in (
+                                    bucket[:top_score_count] if top_score_count > 0 else bucket
+                                )) else 0
                             ),
                             lap_bucket.values(),
                             0

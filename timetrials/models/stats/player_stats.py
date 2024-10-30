@@ -43,7 +43,7 @@ class PlayerStats(models.Model):
 
     total_record_ratio = models.FloatField(help_text=_("Sum of lowest score to record ratios"))
 
-    total_records = models.IntegerField(help_text=_("Sum of track records"))
+    total_records = models.IntegerField(help_text=_("Number of records"))
 
     leaderboard_points = models.IntegerField(help_text=_("Sum of leaderboard points"))
 

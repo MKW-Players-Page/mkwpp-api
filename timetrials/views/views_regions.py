@@ -1,4 +1,4 @@
-from django.db.models import Window
+from django.db.models import F, Window
 from django.db.models.functions import Rank
 
 from rest_framework import generics
@@ -22,14 +22,13 @@ class RegionStatsListView(filters.FilterMixin, generics.ListAPIView):
     )
 
     def get_queryset(self):
-        top_score_count = self.get_filter_value(filters.RegionStatsTopScoreCountFilter)
-
-        score_count = models.Track.objects.count() * top_score_count
+        score_count = models.Track.objects.count()
         if self.get_filter_value(filters.LapModeFilter) is None:
             score_count = score_count * 2
 
         return self.filter(models.RegionStats.objects.all()).filter(
-            score_count=score_count
+            participation_count=score_count
         ).annotate(
-            rank=Window(Rank(), order_by='total_rank')
+            average_rank=(F('total_rank') / F('score_count')),
+            rank=Window(Rank(), order_by='average_rank')
         )
