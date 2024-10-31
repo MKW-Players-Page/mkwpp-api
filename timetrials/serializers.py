@@ -5,6 +5,7 @@ from rest_framework import serializers
 from timetrials import models
 from timetrials.models.categories import CategoryChoices
 from timetrials.models.scores import ScoreSubmissionStatus
+from timetrials.models.stats.region_stats import TopScoreCountChoices
 
 
 # Custom fields
@@ -58,6 +59,14 @@ ScoreSubmissionStatusField = map_enum_field({
     ScoreSubmissionStatus.REJECTED: 'rejected',
 })
 
+TopScoreCountField = map_enum_field({
+    TopScoreCountChoices.ALL: 'all',
+    TopScoreCountChoices.TOP_1: 'records',
+    TopScoreCountChoices.TOP_3: 'top3',
+    TopScoreCountChoices.TOP_5: 'top5',
+    TopScoreCountChoices.TOP_10: 'top10',
+})
+
 
 # Regions
 
@@ -69,6 +78,7 @@ class RegionSerializer(serializers.ModelSerializer):
 
 class RegionStatsSerializer(serializers.ModelSerializer):
     region = RegionSerializer()
+    top_score_count = TopScoreCountField()
     category = CategoryField()
     rank = serializers.IntegerField()
 

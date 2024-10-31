@@ -7,7 +7,7 @@ from rest_framework.exceptions import ValidationError
 from timetrials.models.categories import CategoryChoices
 from timetrials.models.regions import Region, RegionTypeChoices
 from timetrials.models.stats.region_stats import TopScoreCountChoices
-from timetrials.serializers import CategoryField
+from timetrials.serializers import CategoryField, TopScoreCountField
 
 
 class FilterMixin:
@@ -397,10 +397,7 @@ class RegionStatsTopScoreCountFilter(FilterBase):
         )
 
     def validate_filter_value(self, value: str):
-        try:
-            top_score_count = int(value)
-        except ValueError:
-            self.validation_error('invalid_value', self.request_field, value)
+        top_score_count = TopScoreCountField().to_internal_value(value)
 
         if top_score_count not in TopScoreCountChoices.values:
             self.validation_error('invalid_value', self.request_field, value)
@@ -411,8 +408,8 @@ class RegionStatsTopScoreCountFilter(FilterBase):
     def open_api_param(self) -> OpenApiParameter:
         return OpenApiParameter(
             self.request_field,
-            type=int,
-            enum=TopScoreCountChoices.values,
+            type=str,
+            enum=TopScoreCountField.values(),
             required=self.required,
             allow_blank=False,
         )
