@@ -44,3 +44,23 @@ class Player(models.Model):
     class Meta:
         verbose_name = _("player")
         verbose_name_plural = _("players")
+
+
+class PlayerAwardTypeChoices(models.TextChoices):
+    WEEKLY = 'weekly', _("Weekly")
+    QUARTERLY = 'quarterly', _("Quarterly")
+    MONTHLY = 'monthly', _("Monthly")
+    YEARLY = 'yearly', _("Yearly")
+
+
+class PlayerAward(models.Model):
+    player = models.ForeignKey(Player, related_name='awards', on_delete=models.CASCADE)
+
+    type = models.CharField(
+        choices=PlayerAwardTypeChoices.choices,
+        default=PlayerAwardTypeChoices.WEEKLY
+    )
+
+    date = models.DateField(default=datetime.today)
+
+    description = models.CharField(max_length=1024)

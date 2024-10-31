@@ -1,5 +1,5 @@
 from timetrials.models.categories import CategoryChoices
-from timetrials.models.players import Player
+from timetrials.models.players import Player, PlayerAward
 from timetrials.models.regions import Region, RegionTypeChoices
 from timetrials.models.scores import Score
 from timetrials.models.standards import Standard, StandardLevel

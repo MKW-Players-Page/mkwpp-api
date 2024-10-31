@@ -32,6 +32,18 @@ class PlayerAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 
+@admin.register(models.PlayerAward)
+class PlayerAwardAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('player', 'type', 'date', 'description')}),
+    )
+    list_display = ('player', 'type', 'date', 'description')
+    list_display_links = ('date',)
+    list_filter = ('type',)
+    search_fields = ('player__name',)
+    ordering = ('type', '-date')
+
+
 @admin.register(models.Region)
 class RegionAdmin(admin.ModelAdmin):
     fieldsets = (
