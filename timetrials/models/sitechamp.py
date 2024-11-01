@@ -1,14 +1,17 @@
 from django.db import models
 from django.utils import timezone
-from .players import Player
 
-from timetrials.models.categories import CategoryChoices
+from timetrials.models import CategoryChoices, Player
+
 
 class SiteChampion(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
-    date_became_champion = models.DateTimeField(default=timezone.now)
+    date_instated = models.DateTimeField(default=timezone.now)
 
-    category = models.CharField(max_length=10, choices=CategoryChoices.choices)
+    category = models.IntegerField(
+        choices=CategoryChoices.choices,
+        default=CategoryChoices.NON_SHORTCUT
+    )
 
     def __str__(self):
         return f"{self.player} - {self.category}"
