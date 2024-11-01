@@ -24,7 +24,11 @@ class Score(models.Model):
         help_text=_("Finish time in milliseconds (e.g. 69999 for 1:09.999).")
     )
 
-    category = models.CharField(choices=CategoryChoices.choices)
+    category = models.IntegerField(
+        choices=CategoryChoices.choices,
+        default=CategoryChoices.NON_SHORTCUT,
+    )
+
     is_lap = models.BooleanField(default=False, help_text=_("Off for 3lap, on for flap."))
 
     player = models.ForeignKey(Player, related_name='scores', on_delete=models.CASCADE)

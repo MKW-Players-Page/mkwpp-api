@@ -20,7 +20,10 @@ class PlayerStats(models.Model):
 
     region = models.ForeignKey(Region, related_name='playerstats', on_delete=models.CASCADE)
 
-    category = models.CharField(choices=CategoryChoices.choices)
+    category = models.IntegerField(
+        choices=CategoryChoices.choices,
+        default=CategoryChoices.NON_SHORTCUT,
+    )
 
     is_lap = models.BooleanField(
         null=True,
@@ -40,7 +43,7 @@ class PlayerStats(models.Model):
 
     total_record_ratio = models.FloatField(help_text=_("Sum of lowest score to record ratios"))
 
-    total_records = models.IntegerField(help_text=_("Sum of track records"))
+    total_records = models.IntegerField(help_text=_("Number of records"))
 
     leaderboard_points = models.IntegerField(help_text=_("Sum of leaderboard points"))
 

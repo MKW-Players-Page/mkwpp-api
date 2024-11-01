@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'knox',
+    'tinymce',
     'multiselectfield',
     'core',
     'timetrials',
@@ -183,6 +184,25 @@ SPECTACULAR_SETTINGS = {
 EMAIL_HOST = 'smtp'
 EMAIL_PORT = 25
 DEFAULT_FROM_EMAIL = "noreply@mariokart64.com"
+
+
+# TinyMCE
+# https://django-tinymce.readthedocs.io/en/stable/installation.html#configuration
+
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': 'silver',
+    'skin': 'oxide-dark',
+    'height': 500,
+    'menubar': False,
+    'plugins':
+        'anchor,autolink,charmap,code,emoticons,help,lists,link,searchreplace,table,wordcount,',
+    'toolbar': [
+        'undo redo | blocks | alignleft aligncenter alignright alignjustify | bullist numlist '
+        'outdent indent | help',
+        'removeformat | bold italic underline strikethrough | forecolor backcolor | link anchor '
+        'table | charmap emoticons | code',
+    ],
+}
 
 
 # Static files (CSS, JavaScript, Images)

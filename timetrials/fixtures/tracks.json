@@ -6,7 +6,7 @@
         "name": "Luigi Circuit",
         "abbr": "LC",
         "cup": 1,
-        "categories": "nonsc"
+        "categories": "0"
     }
 },
 {
@@ -16,7 +16,7 @@
         "name": "Moo Moo Meadows",
         "abbr": "MMM",
         "cup": 1,
-        "categories": "nonsc"
+        "categories": "0"
     }
 },
 {
@@ -26,7 +26,7 @@
         "name": "Mushroom Gorge",
         "abbr": "MG",
         "cup": 1,
-        "categories": "nonsc,sc,unres"
+        "categories": "0,1,2"
     }
 },
 {
@@ -36,7 +36,7 @@
         "name": "Toad's Factory",
         "abbr": "TF",
         "cup": 1,
-        "categories": "nonsc,sc"
+        "categories": "0,1"
     }
 },
 {
@@ -46,7 +46,7 @@
         "name": "Mario Circuit",
         "abbr": "MC",
         "cup": 2,
-        "categories": "nonsc,unres"
+        "categories": "0,2"
     }
 },
 {
@@ -56,7 +56,7 @@
         "name": "Coconut Mall",
         "abbr": "CM",
         "cup": 2,
-        "categories": "nonsc,sc,unres"
+        "categories": "0,1,2"
     }
 },
 {
@@ -66,7 +66,7 @@
         "name": "DK's Snowboard Cross",
         "abbr": "DKSC",
         "cup": 2,
-        "categories": "nonsc"
+        "categories": "0"
     }
 },
 {
@@ -76,7 +76,7 @@
         "name": "Wario's Gold Mine",
         "abbr": "WGM",
         "cup": 2,
-        "categories": "nonsc,unres"
+        "categories": "0,2"
     }
 },
 {
@@ -86,7 +86,7 @@
         "name": "Daisy Circuit",
         "abbr": "DC",
         "cup": 3,
-        "categories": "nonsc"
+        "categories": "0"
     }
 },
 {
@@ -96,7 +96,7 @@
         "name": "Koopa Cape",
         "abbr": "KC",
         "cup": 3,
-        "categories": "nonsc,unres"
+        "categories": "0,2"
     }
 },
 {
@@ -106,7 +106,7 @@
         "name": "Maple Treeway",
         "abbr": "MT",
         "cup": 3,
-        "categories": "nonsc,unres"
+        "categories": "0,2"
     }
 },
 {
@@ -116,7 +116,7 @@
         "name": "Grumble Volcano",
         "abbr": "GV",
         "cup": 3,
-        "categories": "nonsc,sc,unres"
+        "categories": "0,1,2"
     }
 },
 {
@@ -126,7 +126,7 @@
         "name": "Dry Dry Ruins",
         "abbr": "DDR",
         "cup": 4,
-        "categories": "nonsc"
+        "categories": "0"
     }
 },
 {
@@ -136,7 +136,7 @@
         "name": "Moonview Highway",
         "abbr": "MH",
         "cup": 4,
-        "categories": "nonsc"
+        "categories": "0"
     }
 },
 {
@@ -146,7 +146,7 @@
         "name": "Bowser's Castle",
         "abbr": "BC",
         "cup": 4,
-        "categories": "nonsc,sc"
+        "categories": "0,1"
     }
 },
 {
@@ -156,7 +156,7 @@
         "name": "Rainbow Road",
         "abbr": "RR",
         "cup": 4,
-        "categories": "nonsc,unres"
+        "categories": "0,2"
     }
 },
 {
@@ -166,7 +166,7 @@
         "name": "GCN Peach Beach",
         "abbr": "rPB",
         "cup": 5,
-        "categories": "nonsc,unres"
+        "categories": "0,2"
     }
 },
 {
@@ -176,7 +176,7 @@
         "name": "DS Yoshi Falls",
         "abbr": "rYF",
         "cup": 5,
-        "categories": "nonsc"
+        "categories": "0"
     }
 },
 {
@@ -186,7 +186,7 @@
         "name": "SNES Ghost Valley 2",
         "abbr": "rGV2",
         "cup": 5,
-        "categories": "nonsc,unres"
+        "categories": "0,2"
     }
 },
 {
@@ -196,7 +196,7 @@
         "name": "N64 Mario Raceway",
         "abbr": "rMR",
         "cup": 5,
-        "categories": "nonsc"
+        "categories": "0"
     }
 },
 {
@@ -206,7 +206,7 @@
         "name": "N64 Sherbet Land",
         "abbr": "rSL",
         "cup": 6,
-        "categories": "nonsc,unres"
+        "categories": "0,2"
     }
 },
 {
@@ -216,7 +216,7 @@
         "name": "GBA Shy Guy Beach",
         "abbr": "rSGB",
         "cup": 6,
-        "categories": "nonsc,unres"
+        "categories": "0,2"
     }
 },
 {
@@ -226,7 +226,7 @@
         "name": "DS Delfino Square",
         "abbr": "rDS",
         "cup": 6,
-        "categories": "nonsc"
+        "categories": "0"
     }
 },
 {
@@ -236,7 +236,7 @@
         "name": "GCN Waluigi Stadium",
         "abbr": "rWS",
         "cup": 6,
-        "categories": "nonsc,unres"
+        "categories": "0,2"
     }
 },
 {
@@ -246,7 +246,7 @@
         "name": "DS Desert Hills",
         "abbr": "rDH",
         "cup": 7,
-        "categories": "nonsc,sc"
+        "categories": "0,1"
     }
 },
 {
@@ -256,7 +256,7 @@
         "name": "GBA Bowser Castle 3",
         "abbr": "rBC3",
         "cup": 7,
-        "categories": "nonsc,sc"
+        "categories": "0,1"
     }
 },
 {
@@ -266,7 +266,7 @@
         "name": "N64 DK's Jungle Parkway",
         "abbr": "rDKJP",
         "cup": 7,
-        "categories": "nonsc,sc,unres"
+        "categories": "0,1,2"
     }
 },
 {
@@ -276,7 +276,7 @@
         "name": "GCN Mario Circuit",
         "abbr": "rMC",
         "cup": 7,
-        "categories": "nonsc,sc"
+        "categories": "0,1"
     }
 },
 {
@@ -286,7 +286,7 @@
         "name": "SNES Mario Circuit 3",
         "abbr": "rMC3",
         "cup": 8,
-        "categories": "nonsc"
+        "categories": "0"
     }
 },
 {
@@ -296,7 +296,7 @@
         "name": "DS Peach Gardens",
         "abbr": "rPG",
         "cup": 8,
-        "categories": "nonsc,sc"
+        "categories": "0,1"
     }
 },
 {
@@ -306,7 +306,7 @@
         "name": "GCN DK Mountain",
         "abbr": "rDKM",
         "cup": 8,
-        "categories": "nonsc,sc"
+        "categories": "0,1"
     }
 },
 {
@@ -316,7 +316,7 @@
         "name": "N64 Bowser's Castle",
         "abbr": "rBC",
         "cup": 8,
-        "categories": "nonsc,sc,unres"
+        "categories": "0,1,2"
     }
 }
 ]

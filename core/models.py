@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from tinymce import models as tinymce_models
+
 
 class User(AbstractUser):
     # Make email required and add unique constraint
@@ -26,3 +28,14 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class BlogPost(models.Model):
+    author = models.ForeignKey(User, related_name='blog_posts', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    content = tinymce_models.HTMLField()
+    is_published = models.BooleanField(default=False)
+    published_at = models.DateTimeField()
+
+    def __str__(self):
+        return self.title

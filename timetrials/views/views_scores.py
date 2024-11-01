@@ -9,7 +9,6 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from timetrials import filters, models, serializers
-from timetrials.models.categories import eligible_categories
 from timetrials.models.scores import ScoreSubmissionStatus
 from timetrials.queries import (
     annotate_scores_record_ratio, annotate_scores_standard, query_region_players
@@ -23,6 +22,7 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
     filter_fields = (
         filters.CategoryFilter(),
         filters.LapModeFilter(required=False),
+        filters.RegionFilter(ranked_only=False, required=False, auto=False),
     )
 
     def get_queryset(self):
@@ -42,10 +42,16 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
         # on that same track and category
         track_scores = models.Score.objects.filter(
             track=OuterRef(OuterRef('track')),
-            category__in=eligible_categories(category),
+            category__lte=category,
             is_lap=OuterRef(OuterRef('is_lap')),
             status=ScoreSubmissionStatus.ACCEPTED,
         ).order_by('player', 'value').distinct('player')
+
+        region = self.get_filter_value(filters.RegionFilter)
+        if region and region.type != models.RegionTypeChoices.WORLD:
+            track_scores = track_scores.filter(
+                player__in=Subquery(query_region_players(region).values('pk'))
+            )
 
         # Calculate the rank of each score from the previous query and extract only
         # the rank of the player's score
@@ -68,7 +74,7 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
 
         return annotate_scores_record_ratio(
             annotate_scores_standard(scores, category, legacy=True),
-            category
+            category, region
         )
 
 
@@ -167,6 +173,7 @@ class RecordListView(filters.FilterMixin, generics.ListAPIView):
     filter_fields = (
         filters.CategoryFilter(),
         filters.LapModeFilter(required=False),
+        filters.RegionFilter(auto=False, required=False),
     )
 
     def get_queryset(self):
@@ -177,6 +184,13 @@ class RecordListView(filters.FilterMixin, generics.ListAPIView):
         ).distinct(
             'track', 'is_lap'
         )
+
+        region = self.get_filter_value(filters.RegionFilter)
+
+        if region and region.type != models.RegionTypeChoices.WORLD:
+            records = records.filter(
+                player__in=Subquery(query_region_players(region).values('pk'))
+            )
 
         scores = models.Score.objects.filter(
             pk__in=Subquery(records.values('pk'))

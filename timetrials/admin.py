@@ -32,11 +32,38 @@ class PlayerAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 
+@admin.register(models.PlayerAward)
+class PlayerAwardAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('player', 'type', 'date', 'description')}),
+    )
+    list_display = ('player', 'type', 'date', 'description')
+    list_display_links = ('date',)
+    list_filter = ('type',)
+    search_fields = ('player__name',)
+    ordering = ('type', '-date')
+
+
+class RegionStatsInline(admin.TabularInline):
+    model = models.RegionStats
+    classes = ['collapse']
+
+    def has_add_permission(self, *args, **kwargs):
+        return False
+
+    def has_change_permission(self, *args, **kwargs):
+        return False
+
+    def has_delete_permission(self, *args, **kwargs):
+        return False
+
+
 @admin.register(models.Region)
 class RegionAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('type', 'name', 'code', 'parent', 'is_ranked')}),
     )
+    inlines = (RegionStatsInline,)
     list_display = ('id', 'type', 'name', 'code', 'parent', 'is_ranked')
     list_display_links = ('name',)
     list_filter = ('type', 'is_ranked', 'parent')
