@@ -19,6 +19,7 @@ urlpatterns = [
     path('players/<int:pk>/scores/', views.PlayerScoreListView.as_view(), name='player-score-list'),
     path('players/<int:pk>/stats/', views.PlayerStatsRetrieveView.as_view(), name='player-stats'),
     path('rankings/', views.PlayerStatsListView.as_view(), name='player-stats-list'),
+    path('awards/', views.PlayerAwardListView.as_view(), name='award-list'),
     path('submissions/', views.UserSubmissionListView.as_view(), name='user-submission-list'),
     path('submissions/create/', views.ScoreSubmissionCreateView.as_view(),
          name='submission-create'),

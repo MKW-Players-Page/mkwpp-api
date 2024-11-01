@@ -204,6 +204,14 @@ class PlayerMatchupSerializer(serializers.Serializer):
     p2 = PlayerMatchupPlayerSerializer()
 
 
+class PlayerAwardSerializer(serializers.ModelSerializer):
+    player = PlayerBasicSerializer()
+
+    class Meta:
+        model = models.PlayerAward
+        fields = ['id', 'player', 'type', 'date', 'description']
+
+
 # Scores
 
 class ScoreSerializer(serializers.ModelSerializer):
