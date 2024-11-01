@@ -32,7 +32,7 @@ def query_records(category: models.CategoryChoices, region: models.Region = None
         rank=Value(1)
     )
 
-    if region:
+    if region and region.type != models.RegionTypeChoices.WORLD:
         records = records.filter(
             player__in=Subquery(query_region_players(region).values('pk'))
         )
@@ -61,7 +61,7 @@ def query_ranked_scores(category: models.CategoryChoices, region: models.Region 
         pk__in=Subquery(player_records)
     )
 
-    if region:
+    if region and region.type != models.RegionTypeChoices.WORLD:
         ranked_scores_query = ranked_scores_query.filter(
             player__in=Subquery(query_region_players(region).values('pk'))
         )
