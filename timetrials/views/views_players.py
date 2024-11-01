@@ -154,3 +154,14 @@ class PlayerMatchupRetrieveView(filters.FilterMixin, views.APIView):
         self.annotate_differences(p1, p2)
 
         return Response(self.get_response(p1, p2), status=status.HTTP_200_OK)
+
+
+@filters.extend_schema_with_filters
+class PlayerAwardListView(filters.FilterMixin, generics.ListAPIView):
+    serializer_class = serializers.PlayerAwardSerializer
+    filter_fields = (
+        filters.PlayerAwardTypeFilter(),
+    )
+
+    def get_queryset(self):
+        return self.filter(models.PlayerAward.objects.all()).order_by('-date')
