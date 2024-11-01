@@ -25,7 +25,7 @@ class RegionStats(models.Model):
 
     top_score_count = models.IntegerField(
         choices=TopScoreCountChoices.choices,
-        default=TopScoreCountChoices.ALL,
+        default=TopScoreCountChoices.TOP_1,
         help_text=_("Number of top region score per track"),
     )
 
