@@ -60,6 +60,16 @@ class RegionStats(models.Model):
 
     total_records = models.IntegerField(help_text=_("Number of records"))
 
+    @property
+    def effective_score_count(self):
+        """
+        The actual number of scores counted in the tallies, including fallback scores when necessary
+        """
+        if self.top_score_count == TopScoreCountChoices.ALL:
+            return self.score_count
+        else:
+            return Track.objects.count() * self.top_score_count * (2 if self.is_lap is None else 1)
+
     def __str__(self):
         return "Region stats for %s - %s %s" % (
             self.region.name,
@@ -162,19 +172,7 @@ def generate_all_region_stats():
             fallback_score.is_fallback = True
             lap_bucket[score.track_id] = fallback_score
 
-    for region_id, region_bucket in mapped_scores.items():
-        for category in CategoryChoices.values:
-            if category not in region_bucket:
-                region_bucket[category] = dict()
-            category_bucket = region_bucket[category]
-
-            for is_lap in [False, True]:
-                if is_lap not in category_bucket:
-                    category_bucket[is_lap] = dict()
-                lap_bucket = category_bucket[is_lap]
-
-                for track_id in Track.objects.values_list('pk', flat=True):
-                    pass
+    track_ids = list(Track.objects.values_list('pk', flat=True))
 
     RegionStats.objects.all().delete()
 
@@ -196,7 +194,7 @@ def generate_all_region_stats():
                     overall_stats.total_record_ratio = 0
                     overall_stats.total_records = 0
 
-                    for is_lap in [False, True]:
+                    for is_lap, lap_bucket in category_bucket.items():
                         stats = RegionStats(
                             region_id=region_id,
                             top_score_count=top_score_count,
@@ -204,7 +202,14 @@ def generate_all_region_stats():
                             is_lap=is_lap,
                         )
 
-                        lap_bucket = category_bucket.get(is_lap, dict())
+                        full_bucket = {track_id: list() for track_id in track_ids}
+
+                        for track_id, bucket in full_bucket.items():
+                            bucket.extend(lap_bucket.get(track_id, list()))
+                            missing = top_score_count - len(bucket)
+                            while missing > 0:
+                                bucket.append(fallback_scores[category][is_lap][track_id])
+                                missing -= 1
 
                         stats.participation_count = len(list(filter(
                             lambda bucket: len(bucket) >= top_score_count, lap_bucket.values()
@@ -217,23 +222,13 @@ def generate_all_region_stats():
                             lap_bucket.values(),
                             0
                         )
-
-                        for track_id in Track.objects.values_list('pk', flat=True):
-                            if track_id not in lap_bucket:
-                                lap_bucket[track_id] = list()
-                            bucket = lap_bucket[track_id]
-
-                            missing = top_score_count - len(bucket)
-                            if missing > 0:
-                                bucket += [fallback_scores[category][is_lap][track_id]] * missing
-
                         stats.total_score = reduce(
                             lambda total, bucket: total + reduce(
                                 lambda total, score: total + score.value,
                                 bucket[:top_score_count] if top_score_count > 0 else bucket,
                                 0
                             ),
-                            lap_bucket.values(),
+                            full_bucket.values(),
                             0
                         )
                         stats.total_rank = reduce(
@@ -242,7 +237,7 @@ def generate_all_region_stats():
                                 bucket[:top_score_count] if top_score_count > 0 else bucket,
                                 0
                             ),
-                            lap_bucket.values(),
+                            full_bucket.values(),
                             0
                         )
                         stats.total_standard = reduce(
@@ -254,7 +249,7 @@ def generate_all_region_stats():
                                 bucket[:top_score_count] if top_score_count > 0 else bucket,
                                 0
                             ),
-                            lap_bucket.values(),
+                            full_bucket.values(),
                             0
                         )
                         stats.total_record_ratio = reduce(
@@ -266,7 +261,7 @@ def generate_all_region_stats():
                                 bucket[:top_score_count] if top_score_count > 0 else bucket,
                                 0
                             ),
-                            lap_bucket.values(),
+                            full_bucket.values(),
                             0
                         )
                         stats.total_records = reduce(
@@ -275,7 +270,7 @@ def generate_all_region_stats():
                                     bucket[:top_score_count] if top_score_count > 0 else bucket
                                 )) else 0
                             ),
-                            lap_bucket.values(),
+                            full_bucket.values(),
                             0
                         )
 
