@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from timetrials.models.categories import CategoryChoices
 from timetrials.models.players import Player
 from timetrials.models.regions import Region
+from timetrials.models.scores import Score
 from timetrials.models.standards import Standard
 from timetrials.queries import query_ranked_scores, query_records
 
@@ -64,8 +65,16 @@ def generate_all_player_stats():
 
     mapped_standards = dict()
 
-    for standard in Standard.objects.select_related('level').filter(level__is_legacy=True):
-        for category in CategoryChoices.values:
+    for category in CategoryChoices.values:
+        standards = Standard.objects.select_related('level').filter(
+            category__lte=category,
+            level__is_legacy=True,
+        ).distinct(
+            'track', 'is_lap', 'level'
+        ).order_by(
+            'track', 'is_lap', 'level', '-category'
+        )
+        for standard in standards:
             if standard.track_id not in mapped_standards:
                 mapped_standards[standard.track_id] = dict()
             track_bucket = mapped_standards[standard.track_id]
@@ -78,12 +87,38 @@ def generate_all_player_stats():
                 category_bucket[standard.is_lap] = list()
             lap_bucket = category_bucket[standard.is_lap]
 
-            insort(lap_bucket, standard, key=lambda std: std.value or 60*60*1000)
+            insort(lap_bucket, standard, key=lambda std: std.level.value)
 
     ranked_regions = dict(
         (region.id, region) for region in
         Region.objects.filter(is_ranked=True).order_by('pk')
     )
+
+    fallback_scores = dict()
+
+    for category in CategoryChoices.values:
+        bottom_scores = query_ranked_scores(category).distinct(
+            'track', 'is_lap'
+        ).order_by(
+            'track', 'is_lap', '-value'
+        )
+        for score in bottom_scores:
+            if category not in fallback_scores:
+                fallback_scores[category] = dict()
+            category_bucket = fallback_scores[category]
+
+            if score.is_lap not in category_bucket:
+                category_bucket[score.is_lap] = dict()
+            lap_bucket = category_bucket[score.is_lap]
+
+            fallback_score = Score(
+                value=score.value + 1,
+                track=score.track,
+                is_lap=score.is_lap,
+            )
+            fallback_score.rank = score.rank + 1
+            fallback_score.is_fallback = True
+            lap_bucket[score.track_id] = fallback_score
 
     mapped_records = dict()
 
@@ -107,6 +142,17 @@ def generate_all_player_stats():
 
     mapped_scores = dict()
 
+    def make_score_bucket():
+        new_score_bucket = dict()
+        for category, category_bucket in fallback_scores.items():
+            new_category_bucket = new_score_bucket[category] = dict()
+            for is_lap, lap_bucket in category_bucket.items():
+                new_lap_bucket = new_category_bucket[is_lap] = dict()
+                for track_id, score in lap_bucket.items():
+                    new_lap_bucket[track_id] = score
+
+        return new_score_bucket
+
     for region in ranked_regions.values():
         for category in CategoryChoices.values:
             scores = query_ranked_scores(category, region).order_by('player', 'is_lap')
@@ -117,18 +163,10 @@ def generate_all_player_stats():
                 player_bucket = mapped_scores[score.player_id]
 
                 if region.id not in player_bucket:
-                    player_bucket[region.id] = dict()
+                    player_bucket[region.id] = make_score_bucket()
                 region_bucket = player_bucket[region.id]
 
-                if category not in region_bucket:
-                    region_bucket[category] = dict()
-                category_bucket = region_bucket[category]
-
-                if score.is_lap not in category_bucket:
-                    category_bucket[score.is_lap] = list()
-                lap_bucket = category_bucket[score.is_lap]
-
-                lap_bucket.append(score)
+                region_bucket[category][score.is_lap][score.track_id] = score
 
     PlayerStats.objects.all().delete()
 
@@ -162,19 +200,21 @@ def generate_all_player_stats():
                             is_lap=is_lap
                         )
 
-                        stats.score_count = len(scores)
+                        stats.score_count = len(list(filter(
+                            lambda score: not getattr(score, 'is_fallback', False), scores.values()
+                        )))
                         stats.total_score = reduce(
-                            lambda total, score: total + score.value, scores, 0
+                            lambda total, score: total + score.value, scores.values(), 0
                         )
                         stats.total_rank = reduce(
-                            lambda total, score: total + score.rank, scores, 0
+                            lambda total, score: total + score.rank, scores.values(), 0
                         )
                         stats.total_standard = reduce(
                             lambda total, score: total + next(filter(
                                 lambda std: std.value is None or std.value >= score.value,
                                 mapped_standards[score.track_id][category][score.is_lap]
                             )).level.value,
-                            scores,
+                            scores.values(),
                             0
                         )
                         stats.total_record_ratio = reduce(
@@ -182,16 +222,16 @@ def generate_all_player_stats():
                                 total
                                 + mapped_records[score.track_id][region.id][category][score.is_lap]
                                 / score.value,
-                            scores,
+                            scores.values(),
                             0
                         )
 
                         stats.total_records = len(list(filter(
-                            lambda score: score.rank == 1, scores
+                            lambda score: score.rank == 1, scores.values()
                         )))
 
                         stats.leaderboard_points = sum(map(
-                            lambda score: max(11 - score.rank, 0), scores
+                            lambda score: max(11 - score.rank, 0), scores.values()
                         ))
 
                         overall_stats.score_count += stats.score_count
