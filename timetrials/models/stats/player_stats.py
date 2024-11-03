@@ -9,6 +9,7 @@ from timetrials.models.players import Player
 from timetrials.models.regions import Region
 from timetrials.models.scores import Score
 from timetrials.models.standards import Standard
+from timetrials.models.tracks import Track
 from timetrials.queries import query_ranked_scores, query_records
 
 
@@ -47,6 +48,13 @@ class PlayerStats(models.Model):
     total_records = models.IntegerField(help_text=_("Number of records"))
 
     leaderboard_points = models.IntegerField(help_text=_("Sum of leaderboard points"))
+
+    @property
+    def effective_score_count(self):
+        """
+        The actual number of scores counted in the tallies, including fallback scores when necessary
+        """
+        return Track.objects.count() * (2 if self.is_lap is None else 1)
 
     def __str__(self):
         return "Stats for %s - %s %s" % (
