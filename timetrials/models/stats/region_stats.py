@@ -6,12 +6,14 @@ from django.utils.translation import gettext_lazy as _
 
 from timetrials.models.categories import CategoryChoices
 from timetrials.models.regions import Region
+from timetrials.models.scores import Score
 from timetrials.models.standards import Standard
+from timetrials.models.tracks import Track
 from timetrials.queries import query_ranked_scores, query_records, query_region_players
 
 
 class TopScoreCountChoices(models.IntegerChoices):
-    ALL = 0, _("Every regional score (minimum of 3 to count)")
+    ALL = 0, _("Every regional score")
     TOP_1 = 1, _("Regional record only")
     TOP_3 = 3, _("Top 3 regional scores")
     TOP_5 = 5, _("Top 5 regional scores")
@@ -134,6 +136,46 @@ def generate_all_region_stats():
 
                 track_bucket.append(score)
 
+    fallback_scores = dict()
+
+    for category in CategoryChoices.values:
+        bottom_scores = query_ranked_scores(category).distinct(
+            'track', 'is_lap'
+        ).order_by(
+            'track', 'is_lap', '-value'
+        )
+        for score in bottom_scores:
+            if category not in fallback_scores:
+                fallback_scores[category] = dict()
+            category_bucket = fallback_scores[category]
+
+            if score.is_lap not in category_bucket:
+                category_bucket[score.is_lap] = dict()
+            lap_bucket = category_bucket[score.is_lap]
+
+            fallback_score = Score(
+                value=score.value + 1,
+                track=score.track,
+                is_lap=score.is_lap,
+            )
+            fallback_score.rank = score.rank + 1
+            fallback_score.is_fallback = True
+            lap_bucket[score.track_id] = fallback_score
+
+    for region_id, region_bucket in mapped_scores.items():
+        for category in CategoryChoices.values:
+            if category not in region_bucket:
+                region_bucket[category] = dict()
+            category_bucket = region_bucket[category]
+
+            for is_lap in [False, True]:
+                if is_lap not in category_bucket:
+                    category_bucket[is_lap] = dict()
+                lap_bucket = category_bucket[is_lap]
+
+                for track_id in Track.objects.values_list('pk', flat=True):
+                    pass
+
     RegionStats.objects.all().delete()
 
     for region_id, region_bucket in mapped_scores.items():
@@ -154,7 +196,7 @@ def generate_all_region_stats():
                     overall_stats.total_record_ratio = 0
                     overall_stats.total_records = 0
 
-                    for is_lap, lap_bucket in category_bucket.items():
+                    for is_lap in [False, True]:
                         stats = RegionStats(
                             region_id=region_id,
                             top_score_count=top_score_count,
@@ -162,10 +204,10 @@ def generate_all_region_stats():
                             is_lap=is_lap,
                         )
 
+                        lap_bucket = category_bucket.get(is_lap, dict())
+
                         stats.participation_count = len(list(filter(
-                            lambda bucket:
-                                len(bucket) >= (top_score_count if top_score_count > 0 else 3),
-                            lap_bucket.values()
+                            lambda bucket: len(bucket) >= top_score_count, lap_bucket.values()
                         )))
                         stats.score_count = reduce(
                             lambda total, bucket: total + (
@@ -175,6 +217,16 @@ def generate_all_region_stats():
                             lap_bucket.values(),
                             0
                         )
+
+                        for track_id in Track.objects.values_list('pk', flat=True):
+                            if track_id not in lap_bucket:
+                                lap_bucket[track_id] = list()
+                            bucket = lap_bucket[track_id]
+
+                            missing = top_score_count - len(bucket)
+                            if missing > 0:
+                                bucket += [fallback_scores[category][is_lap][track_id]] * missing
+
                         stats.total_score = reduce(
                             lambda total, bucket: total + reduce(
                                 lambda total, score: total + score.value,
