@@ -297,3 +297,14 @@ class StandardLevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.StandardLevel
         fields = ['id', 'name', 'value', 'is_legacy', 'standards']
+
+
+# Site Champion
+
+class SiteChampionSerializer(serializers.ModelSerializer):
+    category = CategoryField()
+    player = PlayerSerializer()
+
+    class Meta:
+        model = models.SiteChampion
+        fields = ['id', 'category', 'date_instated', 'player']

@@ -7,5 +7,6 @@ from timetrials.views.views_scores import (
     PlayerScoreListView, RecordListView, ScoreSubmissionCreateView, TrackScoreListView,
     TrackTopsListView, UserSubmissionListView
 )
+from timetrials.views.views_sitechamps import SiteChampListView
 from timetrials.views.views_standards import StandardListView
 from timetrials.views.views_tracks import TrackCupListView, TrackListView
