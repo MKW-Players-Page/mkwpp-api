@@ -100,9 +100,9 @@ class TrackAdmin(admin.ModelAdmin):
 @admin.register(models.TrackCup)
 class TrackCupAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('name',)}),
+        (None, {'fields': ('name', 'code')}),
     )
-    list_display = ('id', 'name')
+    list_display = ('id', 'name', 'code')
     list_display_links = ('name',)
     search_fields = ('name',)
     ordering = ('id',)

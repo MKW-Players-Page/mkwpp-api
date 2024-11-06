@@ -113,7 +113,7 @@ class TrackSerializer(serializers.ModelSerializer):
 class TrackCupSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TrackCup
-        fields = ['id', 'name', 'tracks']
+        fields = ['id', 'name', 'code', 'tracks']
 
 
 # Players
