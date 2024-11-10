@@ -2,6 +2,8 @@ from drf_spectacular.utils import extend_schema_field
 
 from rest_framework import serializers
 
+from core.serializers import TimestampField
+
 from timetrials import models
 from timetrials.models.categories import CategoryChoices
 from timetrials.models.scores import ScoreSubmissionStatus
@@ -303,6 +305,7 @@ class StandardLevelSerializer(serializers.ModelSerializer):
 
 class SiteChampionSerializer(serializers.ModelSerializer):
     category = CategoryField()
+    date_instated = TimestampField()
     player = PlayerSerializer()
 
     class Meta:

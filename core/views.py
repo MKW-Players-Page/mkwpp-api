@@ -2,11 +2,10 @@ from datetime import timedelta
 
 from django.core import signing
 from django.conf import settings
-from django.contrib.auth.password_validation import validate_password
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import exceptions, generics, permissions, serializers, status, views
+from rest_framework import exceptions, generics, permissions, status, views
 from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 
@@ -15,6 +14,7 @@ from drf_spectacular.utils import extend_schema, OpenApiResponse
 from knox.auth import TokenAuthentication
 from knox.views import LoginView, LogoutView
 
+from core import serializers
 from core.models import BlogPost, User
 
 
@@ -24,18 +24,14 @@ ACCOUNT_VERIFICATION_SALT = 'account_verification'
 MAX_TOKEN_AGE = int(timedelta(days=2).total_seconds())
 
 
-class AuthSerializer(AuthTokenSerializer):
-    expiry = serializers.CharField(read_only=True)
-
-
 @extend_schema(responses={
-    200: OpenApiResponse(AuthSerializer),
+    200: OpenApiResponse(serializers.AuthSerializer),
     400: OpenApiResponse(description=_("Bad request")),
     401: OpenApiResponse(description=_("Unauthorized")),
     403: OpenApiResponse(description=_("Forbidden")),
 })
 class CoreLoginView(LoginView):
-    serializer_class = AuthSerializer
+    serializer_class = serializers.AuthSerializer
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
@@ -59,36 +55,12 @@ class CoreLogoutView(LogoutView):
     pass
 
 
-class UserSerializer(serializers.ModelSerializer):
-    player = serializers.SerializerMethodField(read_only=True)
-
-    def get_player(self, user: User) -> int:
-        return user.player.id if hasattr(user, 'player') else 0
-
-    def validate_password(self, value):
-        validate_password(value)
-        return value
-
-    def create(self, validated_data):
-        user = User(**validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
-
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password', 'player']
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }
-
-
 @extend_schema(responses={
     201: OpenApiResponse(description=_("User account was successfully created.")),
     400: OpenApiResponse(description=_("Invalid credentials were provided.")),
 })
 class CreateUserView(views.APIView):
-    serializer_class = UserSerializer
+    serializer_class = serializers.UserSerializer
     permission_classes = (permissions.AllowAny,)
 
     def create_user(self, request) -> User:
@@ -119,10 +91,6 @@ class CreateUserView(views.APIView):
         return Response(status=status.HTTP_201_CREATED)
 
 
-class VerificationTokenSerializer(serializers.Serializer):
-    token = serializers.CharField(write_only=True)
-
-
 @extend_schema(responses={
     204: OpenApiResponse(description=_("User account was successfully verified.")),
     400: OpenApiResponse(description=_("Token is invalid, has expired, or was already used.")),
@@ -132,7 +100,7 @@ class VerifyUserView(views.APIView):
     EXPIRED_TOKEN_MESSAGE = _("This validation token has expired! Please register once more.")
     ALREADY_VERIFIED_MESSAGE = _("This user account has already been verified!")
 
-    serializer_class = VerificationTokenSerializer
+    serializer_class = serializers.VerificationTokenSerializer
 
     def validate_token(self, token):
         try:
@@ -170,11 +138,11 @@ class VerifyUserView(views.APIView):
 
 
 @extend_schema(responses={
-    200: OpenApiResponse(UserSerializer),
+    200: OpenApiResponse(serializers.UserSerializer),
     401: OpenApiResponse(description=_("User is not authenticated.")),
 })
 class CurrentUserView(generics.RetrieveAPIView):
-    serializer_class = UserSerializer
+    serializer_class = serializers.UserSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -184,32 +152,17 @@ class CurrentUserView(generics.RetrieveAPIView):
 
 # Blog posts
 
-class BlogPostSummarySerializer(serializers.ModelSerializer):
-    author = UserSerializer()
-
-    class Meta:
-        model = BlogPost
-        fields = ['id', 'author', 'title', 'published_at']
-
-
-class BlogPostSerializer(serializers.ModelSerializer):
-    author = UserSerializer()
-
-    class Meta:
-        model = BlogPost
-        fields = ['id', 'author', 'title', 'content', 'published_at']
-
 
 class BlogPostListView(generics.ListAPIView):
-    serializer_class = BlogPostSummarySerializer
+    serializer_class = serializers.BlogPostSummarySerializer
     queryset = BlogPost.objects.filter(is_published=True).order_by('-published_at')
 
 
 class LatestBlogPostListView(generics.ListAPIView):
-    serializer_class = BlogPostSerializer
+    serializer_class = serializers.BlogPostSerializer
     queryset = BlogPost.objects.filter(is_published=True).order_by('-published_at')[:5]
 
 
 class BlogPostRetrieveView(generics.RetrieveAPIView):
-    serializer_class = BlogPostSerializer
+    serializer_class = serializers.BlogPostSerializer
     queryset = BlogPost.objects.filter(is_published=True)
