@@ -3078,5 +3078,148 @@
         "parent": 116,
         "is_ranked": false
     }
+},
+{
+    "model": "timetrials.region",
+    "pk": 285,
+    "fields": {
+        "type": "subnational",
+        "name": "Alberta",
+        "code": "CAAB",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 286,
+    "fields": {
+        "type": "subnational",
+        "name": "British Columbia",
+        "code": "CABC",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 287,
+    "fields": {
+        "type": "subnational",
+        "name": "Manitoba",
+        "code": "CAMB",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 288,
+    "fields": {
+        "type": "subnational",
+        "name": "New Brunswick",
+        "code": "CANB",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 289,
+    "fields": {
+        "type": "subnational",
+        "name": "Newfoundland and Labrador",
+        "code": "CANL",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 290,
+    "fields": {
+        "type": "subnational",
+        "name": "Northwest Territories",
+        "code": "CANT",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 291,
+    "fields": {
+        "type": "subnational",
+        "name": "Nova Scotia",
+        "code": "CANS",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 292,
+    "fields": {
+        "type": "subnational",
+        "name": "Nunavut",
+        "code": "CANU",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 293,
+    "fields": {
+        "type": "subnational",
+        "name": "Ontario",
+        "code": "CAON",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 294,
+    "fields": {
+        "type": "subnational",
+        "name": "Prince Edward Island",
+        "code": "CAPE",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 295,
+    "fields": {
+        "type": "subnational",
+        "name": "Quebec",
+        "code": "CAQC",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 296,
+    "fields": {
+        "type": "subnational",
+        "name": "Saskatchewan",
+        "code": "CASK",
+        "parent": 45,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 297,
+    "fields": {
+        "type": "subnational",
+        "name": "Yukon",
+        "code": "CAYT",
+        "parent": 45,
+        "is_ranked": false
+    }
 }
 ]
