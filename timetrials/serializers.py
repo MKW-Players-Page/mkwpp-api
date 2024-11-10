@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from core.serializers import TimestampField
 
-from timetrials import models
+from timetrials import models, queries
 from timetrials.models.categories import CategoryChoices
 from timetrials.models.scores import ScoreSubmissionStatus
 from timetrials.models.stats.region_stats import TopScoreCountChoices
@@ -73,9 +73,14 @@ TopScoreCountField = map_enum_field({
 # Regions
 
 class RegionSerializer(serializers.ModelSerializer):
+    player_count = serializers.SerializerMethodField()
+
+    def get_player_count(self, region: models.Region) -> int:
+        return queries.query_region_players(region).count()
+
     class Meta:
         model = models.Region
-        fields = ['id', 'type', 'name', 'code', 'parent', 'is_ranked']
+        fields = ['id', 'type', 'name', 'code', 'parent', 'is_ranked', 'player_count']
 
 
 class RegionStatsSerializer(serializers.ModelSerializer):
