@@ -88,6 +88,18 @@ class RegionStatsSerializer(serializers.ModelSerializer):
     top_score_count = TopScoreCountField()
     category = CategoryField()
     rank = serializers.IntegerField()
+    average_rank = serializers.SerializerMethodField()
+    average_standard = serializers.SerializerMethodField()
+    average_record_ratio = serializers.SerializerMethodField()
+
+    def get_average_rank(self, stats: models.RegionStats):
+        return f"{stats.total_rank/stats.effective_score_count:.08}"
+
+    def get_average_standard(self, stats: models.RegionStats):
+        return f"{stats.total_standard/stats.effective_score_count:.08}"
+
+    def get_average_record_ratio(self, stats: models.RegionStats):
+        return f"{stats.total_record_ratio/stats.effective_score_count:.08}"
 
     class Meta:
         model = models.RegionStats
@@ -101,8 +113,11 @@ class RegionStatsSerializer(serializers.ModelSerializer):
             'score_count',
             'total_score',
             'total_rank',
+            'average_rank',
             'total_standard',
+            'average_standard',
             'total_record_ratio',
+            'average_record_ratio',
             'total_records',
         ]
 
@@ -141,6 +156,18 @@ class PlayerStatsSerializer(serializers.ModelSerializer):
     rank = serializers.IntegerField()
     player = PlayerBasicSerializer()
     category = CategoryField()
+    average_rank = serializers.SerializerMethodField()
+    average_standard = serializers.SerializerMethodField()
+    average_record_ratio = serializers.SerializerMethodField()
+
+    def get_average_rank(self, stats: models.PlayerStats):
+        return f"{stats.total_rank/stats.effective_score_count:.08}"
+
+    def get_average_standard(self, stats: models.PlayerStats):
+        return f"{stats.total_standard/stats.effective_score_count:.08}"
+
+    def get_average_record_ratio(self, stats: models.PlayerStats):
+        return f"{stats.total_record_ratio/stats.effective_score_count:.08}"
 
     class Meta:
         model = models.PlayerStats
@@ -153,8 +180,11 @@ class PlayerStatsSerializer(serializers.ModelSerializer):
             'score_count',
             'total_score',
             'total_rank',
+            'average_rank',
             'total_standard',
+            'average_standard',
             'total_record_ratio',
+            'average_record_ratio',
             'total_records',
             'leaderboard_points',
         ]
