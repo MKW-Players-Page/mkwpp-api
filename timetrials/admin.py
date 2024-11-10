@@ -1,7 +1,32 @@
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
 from timetrials import models
 
+
+# Filters
+
+class RecursiveRegionFilter(admin.SimpleListFilter):
+    title = _("region")
+    parameter_name = 'region'
+
+    def lookups(self, request, model_admin):
+        return [
+            (region.id, region.name) for region in models.Region.objects.order_by('parent', 'name')
+        ]
+
+    def queryset(self, request, queryset):
+        if not self.value():
+            return queryset
+
+        region = models.Region.objects.filter(id=self.value()).first()
+        if not region:
+            return queryset.none()
+
+        return queryset.filter(region__in=region.descendants(include_self=True).values('pk'))
+
+
+# Model admins
 
 class PlayerStatsInline(admin.TabularInline):
     model = models.PlayerStats
@@ -27,7 +52,7 @@ class PlayerAdmin(admin.ModelAdmin):
     inlines = (PlayerStatsInline,)
     list_display = ('id', 'name', 'alias', 'region', 'user')
     list_display_links = ('name',)
-    list_filter = ('region',)
+    list_filter = (RecursiveRegionFilter,)
     search_fields = ('name',)
     ordering = ('name',)
 
