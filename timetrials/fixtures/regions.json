@@ -2858,5 +2858,225 @@
         "parent": 3,
         "is_ranked": true
     }
+},
+{
+    "model": "timetrials.region",
+    "pk": 265,
+    "fields": {
+        "type": "subnational",
+        "name": "Aosta Valley",
+        "code": "IT23",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 266,
+    "fields": {
+        "type": "subnational",
+        "name": "Piedmont",
+        "code": "IT21",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 267,
+    "fields": {
+        "type": "subnational",
+        "name": "Lombardy",
+        "code": "IT25",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 268,
+    "fields": {
+        "type": "subnational",
+        "name": "Trentino-Südtirol",
+        "code": "IT32",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 269,
+    "fields": {
+        "type": "subnational",
+        "name": "Veneto",
+        "code": "IT34",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 270,
+    "fields": {
+        "type": "subnational",
+        "name": "Friuli-Venezia Giulia",
+        "code": "IT36",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 271,
+    "fields": {
+        "type": "subnational",
+        "name": "Liguria",
+        "code": "IT42",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 272,
+    "fields": {
+        "type": "subnational",
+        "name": "Emilia-Romagna",
+        "code": "IT45",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 273,
+    "fields": {
+        "type": "subnational",
+        "name": "Tuscany",
+        "code": "IT52",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 274,
+    "fields": {
+        "type": "subnational",
+        "name": "Umbria",
+        "code": "IT55",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 275,
+    "fields": {
+        "type": "subnational",
+        "name": "Marche",
+        "code": "IT57",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 276,
+    "fields": {
+        "type": "subnational",
+        "name": "Lazio",
+        "code": "IT62",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 277,
+    "fields": {
+        "type": "subnational",
+        "name": "Abruzzo",
+        "code": "IT65",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 278,
+    "fields": {
+        "type": "subnational",
+        "name": "Molise",
+        "code": "IT67",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 279,
+    "fields": {
+        "type": "subnational",
+        "name": "Campania",
+        "code": "IT72",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 280,
+    "fields": {
+        "type": "subnational",
+        "name": "Apulia",
+        "code": "IT75",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 281,
+    "fields": {
+        "type": "subnational",
+        "name": "Basilicata",
+        "code": "IT77",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 282,
+    "fields": {
+        "type": "subnational",
+        "name": "Calabria",
+        "code": "IT78",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 283,
+    "fields": {
+        "type": "subnational",
+        "name": "Sicily",
+        "code": "IT82",
+        "parent": 116,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 284,
+    "fields": {
+        "type": "subnational",
+        "name": "Sardinia",
+        "code": "IT88",
+        "parent": 116,
+        "is_ranked": false
+    }
 }
 ]
