@@ -92,13 +92,13 @@ class RegionStatsSerializer(serializers.ModelSerializer):
     average_standard = serializers.SerializerMethodField()
     average_record_ratio = serializers.SerializerMethodField()
 
-    def get_average_rank(self, stats: models.RegionStats):
+    def get_average_rank(self, stats: models.RegionStats) -> str:
         return f"{stats.total_rank/stats.effective_score_count:.08}"
 
-    def get_average_standard(self, stats: models.RegionStats):
+    def get_average_standard(self, stats: models.RegionStats) -> str:
         return f"{stats.total_standard/stats.effective_score_count:.08}"
 
-    def get_average_record_ratio(self, stats: models.RegionStats):
+    def get_average_record_ratio(self, stats: models.RegionStats) -> str:
         return f"{stats.total_record_ratio/stats.effective_score_count:.08}"
 
     class Meta:
@@ -160,13 +160,13 @@ class PlayerStatsSerializer(serializers.ModelSerializer):
     average_standard = serializers.SerializerMethodField()
     average_record_ratio = serializers.SerializerMethodField()
 
-    def get_average_rank(self, stats: models.PlayerStats):
+    def get_average_rank(self, stats: models.PlayerStats) -> str:
         return f"{stats.total_rank/stats.effective_score_count:.08}"
 
-    def get_average_standard(self, stats: models.PlayerStats):
+    def get_average_standard(self, stats: models.PlayerStats) -> str:
         return f"{stats.total_standard/stats.effective_score_count:.08}"
 
-    def get_average_record_ratio(self, stats: models.PlayerStats):
+    def get_average_record_ratio(self, stats: models.PlayerStats) -> str:
         return f"{stats.total_record_ratio/stats.effective_score_count:.08}"
 
     class Meta:
@@ -188,57 +188,6 @@ class PlayerStatsSerializer(serializers.ModelSerializer):
             'total_records',
             'leaderboard_points',
         ]
-
-
-class PlayerMatchupScoreSerializer(serializers.ModelSerializer):
-    difference = serializers.IntegerField(allow_null=True)
-    category = CategoryField()
-
-    class Meta:
-        model = models.Score
-        fields = [
-            'id',
-            'value',
-            'difference',
-            'player',
-            'track',
-            'category',
-            'is_lap',
-            'date',
-            'video_link',
-            'ghost_link',
-            'comment',
-        ]
-
-
-class PlayerMatchupStatsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.PlayerStats
-        fields = [
-            'score_count',
-            'total_score',
-            'total_rank',
-            'total_standard',
-            'total_record_ratio',
-            'total_records',
-            'leaderboard_points',
-        ]
-
-
-class PlayerMatchupPlayerSerializer(serializers.ModelSerializer):
-    scores = PlayerMatchupScoreSerializer(many=True, source='player_scores')
-    stats = PlayerMatchupStatsSerializer(source='player_stats')
-    total_wins = serializers.IntegerField()
-    total_ties = serializers.IntegerField()
-
-    class Meta:
-        model = models.Player
-        fields = ['id', 'name', 'region', 'alias', 'scores', 'stats', 'total_wins', 'total_ties']
-
-
-class PlayerMatchupSerializer(serializers.Serializer):
-    p1 = PlayerMatchupPlayerSerializer()
-    p2 = PlayerMatchupPlayerSerializer()
 
 
 class PlayerAwardSerializer(serializers.ModelSerializer):

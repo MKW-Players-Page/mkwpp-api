@@ -1,6 +1,6 @@
 from timetrials.views.views_players import (
-    PlayerAwardListView, PlayerListView, PlayerMatchupRetrieveView, PlayerRetrieveView,
-    PlayerStatsListView, PlayerStatsRetrieveView
+    PlayerAwardListView, PlayerListView, PlayerRetrieveView, PlayerStatsListView,
+    PlayerStatsRetrieveView
 )
 from timetrials.views.views_regions import RegionListView, RegionStatsListView
 from timetrials.views.views_scores import (
