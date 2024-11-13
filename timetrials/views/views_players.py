@@ -1,8 +1,12 @@
 from django.db.models import Value, Window
 from django.db.models.functions import Rank
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext_lazy as _
 
-from rest_framework import generics
+from rest_framework import generics, permissions
+from rest_framework.exceptions import ValidationError
+
+from knox.auth import TokenAuthentication
 
 from timetrials import filters, models, serializers
 
@@ -15,6 +19,18 @@ class PlayerListView(generics.ListAPIView):
 class PlayerRetrieveView(generics.RetrieveAPIView):
     queryset = models.Player.objects.all()
     serializer_class = serializers.PlayerSerializer
+
+
+class PlayerUpdateView(generics.UpdateAPIView):
+    serializer_class = serializers.PlayerUpdateSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self):
+        user = self.request.user
+        if not hasattr(user, 'player'):
+            raise ValidationError(_("User has no associated player profile."))
+        return user.player
 
 
 @filters.extend_schema_with_filters

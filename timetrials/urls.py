@@ -16,6 +16,7 @@ urlpatterns = [
     path('players/<int:pk>/', views.PlayerRetrieveView.as_view(), name='player-details'),
     path('players/<int:pk>/scores/', views.PlayerScoreListView.as_view(), name='player-score-list'),
     path('players/<int:pk>/stats/', views.PlayerStatsRetrieveView.as_view(), name='player-stats'),
+    path('profile/', views.PlayerUpdateView.as_view(), name='player-update'),
     path('rankings/', views.PlayerStatsListView.as_view(), name='player-stats-list'),
     path('awards/', views.PlayerAwardListView.as_view(), name='award-list'),
     path('champions/', views.SiteChampListView.as_view(), name='champion-list'),

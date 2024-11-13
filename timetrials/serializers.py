@@ -152,6 +152,12 @@ class PlayerSerializer(serializers.ModelSerializer):
         fields = PlayerBasicSerializer.Meta.fields + ['bio']
 
 
+class PlayerUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Player
+        fields = ['alias', 'bio']
+
+
 class PlayerStatsSerializer(serializers.ModelSerializer):
     rank = serializers.IntegerField()
     player = PlayerBasicSerializer()
