@@ -153,6 +153,13 @@ class PlayerSerializer(serializers.ModelSerializer):
 
 
 class PlayerUpdateSerializer(serializers.ModelSerializer):
+
+    def validate(self, attrs):
+        return super().validate({
+            key: None if isinstance(value, str) and len(value) == 0 else value
+            for key, value in attrs.items()
+        })
+
     class Meta:
         model = models.Player
         fields = ['alias', 'bio']
