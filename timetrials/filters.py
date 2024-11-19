@@ -32,6 +32,13 @@ class FilterMixin:
 
         raise TypeError(f"No filter fields of type {filter_class.__name__}")
 
+    def limit(self, queryset: QuerySet) -> QuerySet:
+        for filter_field in self.filter_fields:
+            if isinstance(filter_field, LimitFilter):
+                return filter_field.filter(self.request, queryset)
+
+        raise TypeError("No LimitFilter in filter fields")
+
 
 def extend_schema_with_filters(view):
     return extend_schema(
@@ -141,6 +148,67 @@ class OrderingFilterBase(FilterBase):
     def filter(self, request, queryset: QuerySet) -> QuerySet:
         """Sort the queryset."""
         return queryset.order_by(self.get_filter_value(request))
+
+
+class LimitFilter(FilterBase):
+
+    def __init__(self, *,
+                 request_field='limit',
+                 min=1,
+                 max=None,
+                 default=None,
+                 required=True):
+        """
+        Parameters
+        ----------
+        request_field : str
+            The name of the query param of the request to get the filter value from
+        min : int
+            The minimum value for this field
+        max : int
+            The maximum value for this field, or None for no limit
+        default : int
+            The default value for this field if not present in the query params
+        required : bool
+            Whether this filter is required to be present in the query params
+        """
+        super().__init__(
+            field_name='',
+            request_field=request_field,
+            auto=False,
+            required=required
+        )
+
+        self.min = min
+        self.max = max
+        self.default = default
+
+    def validate_filter_value(self, value: str):
+        try:
+            limit = int(value)
+        except ValueError:
+            self.validation_error('invalid_value', self.request_field, value)
+
+        if limit < self.min or limit > self.max:
+            self.validation_error('invalid_value', self.request_field, value)
+
+        return limit
+
+    def filter(self, request, queryset: QuerySet) -> QuerySet:
+        """Limit the queryset."""
+        limit = self.get_filter_value(request) or self.default
+        if limit is None:
+            return queryset
+        return queryset[:limit]
+
+    @property
+    def open_api_param(self) -> OpenApiParameter:
+        return OpenApiParameter(
+            self.request_field,
+            type=int,
+            required=self.required,
+            allow_blank=False,
+        )
 
 
 class CategoryFilter(FilterBase):
