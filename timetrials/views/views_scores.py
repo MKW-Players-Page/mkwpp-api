@@ -221,6 +221,30 @@ class LatestScoreListView(filters.FilterMixin, generics.ListAPIView):
         ).order_by('-time_reviewed'))
 
 
+@filters.extend_schema_with_filters
+class LatestRecordListView(filters.FilterMixin, generics.ListAPIView):
+    serializer_class = serializers.ScoreSubmissionSerializer
+    filter_fields = (
+        filters.LimitFilter(max=100),
+    )
+
+    def get_queryset(self):
+        # This is a placeholder
+        # TODO: actually implement this functionality properly
+        records = models.Score.objects.filter(
+            status=ScoreSubmissionStatus.ACCEPTED,
+            category=0,
+        ).order_by(
+            'track', 'is_lap', 'value', 'date'
+        ).distinct(
+            'track', 'is_lap'
+        )
+
+        return self.limit(models.Score.objects.filter(
+            pk__in=records.values('pk'),
+        ).order_by('-date'))
+
+
 class ScoreSubmissionCreateView(generics.CreateAPIView):
     serializer_class = serializers.ScoreSubmissionSerializer
     authentication_classes = (TokenAuthentication,)

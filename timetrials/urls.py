@@ -13,6 +13,7 @@ urlpatterns = [
     path('tracks/<int:pk>/tops/', views.TrackTopsListView.as_view(), name='track-tops-list'),
     path('scores/latest/', views.LatestScoreListView.as_view(), name='latest-score-list'),
     path('records/', views.RecordListView.as_view(), name='record-list'),
+    path('records/latest/', views.LatestRecordListView.as_view(), name='latest-record-list'),
     path('players/', views.PlayerListView.as_view(), name='player-list'),
     path('players/<int:pk>/', views.PlayerRetrieveView.as_view(), name='player-details'),
     path('players/<int:pk>/scores/', views.PlayerScoreListView.as_view(), name='player-score-list'),
