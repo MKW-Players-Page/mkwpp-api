@@ -7,8 +7,7 @@ from rest_framework import generics
 
 from timetrials import filters, models, serializers
 from timetrials.queries import (
-    annotate_scores_record_ratio, annotate_scores_standard, query_ranked_scores,
-    query_region_players
+    annotate_scores_record_ratio, annotate_scores_standard, query_region_players
 )
 
 
