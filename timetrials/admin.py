@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.admin.utils import flatten_fieldsets
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from timetrials import models
@@ -101,8 +103,10 @@ class ScoreAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('player', 'track', 'value', 'category', 'is_lap')}),
         ("Details", {'fields': ('date', 'video_link', 'ghost_link', 'comment')}),
+        ("Other", {'fields': ('initial_rank', 'submission')}),
         ("Admin", {'fields': ('admin_note',)}),
     )
+    readonly_fields = ('initial_rank', 'submission')
     list_display = ('id', 'track', 'category', 'is_lap', '__str__', 'player')
     list_display_links = ('__str__',)
     list_filter = ('track', 'category', 'is_lap')
@@ -119,13 +123,52 @@ class ScoreSubmissionAdmin(admin.ModelAdmin):
         )}),
         ("Score", {'fields': ('player', 'track', 'value', 'category', 'is_lap')}),
         ("Score details", {'fields': ('date', 'video_link', 'ghost_link', 'comment')}),
+        ("Other", {'fields': ('score',)}),
         ("Admin", {'fields': ('admin_note',)}),
+    )
+    readonly_fields = (
+        'submitted_by', 'submitted_at', 'reviewed_by', 'reviewed_at', 'score'
     )
     list_display = ('id', '__str__', 'submitted_by', 'submitted_at', 'status')
     list_display_links = ('__str__',)
     list_filter = ('status', 'track', 'category', 'is_lap')
     search_fields = ('player__name', 'player__alias')
     ordering = ('submitted_at',)
+
+    def get_fieldsets(self, request, obj=None):
+        if obj is None:
+            return (
+                (None, {'fields': ('submitter_note',)}),
+                *filter(lambda s: s[0] in ("Score", "Score details", "Admin"), self.fieldsets)
+            )
+        return self.fieldsets
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj is None:
+            return self.readonly_fields + ('status', 'reviewer_note')
+        elif obj.is_finalized:
+            return flatten_fieldsets(self.fieldsets)
+        return self.readonly_fields + ('submitter_note',)
+
+    def save_model(self, request, obj, form, change, **kwargs):
+        if change:
+            obj.reviewed_by = request.user
+            obj.reviewed_at = timezone.now()
+        else:
+            obj.submitted_by = request.user
+
+        super().save_model(request, obj, form, change, **kwargs)
+
+    def change_view(self, request, object_id=None, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['show_close'] = True
+        if object_id is not None:
+            instance = self.model.objects.filter(id=object_id).first()
+            if instance is not None and instance.is_finalized:
+                extra_context['show_save'] = False
+                extra_context['show_save_and_continue'] = False
+                extra_context['show_save_and_add_another'] = False
+        return super().change_view(request, object_id, form_url, extra_context)
 
 
 @admin.register(models.EditScoreSubmission)

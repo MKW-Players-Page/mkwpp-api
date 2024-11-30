@@ -65,6 +65,16 @@ class Score(AbstractScore):
 
     initial_rank = models.IntegerField(null=True, blank=True)
 
+    @property
+    def overall_rank(self) -> int:
+        """Calculate the overall rank of this score."""
+        return Score.objects.filter(
+            track=self.track,
+            is_lap=self.is_lap,
+            category__lte=self.category,
+            value__lt=self.value,
+        ).order_by('player', 'value').distinct('player').count() + 1
+
     def __str__(self):
         return value_to_string(self.value)
 
@@ -103,11 +113,43 @@ class AbstractSubmission(models.Model):
 
     reviewer_note = models.CharField(max_length=255, null=True, blank=True)
 
+    @property
+    def is_finalized(self) -> bool:
+        return self.status in (ScoreSubmissionStatus.ACCEPTED, ScoreSubmissionStatus.REJECTED)
+
     class Meta:
         abstract = True
 
 
 class ScoreSubmission(AbstractScore, AbstractSubmission):
+    score = models.OneToOneField(
+        Score,
+        related_name='submission',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+    def create_score(self):
+        """Create a score instance with the data of this submission if not already created."""
+        if self.score is not None:
+            return
+
+        self.score = Score(
+            value=self.value,
+            category=self.category,
+            is_lap=self.is_lap,
+            player=self.player,
+            track=self.track,
+            date=self.date,
+            video_link=self.video_link,
+            ghost_link=self.ghost_link,
+            comment=self.comment,
+        )
+        self.score.initial_rank = self.score.overall_rank
+        self.score.save()
+
+        self.save()
 
     def __str__(self):
         return score_to_string(self)
