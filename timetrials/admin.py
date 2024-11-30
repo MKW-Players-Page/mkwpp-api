@@ -100,14 +100,52 @@ class RegionAdmin(admin.ModelAdmin):
 class ScoreAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('player', 'track', 'value', 'category', 'is_lap')}),
-        ("Other info", {'fields': ('date', 'video_link', 'ghost_link')}),
-        ("Submission", {'fields': ('status', 'time_submitted', 'time_reviewed', 'reviewed_by')}),
+        ("Details", {'fields': ('date', 'video_link', 'ghost_link', 'comment')}),
+        ("Admin", {'fields': ('admin_note',)}),
     )
-    list_display = ('id', 'track', 'category', 'is_lap', '__str__', 'player', 'status')
+    list_display = ('id', 'track', 'category', 'is_lap', '__str__', 'player')
     list_display_links = ('__str__',)
-    list_filter = ('track', 'category', 'is_lap', 'status')
+    list_filter = ('track', 'category', 'is_lap')
     search_fields = ('player__name',)
     ordering = ('track', 'category', 'is_lap', 'value')
+
+
+@admin.register(models.ScoreSubmission)
+class ScoreSubmissionAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': (
+            'status', 'submitted_by', 'submitted_at', 'submitter_note', 'reviewed_by',
+            'reviewed_at', 'reviewer_note'
+        )}),
+        ("Score", {'fields': ('player', 'track', 'value', 'category', 'is_lap')}),
+        ("Score details", {'fields': ('date', 'video_link', 'ghost_link', 'comment')}),
+        ("Admin", {'fields': ('admin_note',)}),
+    )
+    list_display = ('id', '__str__', 'submitted_by', 'submitted_at', 'status')
+    list_display_links = ('__str__',)
+    list_filter = ('status', 'track', 'category', 'is_lap')
+    search_fields = ('player__name', 'player__alias')
+    ordering = ('submitted_at',)
+
+
+@admin.register(models.EditScoreSubmission)
+class EditScoreSubmissionAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': (
+            'status', 'submitted_by', 'submitted_at', 'submitter_note', 'reviewed_by',
+            'reviewed_at', 'reviewer_note'
+        )}),
+        ("Edits", {'fields': (
+            'video_link_edited', 'video_link',
+            'ghost_link_edited', 'ghost_link',
+            'comment_edited', 'comment',
+        )}),
+    )
+    list_display = ('id', '__str__', 'submitted_by', 'submitted_at', 'status')
+    list_display_links = ('__str__',)
+    list_filter = ('status',)
+    search_fields = ('score__player__name', 'score__player__alias')
+    ordering = ('submitted_at',)
 
 
 @admin.register(models.Track)
