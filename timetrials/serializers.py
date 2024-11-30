@@ -333,11 +333,13 @@ class EditScoreSubmissionSerializer(serializers.ModelSerializer):
     )
     status = ScoreSubmissionStatusField(read_only=True)
 
-    def validate(self, attrs):
-        attrs['video_link_edited'] = 'video_link' in attrs
-        attrs['ghost_link_edited'] = 'ghost_link' in attrs
-        attrs['comment_edited'] = 'comment' in attrs
-        return super().validate(attrs)
+    def validate(self, data):
+        data['video_link_edited'] = 'video_link' in data
+        data['ghost_link_edited'] = 'ghost_link' in data
+        data['comment_edited'] = 'comment' in data
+        if not (data['video_link_edited'] or data['ghost_link_edited'] or data['comment_edited']):
+            raise serializers.ValidationError('Expected at least one field update.')
+        return super().validate(data)
 
     class Meta:
         model = models.EditScoreSubmission
