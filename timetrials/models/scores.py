@@ -171,6 +171,17 @@ class EditScoreSubmission(AbstractSubmission):
     comment_edited = models.BooleanField(default=False)
     comment = models.CharField(max_length=128, null=True, blank=True)
 
+    def edit_score(self):
+        if self.video_link_edited:
+            self.score.video_link = self.video_link
+        if self.ghost_link_edited:
+            self.score.ghost_link = self.ghost_link
+        if self.comment_edited:
+            self.score.comment = self.comment
+
+        if self.video_link_edited or self.ghost_link_edited or self.comment_edited:
+            self.score.save()
+
     def __str__(self):
         return score_to_string(self.score)
 
