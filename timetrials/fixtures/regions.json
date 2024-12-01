@@ -3221,5 +3221,566 @@
         "parent": 45,
         "is_ranked": false
     }
+},
+{
+    "model": "timetrials.region",
+    "pk": 298,
+    "fields": {
+        "type": "subnational",
+        "name": "Alabama",
+        "code": "USAL",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 299,
+    "fields": {
+        "type": "subnational",
+        "name": "Alaska",
+        "code": "USAK",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 300,
+    "fields": {
+        "type": "subnational",
+        "name": "Arizona",
+        "code": "USAZ",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 301,
+    "fields": {
+        "type": "subnational",
+        "name": "Arkansas",
+        "code": "USAR",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 302,
+    "fields": {
+        "type": "subnational",
+        "name": "California",
+        "code": "USCA",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 303,
+    "fields": {
+        "type": "subnational",
+        "name": "Colorado",
+        "code": "USCO",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 304,
+    "fields": {
+        "type": "subnational",
+        "name": "Connecticut",
+        "code": "USCT",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 305,
+    "fields": {
+        "type": "subnational",
+        "name": "Delaware",
+        "code": "USDE",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 306,
+    "fields": {
+        "type": "subnational",
+        "name": "Florida",
+        "code": "USFL",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 307,
+    "fields": {
+        "type": "subnational",
+        "name": "Georgia (US)",
+        "code": "USGA",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 308,
+    "fields": {
+        "type": "subnational",
+        "name": "Hawaii",
+        "code": "USHI",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 309,
+    "fields": {
+        "type": "subnational",
+        "name": "Idaho",
+        "code": "USID",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 310,
+    "fields": {
+        "type": "subnational",
+        "name": "Illinois",
+        "code": "USIL",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 311,
+    "fields": {
+        "type": "subnational",
+        "name": "Indiana",
+        "code": "USIN",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 312,
+    "fields": {
+        "type": "subnational",
+        "name": "Iowa",
+        "code": "USIA",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 313,
+    "fields": {
+        "type": "subnational",
+        "name": "Kansas",
+        "code": "USKS",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 314,
+    "fields": {
+        "type": "subnational",
+        "name": "Kentucky",
+        "code": "USKY",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 315,
+    "fields": {
+        "type": "subnational",
+        "name": "Louisiana",
+        "code": "USLA",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 316,
+    "fields": {
+        "type": "subnational",
+        "name": "Maine",
+        "code": "USME",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 317,
+    "fields": {
+        "type": "subnational",
+        "name": "Maryland",
+        "code": "USMD",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 318,
+    "fields": {
+        "type": "subnational",
+        "name": "Massachusetts",
+        "code": "USMA",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 319,
+    "fields": {
+        "type": "subnational",
+        "name": "Michigan",
+        "code": "USMI",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 320,
+    "fields": {
+        "type": "subnational",
+        "name": "Minnesota",
+        "code": "USMN",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 321,
+    "fields": {
+        "type": "subnational",
+        "name": "Mississippi",
+        "code": "USMS",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 322,
+    "fields": {
+        "type": "subnational",
+        "name": "Missouri",
+        "code": "USMO",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 323,
+    "fields": {
+        "type": "subnational",
+        "name": "Montana",
+        "code": "USMT",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 324,
+    "fields": {
+        "type": "subnational",
+        "name": "Nebraska",
+        "code": "USNE",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 325,
+    "fields": {
+        "type": "subnational",
+        "name": "Nevada",
+        "code": "USNV",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 326,
+    "fields": {
+        "type": "subnational",
+        "name": "New Hampshire",
+        "code": "USNH",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 327,
+    "fields": {
+        "type": "subnational",
+        "name": "New Jersey",
+        "code": "USNJ",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 328,
+    "fields": {
+        "type": "subnational",
+        "name": "New Mexico",
+        "code": "USNM",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 329,
+    "fields": {
+        "type": "subnational",
+        "name": "New York",
+        "code": "USNY",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 330,
+    "fields": {
+        "type": "subnational",
+        "name": "North Carolina",
+        "code": "USNC",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 331,
+    "fields": {
+        "type": "subnational",
+        "name": "North Dakota",
+        "code": "USND",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 332,
+    "fields": {
+        "type": "subnational",
+        "name": "Ohio",
+        "code": "USOH",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 333,
+    "fields": {
+        "type": "subnational",
+        "name": "Oklahoma",
+        "code": "USOK",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 334,
+    "fields": {
+        "type": "subnational",
+        "name": "Oregon",
+        "code": "USOR",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 335,
+    "fields": {
+        "type": "subnational",
+        "name": "Pennsylvania",
+        "code": "USPA",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 336,
+    "fields": {
+        "type": "subnational",
+        "name": "Rhode Island",
+        "code": "USRI",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 337,
+    "fields": {
+        "type": "subnational",
+        "name": "South Carolina",
+        "code": "USSC",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 338,
+    "fields": {
+        "type": "subnational",
+        "name": "South Dakota",
+        "code": "USSD",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 339,
+    "fields": {
+        "type": "subnational",
+        "name": "Tennessee",
+        "code": "USTN",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 340,
+    "fields": {
+        "type": "subnational",
+        "name": "Texas",
+        "code": "USTX",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 341,
+    "fields": {
+        "type": "subnational",
+        "name": "Utah",
+        "code": "USUT",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 342,
+    "fields": {
+        "type": "subnational",
+        "name": "Vermont",
+        "code": "USVT",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 343,
+    "fields": {
+        "type": "subnational",
+        "name": "Virginia",
+        "code": "USVA",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 344,
+    "fields": {
+        "type": "subnational",
+        "name": "Washington",
+        "code": "USWA",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 345,
+    "fields": {
+        "type": "subnational",
+        "name": "West Virginia",
+        "code": "USWV",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 346,
+    "fields": {
+        "type": "subnational",
+        "name": "Wisconsin",
+        "code": "USWI",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 347,
+    "fields": {
+        "type": "subnational",
+        "name": "Wyoming",
+        "code": "USWY",
+        "parent": 248,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 348,
+    "fields": {
+        "type": "subnational",
+        "name": "District of Columbia",
+        "code": "USDC",
+        "parent": 248,
+        "is_ranked": false
+    }
 }
 ]
