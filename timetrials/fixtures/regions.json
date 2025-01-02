@@ -3782,5 +3782,291 @@
         "parent": 248,
         "is_ranked": false
     }
+},
+{
+    "model": "timetrials.region",
+    "pk": 349,
+    "fields": {
+        "type": "subnational",
+        "name": "Aargau",
+        "code": "CHAG",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 350,
+    "fields": {
+        "type": "subnational",
+        "name": "Appenzell Outer-Rhodes",
+        "code": "CHAR",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 351,
+    "fields": {
+        "type": "subnational",
+        "name": "Appenzell Inner-Rhodes",
+        "code": "CHAI",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 352,
+    "fields": {
+        "type": "subnational",
+        "name": "Basel-Country",
+        "code": "CHBL",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 353,
+    "fields": {
+        "type": "subnational",
+        "name": "Basel-City",
+        "code": "CHBS",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 354,
+    "fields": {
+        "type": "subnational",
+        "name": "Bern",
+        "code": "CHBE",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 355,
+    "fields": {
+        "type": "subnational",
+        "name": "Fribourg",
+        "code": "CHFR",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 356,
+    "fields": {
+        "type": "subnational",
+        "name": "Geneva",
+        "code": "CHGE",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 357,
+    "fields": {
+        "type": "subnational",
+        "name": "Glarus",
+        "code": "CHGL",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 358,
+    "fields": {
+        "type": "subnational",
+        "name": "Grisons",
+        "code": "CHGR",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 359,
+    "fields": {
+        "type": "subnational",
+        "name": "Jura",
+        "code": "CHJU",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 360,
+    "fields": {
+        "type": "subnational",
+        "name": "Lucerne",
+        "code": "CHLU",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 361,
+    "fields": {
+        "type": "subnational",
+        "name": "Neuchâtel",
+        "code": "CHNE",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 362,
+    "fields": {
+        "type": "subnational",
+        "name": "Nidwalden",
+        "code": "CHNW",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 363,
+    "fields": {
+        "type": "subnational",
+        "name": "Obwalden",
+        "code": "CHOW",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 364,
+    "fields": {
+        "type": "subnational",
+        "name": "St. Gallen",
+        "code": "CHSG",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 365,
+    "fields": {
+        "type": "subnational",
+        "name": "Schaffhausen",
+        "code": "CHSH",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 366,
+    "fields": {
+        "type": "subnational",
+        "name": "Schwyz",
+        "code": "CHSZ",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 367,
+    "fields": {
+        "type": "subnational",
+        "name": "Solothurn",
+        "code": "CHSO",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 368,
+    "fields": {
+        "type": "subnational",
+        "name": "Thurgau",
+        "code": "CHTG",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 369,
+    "fields": {
+        "type": "subnational",
+        "name": "Ticino",
+        "code": "CHTI",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 370,
+    "fields": {
+        "type": "subnational",
+        "name": "Uri",
+        "code": "CHUR",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 371,
+    "fields": {
+        "type": "subnational",
+        "name": "Valais",
+        "code": "CHVS",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 372,
+    "fields": {
+        "type": "subnational",
+        "name": "Vaud",
+        "code": "CHVD",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 373,
+    "fields": {
+        "type": "subnational",
+        "name": "Zug",
+        "code": "CHZG",
+        "parent": 225,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 374,
+    "fields": {
+        "type": "subnational",
+        "name": "Zurich",
+        "code": "CHZH",
+        "parent": 225,
+        "is_ranked": false
+    }
 }
 ]
