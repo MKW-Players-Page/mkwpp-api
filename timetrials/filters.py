@@ -7,8 +7,9 @@ from rest_framework.exceptions import ValidationError
 from timetrials.models.categories import CategoryChoices
 from timetrials.models.players import PlayerAwardTypeChoices
 from timetrials.models.regions import Region, RegionTypeChoices
+from timetrials.models.scores import ScoreSubmissionStatus
 from timetrials.models.stats.region_stats import TopScoreCountChoices
-from timetrials.serializers import CategoryField, TopScoreCountField
+from timetrials.serializers import CategoryField, ScoreSubmissionStatusField, TopScoreCountField
 
 
 class FilterMixin:
@@ -434,6 +435,51 @@ class RegionTypeFilter(FilterBase):
             self.request_field,
             type=str,
             enum=self.choices,
+            required=self.required,
+            allow_blank=False,
+        )
+
+
+class ScoreSubmissionStatusFilter(FilterBase):
+
+    def __init__(self, *,
+                 field_name='status',
+                 request_field='status',
+                 auto=True,
+                 required=True):
+        """
+        Parameters
+        ----------
+        field_name : str
+            The name of the field on the model to apply the filter to
+        request_field : str
+            The name of the query param of the request to get the filter value from
+        auto : bool
+            Whether this filter should be applied by FilterMixin.filter
+        required : bool
+            Whether this filter is required to be present in the query params
+        """
+        super().__init__(
+            field_name=field_name,
+            request_field=request_field,
+            auto=auto,
+            required=required
+        )
+
+    def validate_filter_value(self, value: str):
+        status = ScoreSubmissionStatusField().to_internal_value(value)
+
+        if status not in ScoreSubmissionStatus.values:
+            self.validation_error('invalid_value', self.request_field, value)
+
+        return status
+
+    @property
+    def open_api_param(self) -> OpenApiParameter:
+        return OpenApiParameter(
+            self.request_field,
+            type=str,
+            enum=ScoreSubmissionStatusField.values(),
             required=self.required,
             allow_blank=False,
         )

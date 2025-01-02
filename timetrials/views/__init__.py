@@ -5,8 +5,12 @@ from timetrials.views.views_players import (
 from timetrials.views.views_regions import RegionListView, RegionStatsListView
 from timetrials.views.views_scores import (
     LatestRecordListView, LatestScoreListView, PlayerScoreListView, RecordListView,
-    ScoreSubmissionCreateView, TrackScoreListView, TrackTopsListView, UserSubmissionListView
+    TrackScoreListView, TrackTopsListView
 )
 from timetrials.views.views_sitechamps import SiteChampListView
 from timetrials.views.views_standards import StandardListView
+from timetrials.views.views_submissions import (
+    EditScoreSubmissionCreateView, EditScoreSubmissionDestroyView, EditScoreSubmissionListView,
+    ScoreSubmissionCreateView, ScoreSubmissionDestroyView, ScoreSubmissionListView
+)
 from timetrials.views.views_tracks import TrackCupListView, TrackListView

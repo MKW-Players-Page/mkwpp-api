@@ -4,7 +4,6 @@ from django.db.models.functions import Cast, Rank
 from django_cte import With
 
 from timetrials import models
-from timetrials.models.scores import ScoreSubmissionStatus
 
 
 def query_region_players(region: models.Region):
@@ -27,7 +26,6 @@ def query_records(category: models.CategoryChoices, region: models.Region = None
         'track', 'is_lap', 'value'
     ).filter(
         category__lte=category,
-        status=ScoreSubmissionStatus.ACCEPTED,
     ).annotate(
         rank=Value(1)
     )
@@ -52,7 +50,6 @@ def query_ranked_scores(category: models.CategoryChoices, region: models.Region 
         'player', 'track', 'is_lap', 'value'
     ).filter(
         category__lte=category,
-        status=ScoreSubmissionStatus.ACCEPTED,
     ).values('pk')
 
     ranked_scores_query = models.Score.objects.order_by(

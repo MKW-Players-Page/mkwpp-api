@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.admin.utils import flatten_fieldsets
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from timetrials import models
@@ -100,14 +102,100 @@ class RegionAdmin(admin.ModelAdmin):
 class ScoreAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('player', 'track', 'value', 'category', 'is_lap')}),
-        ("Other info", {'fields': ('date', 'video_link', 'ghost_link')}),
-        ("Submission", {'fields': ('status', 'time_submitted', 'time_reviewed', 'reviewed_by')}),
+        ("Details", {'fields': ('date', 'video_link', 'ghost_link', 'comment')}),
+        ("Other", {'fields': ('initial_rank', 'submission')}),
+        ("Admin", {'fields': ('admin_note',)}),
     )
-    list_display = ('id', 'track', 'category', 'is_lap', '__str__', 'player', 'status')
+    readonly_fields = ('initial_rank', 'submission')
+    list_display = ('id', 'track', 'category', 'is_lap', '__str__', 'player')
     list_display_links = ('__str__',)
-    list_filter = ('track', 'category', 'is_lap', 'status')
+    list_filter = ('track', 'category', 'is_lap')
     search_fields = ('player__name',)
     ordering = ('track', 'category', 'is_lap', 'value')
+
+
+class SubmissionAdmin(admin.ModelAdmin):
+    submission_add_fieldset = (None, {'fields': ('submitter_note',)})
+    submission_change_fieldset = (None, {'fields': (
+        'status', 'submitted_by', 'submitted_at', 'submitter_note', 'reviewed_by', 'reviewed_at',
+        'reviewer_note'
+    )})
+    submission_readonly_fields = ('submitted_by', 'submitted_at', 'reviewed_by', 'reviewed_at')
+    submission_add_readonly_fields = ('status', 'reviewer_note')
+    submission_change_readonly_fields = ('submitter_note',)
+    ordering = ('submitted_at',)
+
+    def get_fieldsets(self, request, obj=None):
+        if obj is None:
+            return (self.submission_add_fieldset, *self.fieldsets)
+        return (self.submission_change_fieldset, *self.fieldsets)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj is None:
+            return (
+                self.readonly_fields +
+                self.submission_readonly_fields +
+                self.submission_add_readonly_fields
+            )
+        elif obj.is_finalized:
+            return flatten_fieldsets(self.get_fieldsets(request, obj))
+        return (
+            self.readonly_fields +
+            self.submission_readonly_fields +
+            self.submission_change_readonly_fields
+        )
+
+    def save_model(self, request, obj, form, change, **kwargs):
+        if change:
+            obj.reviewed_by = request.user
+            obj.reviewed_at = timezone.now()
+        else:
+            obj.submitted_by = request.user
+
+        super().save_model(request, obj, form, change, **kwargs)
+
+    def change_view(self, request, object_id=None, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        if object_id is not None:
+            instance = self.model.objects.filter(id=object_id).first()
+            if instance is not None and instance.is_finalized:
+                extra_context['show_save'] = False
+                extra_context['show_save_and_continue'] = False
+                extra_context['show_save_and_add_another'] = False
+        return super().change_view(request, object_id, form_url, extra_context)
+
+
+@admin.register(models.ScoreSubmission)
+class ScoreSubmissionAdmin(SubmissionAdmin):
+    fieldsets = (
+        ("Score", {'fields': ('player', 'track', 'value', 'category', 'is_lap')}),
+        ("Score details", {'fields': ('date', 'video_link', 'ghost_link', 'comment')}),
+        ("Other", {'fields': ('score',)}),
+        ("Admin", {'fields': ('admin_note',)}),
+    )
+    readonly_fields = ('score',)
+    list_display = ('id', '__str__', 'submitted_by', 'submitted_at', 'status')
+    list_display_links = ('__str__',)
+    list_filter = ('status', 'track', 'category', 'is_lap')
+    search_fields = ('player__name', 'player__alias')
+
+
+@admin.register(models.EditScoreSubmission)
+class EditScoreSubmissionAdmin(SubmissionAdmin):
+    fieldsets = (
+        ("Edits", {'fields': (
+            'score',
+            'video_link_edited', 'video_link',
+            'ghost_link_edited', 'ghost_link',
+            'comment_edited', 'comment',
+        )}),
+    )
+    raw_id_fields = ('score',)
+    list_display = ('id', '__str__', 'submitted_by', 'submitted_at', 'status')
+    list_display_links = ('__str__',)
+    list_filter = ('status',)
+    search_fields = ('score__player__name', 'score__player__alias')
+    ordering = ('submitted_at',)
 
 
 @admin.register(models.Track)

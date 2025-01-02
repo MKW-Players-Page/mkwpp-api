@@ -59,6 +59,7 @@ ScoreSubmissionStatusField = map_enum_field({
     ScoreSubmissionStatus.PENDING: 'pending',
     ScoreSubmissionStatus.ACCEPTED: 'accepted',
     ScoreSubmissionStatus.REJECTED: 'rejected',
+    ScoreSubmissionStatus.ON_HOLD: 'on_hold',
 })
 
 TopScoreCountField = map_enum_field({
@@ -213,6 +214,46 @@ class PlayerAwardSerializer(serializers.ModelSerializer):
 
 # Scores
 
+class ScoreBasicSerializer(serializers.ModelSerializer):
+    category = CategoryField()
+
+    class Meta:
+        model = models.Score
+        fields = [
+            'id',
+            'value',
+            'player',
+            'track',
+            'category',
+            'is_lap',
+            'date',
+            'video_link',
+            'ghost_link',
+            'comment',
+        ]
+
+
+class RecentScoreSerializer(ScoreBasicSerializer):
+    player = PlayerBasicSerializer()
+    category = CategoryField()
+
+    class Meta:
+        model = models.Score
+        fields = [
+            'id',
+            'value',
+            'player',
+            'track',
+            'category',
+            'is_lap',
+            'date',
+            'initial_rank',
+            'video_link',
+            'ghost_link',
+            'comment',
+        ]
+
+
 class ScoreSerializer(serializers.ModelSerializer):
     rank = serializers.IntegerField()
     category = CategoryField()
@@ -244,15 +285,21 @@ class ScoreWithPlayerSerializer(ScoreSerializer):
 
 class ScoreSubmissionSerializer(serializers.ModelSerializer):
     player = PlayerBasicSerializer(read_only=True)
+    player_id = serializers.PrimaryKeyRelatedField(
+        queryset=models.Player.objects.all(),
+        write_only=True,
+        source='player'
+    )
     category = CategoryField()
     status = ScoreSubmissionStatusField(read_only=True)
 
     class Meta:
-        model = models.Score
+        model = models.ScoreSubmission
         fields = [
             'id',
             'value',
             'player',
+            'player_id',
             'track',
             'category',
             'is_lap',
@@ -261,14 +308,68 @@ class ScoreSubmissionSerializer(serializers.ModelSerializer):
             'ghost_link',
             'comment',
             'status',
-            'time_submitted',
-            'time_reviewed',
+            'submitted_by',
+            'submitted_at',
+            'submitter_note',
             'reviewed_by',
+            'reviewed_at',
+            'reviewer_note',
         ]
         extra_kwargs = {
-            'time_submitted': {'read_only': True},
-            'time_reviewed': {'read_only': True},
+            'submitted_by': {'read_only': True},
+            'submitted_at': {'read_only': True},
             'reviewed_by': {'read_only': True},
+            'reviewed_at': {'read_only': True},
+            'reviewer_note': {'read_only': True},
+        }
+
+
+class EditScoreSubmissionSerializer(serializers.ModelSerializer):
+    score = ScoreBasicSerializer(read_only=True)
+    score_id = serializers.PrimaryKeyRelatedField(
+        queryset=models.Score.objects.all(),
+        write_only=True,
+        source='score'
+    )
+    status = ScoreSubmissionStatusField(read_only=True)
+
+    def validate(self, data):
+        data['video_link_edited'] = 'video_link' in data
+        data['ghost_link_edited'] = 'ghost_link' in data
+        data['comment_edited'] = 'comment' in data
+        if not (data['video_link_edited'] or data['ghost_link_edited'] or data['comment_edited']):
+            raise serializers.ValidationError('Expected at least one field update.')
+        return super().validate(data)
+
+    class Meta:
+        model = models.EditScoreSubmission
+        fields = [
+            'id',
+            'score',
+            'score_id',
+            'video_link_edited',
+            'video_link',
+            'ghost_link_edited',
+            'ghost_link',
+            'comment_edited',
+            'comment',
+            'status',
+            'submitted_by',
+            'submitted_at',
+            'submitter_note',
+            'reviewed_by',
+            'reviewed_at',
+            'reviewer_note',
+        ]
+        extra_kwargs = {
+            'video_link_edited': {'read_only': True},
+            'ghost_link_edited': {'read_only': True},
+            'comment_edited': {'read_only': True},
+            'submitted_by': {'read_only': True},
+            'submitted_at': {'read_only': True},
+            'reviewed_by': {'read_only': True},
+            'reviewed_at': {'read_only': True},
+            'reviewer_note': {'read_only': True},
         }
 
 
