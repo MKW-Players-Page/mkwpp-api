@@ -80,6 +80,8 @@ class TrackScoreListView(filters.FilterMixin, generics.ListAPIView):
         filters.CategoryFilter(),
         filters.LapModeFilter(),
         filters.RegionFilter(auto=False, required=False),
+        filters.OffsetFilter(),
+        filters.LimitFilter(),
     )
 
     def get_queryset(self):
@@ -107,7 +109,7 @@ class TrackScoreListView(filters.FilterMixin, generics.ListAPIView):
         category = self.get_filter_value(filters.CategoryFilter)
 
         return annotate_scores_record_ratio(
-            annotate_scores_standard(scores, category, legacy=True),
+            annotate_scores_standard(self.limit(scores), category, legacy=True),
             category
         )
 
@@ -202,7 +204,7 @@ class RecordListView(filters.FilterMixin, generics.ListAPIView):
 class LatestScoreListView(filters.FilterMixin, generics.ListAPIView):
     serializer_class = serializers.RecentScoreSerializer
     filter_fields = (
-        filters.LimitFilter(max=100),
+        filters.LimitFilter(required=True, max=100),
     )
 
     def get_queryset(self):
@@ -215,7 +217,7 @@ class LatestScoreListView(filters.FilterMixin, generics.ListAPIView):
 class LatestRecordListView(filters.FilterMixin, generics.ListAPIView):
     serializer_class = serializers.RecentScoreSerializer
     filter_fields = (
-        filters.LimitFilter(max=100),
+        filters.LimitFilter(required=True, max=100),
     )
 
     def get_queryset(self):
