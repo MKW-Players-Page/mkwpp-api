@@ -35,10 +35,13 @@ class FilterMixin:
 
     def limit(self, queryset: QuerySet) -> QuerySet:
         for filter_field in self.filter_fields:
-            if isinstance(filter_field, LimitFilter):
-                return filter_field.filter(self.request, queryset)
+            if isinstance(filter_field, OffsetFilter):
+                queryset = filter_field.filter(self.request, queryset)
 
-        raise TypeError("No LimitFilter in filter fields")
+            if isinstance(filter_field, LimitFilter):
+                queryset = filter_field.filter(self.request, queryset)
+
+        return queryset
 
 
 def extend_schema_with_filters(view):
@@ -151,6 +154,49 @@ class OrderingFilterBase(FilterBase):
         return queryset.order_by(self.get_filter_value(request))
 
 
+class OffsetFilter(FilterBase):
+
+    def __init__(self, *, request_field='offset', required=False):
+        """
+        Parameters
+        ----------
+        request_field : str
+            The name of the query param of the request to get the filter value from
+        required : bool
+            Whether this filter is required to be present in the query params
+        """
+        super().__init__(
+            field_name='',
+            request_field=request_field,
+            auto=False,
+            required=required
+        )
+
+    def validate_filter_value(self, value: str):
+        try:
+            offset = int(value)
+        except ValueError:
+            self.validation_error('invalid_value', self.request_field, value)
+
+        return offset
+
+    def filter(self, request, queryset: QuerySet) -> QuerySet:
+        """Offset the queryset."""
+        offset = self.get_filter_value(request)
+        if offset is None:
+            return queryset
+        return queryset[offset:]
+
+    @property
+    def open_api_param(self) -> OpenApiParameter:
+        return OpenApiParameter(
+            self.request_field,
+            type=int,
+            required=self.required,
+            allow_blank=False,
+        )
+
+
 class LimitFilter(FilterBase):
 
     def __init__(self, *,
@@ -158,7 +204,7 @@ class LimitFilter(FilterBase):
                  min=1,
                  max=None,
                  default=None,
-                 required=True):
+                 required=False):
         """
         Parameters
         ----------
@@ -190,7 +236,7 @@ class LimitFilter(FilterBase):
         except ValueError:
             self.validation_error('invalid_value', self.request_field, value)
 
-        if limit < self.min or limit > self.max:
+        if limit < self.min or (self.max and limit > self.max):
             self.validation_error('invalid_value', self.request_field, value)
 
         return limit

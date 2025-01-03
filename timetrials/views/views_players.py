@@ -11,9 +11,16 @@ from knox.auth import TokenAuthentication
 from timetrials import filters, models, serializers
 
 
-class PlayerListView(generics.ListAPIView):
-    queryset = models.Player.objects.order_by('name')
+@filters.extend_schema_with_filters
+class PlayerListView(filters.FilterMixin, generics.ListAPIView):
     serializer_class = serializers.PlayerBasicSerializer
+    filter_fields = (
+        filters.OffsetFilter(),
+        filters.LimitFilter(),
+    )
+
+    def get_queryset(self):
+        return self.limit(models.Player.objects.order_by('name'))
 
 
 class PlayerRetrieveView(generics.RetrieveAPIView):
@@ -41,6 +48,8 @@ class PlayerStatsListView(filters.FilterMixin, generics.ListAPIView):
         filters.LapModeFilter(allow_overall=True),
         filters.RegionFilter(expand=False, ranked_only=True),
         filters.MetricOrderingFilter(),
+        filters.OffsetFilter(),
+        filters.LimitFilter(),
     )
 
     def get_queryset(self):
@@ -48,10 +57,12 @@ class PlayerStatsListView(filters.FilterMixin, generics.ListAPIView):
         if self.get_filter_value(filters.LapModeFilter) is None:
             score_count = score_count * 2
 
-        return self.filter(models.PlayerStats.objects.all()).filter(
-            score_count=score_count
-        ).annotate(
-            rank=Window(Rank(), order_by=self.get_filter_value(filters.MetricOrderingFilter))
+        return self.limit(
+            self.filter(models.PlayerStats.objects.all()).filter(
+                score_count=score_count
+            ).annotate(
+                rank=Window(Rank(), order_by=self.get_filter_value(filters.MetricOrderingFilter))
+            )
         )
 
 

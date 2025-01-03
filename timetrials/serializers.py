@@ -2,6 +2,7 @@ from drf_spectacular.utils import extend_schema_field
 
 from rest_framework import serializers
 
+from core.models import User
 from core.serializers import TimestampField
 
 from timetrials import models, queries
@@ -283,6 +284,14 @@ class ScoreWithPlayerSerializer(ScoreSerializer):
     player = PlayerBasicSerializer()
 
 
+class UserWithPlayerSerializer(serializers.ModelSerializer):
+    player = PlayerBasicSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'player']
+
+
 class ScoreSubmissionSerializer(serializers.ModelSerializer):
     player = PlayerBasicSerializer(read_only=True)
     player_id = serializers.PrimaryKeyRelatedField(
@@ -292,6 +301,8 @@ class ScoreSubmissionSerializer(serializers.ModelSerializer):
     )
     category = CategoryField()
     status = ScoreSubmissionStatusField(read_only=True)
+    submitted_by = UserWithPlayerSerializer(read_only=True)
+    reviewed_by = UserWithPlayerSerializer(read_only=True)
 
     class Meta:
         model = models.ScoreSubmission
@@ -316,9 +327,7 @@ class ScoreSubmissionSerializer(serializers.ModelSerializer):
             'reviewer_note',
         ]
         extra_kwargs = {
-            'submitted_by': {'read_only': True},
             'submitted_at': {'read_only': True},
-            'reviewed_by': {'read_only': True},
             'reviewed_at': {'read_only': True},
             'reviewer_note': {'read_only': True},
         }
@@ -332,6 +341,8 @@ class EditScoreSubmissionSerializer(serializers.ModelSerializer):
         source='score'
     )
     status = ScoreSubmissionStatusField(read_only=True)
+    submitted_by = UserWithPlayerSerializer(read_only=True)
+    reviewed_by = UserWithPlayerSerializer(read_only=True)
 
     def validate(self, data):
         data['video_link_edited'] = 'video_link' in data
@@ -365,9 +376,7 @@ class EditScoreSubmissionSerializer(serializers.ModelSerializer):
             'video_link_edited': {'read_only': True},
             'ghost_link_edited': {'read_only': True},
             'comment_edited': {'read_only': True},
-            'submitted_by': {'read_only': True},
             'submitted_at': {'read_only': True},
-            'reviewed_by': {'read_only': True},
             'reviewed_at': {'read_only': True},
             'reviewer_note': {'read_only': True},
         }
