@@ -12,17 +12,20 @@ from core.models import User
 from timetrials import filters, models, serializers
 
 
+def can_create_submission(user, player):
+    if hasattr(user, 'player') and user.player == player:
+        return True
+
+    return models.PlayerSubmitter.objects.filter(player=player, submitter=user).exists()
+
+
 class ScoreSubmissionCreateView(generics.CreateAPIView):
     serializer_class = serializers.ScoreSubmissionSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
-        submit_permission = models.PlayerSubmitter.objects.filter(
-            player=serializer.validated_data['player'],
-            submitter=self.request.user,
-        )
-        if not submit_permission.exists():
+        if not can_create_submission(self.request.user, serializer.validated_data['player']):
             raise ValidationError(_("You may not create submissions for this player."))
 
         return serializer.save(submitted_by=self.request.user)
@@ -69,11 +72,7 @@ class EditScoreSubmissionCreateView(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
-        submit_permission = models.PlayerSubmitter.objects.filter(
-            player=serializer.validated_data['player'],
-            submitter=self.request.user,
-        )
-        if not submit_permission.exists():
+        if not can_create_submission(self.request.user, serializer.validated_data['score'].player):
             raise ValidationError(_("You may not create submissions for this player."))
 
         return serializer.save(submitted_by=self.request.user)
@@ -91,7 +90,7 @@ class EditScoreSubmissionListView(filters.FilterMixin, generics.ListAPIView):
     def get_queryset(self):
         if hasattr(self.request.user, 'player'):
             queryset = models.EditScoreSubmission.objects.filter(
-                Q(player=self.request.user.player) | Q(submitted_by=self.request.user)
+                Q(score__player=self.request.user.player) | Q(submitted_by=self.request.user)
             )
         else:
             queryset = models.EditScoreSubmission.objects.filter(submitted_by=self.request.user)
@@ -106,7 +105,7 @@ class EditScoreSubmissionDestroyView(generics.DestroyAPIView):
     def get_queryset(self):
         if hasattr(self.request.user, 'player'):
             queryset = models.EditScoreSubmission.objects.filter(
-                Q(player=self.request.user.player) | Q(submitted_by=self.request.user)
+                Q(score__player=self.request.user.player) | Q(submitted_by=self.request.user)
             )
         else:
             queryset = models.EditScoreSubmission.objects.filter(submitted_by=self.request.user)
