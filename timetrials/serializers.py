@@ -148,6 +148,14 @@ class PlayerBasicSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'region', 'user', 'alias', 'joined_date', 'last_activity']
 
 
+class UserWithPlayerSerializer(serializers.ModelSerializer):
+    player = PlayerBasicSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'player']
+
+
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Player
@@ -211,6 +219,22 @@ class PlayerAwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PlayerAward
         fields = ['id', 'player', 'type', 'date', 'description']
+
+
+class PlayerSubmitteeSerializer(serializers.ModelSerializer):
+    player = PlayerBasicSerializer(read_only=True)
+
+    class Meta:
+        model = models.PlayerSubmitter
+        fields = ['player']
+
+
+class PlayerSubmitterSerializer(serializers.ModelSerializer):
+    submitter = UserWithPlayerSerializer(read_only=True)
+
+    class Meta:
+        model = models.PlayerSubmitter
+        fields = ['submitter']
 
 
 # Scores
@@ -282,14 +306,6 @@ class ScoreSerializer(serializers.ModelSerializer):
 
 class ScoreWithPlayerSerializer(ScoreSerializer):
     player = PlayerBasicSerializer()
-
-
-class UserWithPlayerSerializer(serializers.ModelSerializer):
-    player = PlayerBasicSerializer(read_only=True)
-
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'player']
 
 
 class ScoreSubmissionSerializer(serializers.ModelSerializer):

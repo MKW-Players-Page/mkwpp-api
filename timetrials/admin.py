@@ -71,6 +71,17 @@ class PlayerAwardAdmin(admin.ModelAdmin):
     ordering = ('type', '-date')
 
 
+@admin.register(models.PlayerSubmitter)
+class PlayerSubmitterAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('player', 'submitter')}),
+    )
+    list_display = ('player', 'submitter')
+    list_display_links = ('player', 'submitter')
+    search_fields = ('player__name', 'submitter__username')
+    ordering = ('player__name', 'submitter__username')
+
+
 class RegionStatsInline(admin.TabularInline):
     model = models.RegionStats
     classes = ['collapse']

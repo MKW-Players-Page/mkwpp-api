@@ -64,3 +64,27 @@ class PlayerAward(models.Model):
     date = models.DateField(default=datetime.today)
 
     description = models.CharField(max_length=1024)
+
+
+class PlayerSubmitter(models.Model):
+    player = models.ForeignKey(
+        Player,
+        related_name='submitters',
+        on_delete=models.CASCADE,
+        help_text=_("The player the submitter is granted permission to create submissions for."),
+    )
+
+    submitter = models.ForeignKey(
+        User,
+        related_name='submittees',
+        on_delete=models.CASCADE,
+        help_text=_("The user being granted permission to create submissions for the player."),
+    )
+
+    class Meta:
+        verbose_name = _("player submitter")
+        verbose_name_plural = _("player submitters")
+
+        constraints = [
+            models.UniqueConstraint(fields=['player', 'submitter'], name='unique_player_submitter'),
+        ]
