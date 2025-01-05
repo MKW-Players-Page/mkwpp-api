@@ -7,8 +7,6 @@ from rest_framework.response import Response
 
 from knox.auth import TokenAuthentication
 
-from core.models import User
-
 from timetrials import filters, models, serializers
 
 
@@ -114,16 +112,20 @@ class EditScoreSubmissionDestroyView(generics.DestroyAPIView):
 
 
 class PlayerSubmitteeListView(generics.ListAPIView):
-    serializer_class = serializers.PlayerSubmitteeSerializer
+    serializer_class = serializers.PlayerBasicSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        return models.PlayerSubmitter.objects.filter(submitter=self.request.user)
+        return models.Player.objects.filter(
+            pk__in=models.PlayerSubmitter.objects.filter(
+                submitter=self.request.user
+            ).values('player')
+        )
 
 
 class PlayerSubmitterListView(generics.ListAPIView):
-    serializer_class = serializers.PlayerSubmitterSerializer
+    serializer_class = serializers.PlayerBasicSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -131,7 +133,11 @@ class PlayerSubmitterListView(generics.ListAPIView):
         if not hasattr(self.request.user, 'player'):
             raise ValidationError(_("User has no associated player profile."))
 
-        return models.PlayerSubmitter.objects.filter(player=self.request.user.player)
+        return models.Player.objects.filter(
+            pk__in=models.PlayerSubmitter.objects.filter(
+                player=self.request.user.player
+            ).values('submitter__player')
+        )
 
 
 class PlayerSubmitterCreateView(views.APIView):
@@ -142,19 +148,23 @@ class PlayerSubmitterCreateView(views.APIView):
         if not hasattr(request.user, 'player'):
             raise ValidationError(_("User has no associated player profile."))
 
-        submitter = User.objects.filter(id=self.kwargs['pk']).first()
+        submitter = models.Player.objects.filter(id=self.kwargs['pk']).first()
         if submitter is None:
-            raise ValidationError(_("No user with given ID."))
-        if submitter.id == request.user.id:
+            raise ValidationError(_("No player with given ID."))
+        if submitter.id == request.user.player.id:
             raise ValidationError(_("You may not assign yourself as your own submitter."))
+        if submitter.user is None:
+            raise ValidationError(
+                _("Player has no associated user account and cannot be assigned as a submitter.")
+            )
 
         player = request.user.player
-        if models.PlayerSubmitter.objects.filter(player=player, submitter=submitter).exists():
+        if models.PlayerSubmitter.objects.filter(player=player, submitter=submitter.user).exists():
             raise ValidationError(_("The given user has already been assigned as a submitter."))
 
-        models.PlayerSubmitter.objects.create(player=player, submitter=submitter)
+        models.PlayerSubmitter.objects.create(player=player, submitter=submitter.user)
 
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_200_OK)
 
 
 class PlayerSubmitterDestroyView(views.APIView):
@@ -165,12 +175,22 @@ class PlayerSubmitterDestroyView(views.APIView):
         if not hasattr(request.user, 'player'):
             raise ValidationError(_("User has no associated player profile."))
 
+        submitter = models.Player.objects.filter(id=self.kwargs['pk']).first()
+        if submitter is None:
+            raise ValidationError(_("No player with given ID."))
+        if submitter.id == request.user.player.id:
+            raise ValidationError(_("You may not remove yourself as your own submitter."))
+        if submitter.user is None:
+            raise ValidationError(
+                _("Player has no associated user account and cannot be assigned as a submitter.")
+            )
+
         result = models.PlayerSubmitter.objects.filter(
             player=request.user.player,
-            submitter_id=self.kwargs['pk'],
+            submitter=submitter.user,
         ).delete()
 
         if result[0] == 0:
-            raise ValidationError(_("The given user was not previously assigned as a submitter."))
+            raise ValidationError(_("The given user is not currently assigned as a submitter."))
 
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -221,22 +221,6 @@ class PlayerAwardSerializer(serializers.ModelSerializer):
         fields = ['id', 'player', 'type', 'date', 'description']
 
 
-class PlayerSubmitteeSerializer(serializers.ModelSerializer):
-    player = PlayerBasicSerializer(read_only=True)
-
-    class Meta:
-        model = models.PlayerSubmitter
-        fields = ['player']
-
-
-class PlayerSubmitterSerializer(serializers.ModelSerializer):
-    submitter = UserWithPlayerSerializer(read_only=True)
-
-    class Meta:
-        model = models.PlayerSubmitter
-        fields = ['submitter']
-
-
 # Scores
 
 class ScoreBasicSerializer(serializers.ModelSerializer):
