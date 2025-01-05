@@ -33,4 +33,12 @@ urlpatterns = [
          name='edit-submission-create'),
     path('submissions/edits/delete/<int:pk>', views.EditScoreSubmissionDestroyView.as_view(),
          name='edit-submission-delete'),
+    path('submissions/submittees/', views.PlayerSubmitteeListView.as_view(),
+         name='playersubmittee-list'),
+    path('submissions/submitters/', views.PlayerSubmitterListView.as_view(),
+         name='playersubmitter-list'),
+    path('submissions/submitters/add/<int:pk>/', views.PlayerSubmitterCreateView.as_view(),
+         name='playersubmitter-create'),
+    path('submissions/submitters/remove/<int:pk>/', views.PlayerSubmitterDestroyView.as_view(),
+         name='playersubmitter-delete')
 ]

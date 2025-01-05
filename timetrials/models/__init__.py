@@ -1,5 +1,5 @@
 from timetrials.models.categories import CategoryChoices
-from timetrials.models.players import Player, PlayerAward
+from timetrials.models.players import Player, PlayerAward, PlayerSubmitter
 from timetrials.models.regions import Region, RegionTypeChoices
 from timetrials.models.scores import (
   EditScoreSubmission, Score, ScoreSubmission, ScoreSubmissionStatus
