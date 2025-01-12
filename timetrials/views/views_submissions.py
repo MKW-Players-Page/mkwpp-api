@@ -5,6 +5,8 @@ from rest_framework import generics, permissions, status, views
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
+from drf_spectacular.utils import extend_schema
+
 from knox.auth import TokenAuthentication
 
 from timetrials import filters, models, serializers
@@ -50,6 +52,7 @@ class ScoreSubmissionListView(filters.FilterMixin, generics.ListAPIView):
 
 
 class ScoreSubmissionDestroyView(generics.DestroyAPIView):
+    serializer_class = serializers.ScoreSubmissionSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -97,6 +100,7 @@ class EditScoreSubmissionListView(filters.FilterMixin, generics.ListAPIView):
 
 
 class EditScoreSubmissionDestroyView(generics.DestroyAPIView):
+    serializer_class = serializers.EditScoreSubmissionSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -140,7 +144,8 @@ class PlayerSubmitterListView(generics.ListAPIView):
         )
 
 
-class PlayerSubmitterCreateView(views.APIView):
+@extend_schema(request=None, responses=None)
+class PlayerSubmitterCreateView(generics.GenericAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -167,7 +172,8 @@ class PlayerSubmitterCreateView(views.APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class PlayerSubmitterDestroyView(views.APIView):
+@extend_schema(request=None, responses=None)
+class PlayerSubmitterDestroyView(generics.GenericAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
