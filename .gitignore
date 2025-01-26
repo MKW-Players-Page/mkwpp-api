@@ -1,6 +1,10 @@
+# env
+.env*
+!.env.dev
+
 # python
-/__pycache__
 /.venv
+__pycache__
 pyrightconfig.json
 
 # vscode
