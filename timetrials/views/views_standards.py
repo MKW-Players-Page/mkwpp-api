@@ -16,4 +16,10 @@ class StandardListView(filters.FilterMixin, generics.ListAPIView):
     )
 
     def get_queryset(self):
-        return self.filter(models.Standard.objects.order_by('track', 'is_lap', 'level'))
+        return self.filter(
+            models.Standard.objects.order_by(
+                'track', 'is_lap', 'level', '-category'
+            ).distinct(
+                'track', 'is_lap', 'level'
+            )
+        )
