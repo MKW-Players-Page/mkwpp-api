@@ -247,10 +247,10 @@ class StandardAdmin(admin.ModelAdmin):
 @admin.register(models.StandardLevel)
 class StandardLevelAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('name', 'value', 'is_legacy')}),
+        (None, {'fields': ('name', 'code', 'value', 'is_legacy')}),
     )
-    list_display = ('id', 'name', 'value', 'is_legacy')
+    list_display = ('id', 'name', 'code', 'value', 'is_legacy')
     list_display_links = ('name',)
     list_filter = ('is_legacy',)
-    search_fields = ('name',)
+    search_fields = ('name', 'code')
     ordering = ('is_legacy', 'value')

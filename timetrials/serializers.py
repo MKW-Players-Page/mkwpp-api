@@ -393,19 +393,9 @@ class StandardSerializer(serializers.ModelSerializer):
 
 
 class StandardLevelSerializer(serializers.ModelSerializer):
-    standards = serializers.SerializerMethodField()
-
-    @extend_schema_field(StandardSerializer(many=True))
-    def get_standards(self, level: models.StandardLevel):
-        return StandardSerializer(
-            level.standards.order_by('category', 'track', 'is_lap'),
-            many=True,
-            context=self.context
-        ).data
-
     class Meta:
         model = models.StandardLevel
-        fields = ['id', 'name', 'value', 'is_legacy', 'standards']
+        fields = ['id', 'name', 'code', 'value']
 
 
 # Site Champion

@@ -1,12 +1,19 @@
-from django_filters import rest_framework as filters
-
 from rest_framework import generics
 
-from timetrials import models, serializers
+from timetrials import filters, models, serializers
 
 
-class StandardListView(generics.ListAPIView):
-    queryset = models.StandardLevel.objects.order_by('is_legacy', 'value')
+class StandardLevelListView(generics.ListAPIView):
+    queryset = models.StandardLevel.objects.order_by('value').filter(is_legacy=True)
     serializer_class = serializers.StandardLevelSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
-    filterset_fields = ['is_legacy']
+
+
+@filters.extend_schema_with_filters
+class StandardListView(filters.FilterMixin, generics.ListAPIView):
+    serializer_class = serializers.StandardSerializer
+    filter_fields = (
+        filters.CategoryFilter(),
+    )
+
+    def get_queryset(self):
+        return self.filter(models.Standard.objects.order_by('track', 'is_lap', 'level'))

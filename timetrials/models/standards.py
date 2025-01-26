@@ -8,6 +8,8 @@ from timetrials.models.tracks import Track
 class StandardLevel(models.Model):
     name = models.CharField(max_length=64)
 
+    code = models.CharField(max_length=2)
+
     value = models.IntegerField(
         help_text=_("Points awarded for achieving this standard level. The lower the better."),
     )
