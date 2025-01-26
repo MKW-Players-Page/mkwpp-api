@@ -90,7 +90,7 @@ def annotate_scores_standard(scores: QuerySet, category: models.CategoryChoices,
             ).order_by(
                 '-category',
                 'value'
-            ).values('pk')[:1]
+            ).values('level')[:1]
         )
     )
 
