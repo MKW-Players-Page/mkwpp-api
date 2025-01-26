@@ -11924,13 +11924,13 @@
     "model": "timetrials.player",
     "pk": 918,
     "fields": {
-        "user": 1,
+        "user": null,
         "name": "Leila FalB Massanova",
         "region": 272,
         "alias": "FalB",
         "joined_date": "2024-09-07",
         "last_activity": null,
-        "bio": "test"
+        "bio": null
     }
 },
 {
