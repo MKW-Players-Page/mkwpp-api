@@ -4068,5 +4068,181 @@
         "parent": 225,
         "is_ranked": false
     }
+},
+{
+    "model": "timetrials.region",
+    "pk": 375,
+    "fields": {
+        "type": "subnational",
+        "name": "Baden-Württemberg",
+        "code": "DEBW",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 376,
+    "fields": {
+        "type": "subnational",
+        "name": "Bayern",
+        "code": "DEBY",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 377,
+    "fields": {
+        "type": "subnational",
+        "name": "Berlin",
+        "code": "DEBE",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 378,
+    "fields": {
+        "type": "subnational",
+        "name": "Brandenburg",
+        "code": "DEBB",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 379,
+    "fields": {
+        "type": "subnational",
+        "name": "Bremen",
+        "code": "DEHB",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 380,
+    "fields": {
+        "type": "subnational",
+        "name": "Hamburg",
+        "code": "DEHH",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 381,
+    "fields": {
+        "type": "subnational",
+        "name": "Hessen",
+        "code": "DEHE",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 382,
+    "fields": {
+        "type": "subnational",
+        "name": "Mecklenburg-Vorpommern",
+        "code": "DEMV",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 383,
+    "fields": {
+        "type": "subnational",
+        "name": "Niedersachsen",
+        "code": "DENI",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 384,
+    "fields": {
+        "type": "subnational",
+        "name": "Nordrhein-Westfalen",
+        "code": "DENW",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 385,
+    "fields": {
+        "type": "subnational",
+        "name": "Rheinland-Pfalz",
+        "code": "DERP",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 386,
+    "fields": {
+        "type": "subnational",
+        "name": "Saarland",
+        "code": "DESL",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 387,
+    "fields": {
+        "type": "subnational",
+        "name": "Sachsen",
+        "code": "DESN",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 388,
+    "fields": {
+        "type": "subnational",
+        "name": "Sachsen-Anhalt",
+        "code": "DEST",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 389,
+    "fields": {
+        "type": "subnational",
+        "name": "Schleswig-Holstein",
+        "code": "DESH",
+        "parent": 91,
+        "is_ranked": false
+    }
+},
+{
+    "model": "timetrials.region",
+    "pk": 390,
+    "fields": {
+        "type": "subnational",
+        "name": "Thüringen",
+        "code": "DETH",
+        "parent": 91,
+        "is_ranked": false
+    }
 }
 ]
