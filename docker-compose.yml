@@ -8,7 +8,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - 5432:5432
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
@@ -17,7 +17,7 @@ services:
   cache:
     image: memcached:latest
     ports:
-      - "11211:11211"
+      - 11211:11211
     command:
       - "-m 128"
 
@@ -26,9 +26,9 @@ services:
     volumes:
       - smtp4dev:/smtp4dev
     ports:
-      - "5000:80"
-      - "25:25"
-      - "143:143"
+      - 5000:80
+      - 25:25
+      - 143:143
     environment:
       - ServerOptions__Urls=http://*:80
       - ServerOptions__HostName=smtp4dev
@@ -37,13 +37,11 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/mkwpp/src
+      - .:/usr/src/app/
     ports:
-      - "8000:8000"
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - 8000:8000
+    env_file:
+      - ./.env.dev
     depends_on:
       - db
       - cache

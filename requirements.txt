@@ -10,10 +10,12 @@ django-tinymce==4.1.0
 django-tree-queries==0.19.0
 djangorestframework==3.15.2
 drf-spectacular==0.27.2
+gunicorn==23.0.0
 inflection==0.5.1
 jsonschema==4.23.0
 jsonschema-specifications==2023.12.1
-psycopg2==2.9.9
+packaging==24.2
+psycopg2==2.9.10
 pymemcache==4.0.0
 PyYAML==6.0.2
 referencing==0.35.1

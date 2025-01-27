@@ -17,18 +17,25 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def int_or_default(value: str, default: int):
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return default
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-t71_6n)-@b6@k-6cd*!l@5voy)ew@&15+7izq-y*@!psnawb0s'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int_or_default(os.environ.get('DJANGO_DEBUG'), 0))
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(' ')
 
-FRONTEND_URL = 'http://localhost:3000'
+FRONTEND_URL = os.environ.get('DJANGO_FRONTEND_URL', 'http://localhost:3000')
 
 
 # Application definition
@@ -91,8 +98,10 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_NAME'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': 'db',
-        'PORT': 5432,
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': int_or_default(os.environ.get('POSTGRES_PORT'), 0),
+        'CONN_MAX_AGE': int_or_default(os.environ.get('DJANGO_DB_CONN_MAX_AGE', ''), 0),
+        'CONN_HEALTH_CHECKS': os.environ.get('DJANGO_DB_CONN_HEALTH_CHECKS', '') == 'true',
     }
 }
 
@@ -157,6 +166,23 @@ REST_FRAMEWORK = {
 }
 
 
+# HTTPS
+# https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/#https
+
+# SECURE_HSTS_SECONDS = int_or_default(os.environ.get('DJANGO_HSTS_SECONDS', ''), 0)
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = SECURE_HSTS_SECONDS != 0
+# SECURE_HSTS_PRELOAD = SECURE_HSTS_SECONDS != 0
+
+# SECURE_SSL_REDIRECT = os.environ.get('DJANGO_HTTPS', '').lower() == 'true'
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') if SECURE_SSL_REDIRECT else None
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+CSRF_COOKIE_SECURE = os.environ.get('DJANGO_HTTPS', '').lower() == 'true'
+SESSION_COOKIE_SECURE = os.environ.get('DJANGO_HTTPS', '').lower() == 'true'
+
+CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(' ')
+
+
 # CORS
 # https://github.com/adamchainz/django-cors-headers#configuration
 
@@ -208,7 +234,9 @@ TINYMCE_DEFAULT_CONFIG = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATIC_URL = '/static/'
 
 
 # Default primary key field type
