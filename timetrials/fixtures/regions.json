@@ -183,7 +183,7 @@
         "name": "Australia",
         "code": "AU",
         "parent": 5,
-        "is_ranked": true
+        "is_ranked": false
     }
 },
 {
@@ -2009,7 +2009,7 @@
         "name": "Portugal",
         "code": "PT",
         "parent": 260,
-        "is_ranked": false
+        "is_ranked": true
     }
 },
 {
@@ -2350,7 +2350,7 @@
         "name": "Spain",
         "code": "ES",
         "parent": 260,
-        "is_ranked": false
+        "is_ranked": true
     }
 },
 {
@@ -2823,7 +2823,7 @@
         "name": "Hiberia",
         "code": "ESPT",
         "parent": 3,
-        "is_ranked": true
+        "is_ranked": false
     }
 },
 {
