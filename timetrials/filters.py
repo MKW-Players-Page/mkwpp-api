@@ -1,3 +1,5 @@
+import datetime
+
 from django.db.models import QuerySet
 
 from drf_spectacular.utils import extend_schema, OpenApiParameter
@@ -366,6 +368,56 @@ class LapModeFilter(FilterBase):
             self.request_field,
             type=str,
             enum=self.choices.keys(),
+            required=self.required,
+            allow_blank=False,
+        )
+
+
+class DateFilter(FilterBase):
+
+    def __init__(self, *,
+                 field_name='date',
+                 request_field='date',
+                 auto=True,
+                 required=False):
+        """
+        Parameters
+        ----------
+        field_name : str
+            The name of the field on the model to apply the filter to
+        request_field : str
+            The name of the query param of the request to get the filter value from
+        auto : bool
+            Whether this filter should be applied by FilterMixin.filter
+        required : bool
+            Whether this filter is required to be present in the query params
+        """
+        super().__init__(
+            field_name=field_name,
+            request_field=request_field,
+            auto=auto,
+            required=required
+        )
+
+    def validate_filter_value(self, value: str):
+        try:
+            date = datetime.datetime.strptime(value, "%Y-%m-%d")
+
+        except ValueError:
+            self.validation_error('invalid_value', self.request_field, value)
+
+        return date
+
+    def filter(self, request, queryset: QuerySet) -> QuerySet:
+        return queryset.filter(**{
+            f'{self.field_name}__lte': self.get_filter_value(request)
+        })
+
+    @property
+    def open_api_param(self) -> OpenApiParameter:
+        return OpenApiParameter(
+            self.request_field,
+            type=datetime.date,
             required=self.required,
             allow_blank=False,
         )

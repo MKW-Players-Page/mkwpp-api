@@ -18,6 +18,7 @@ class PlayerScoreListView(filters.FilterMixin, generics.ListAPIView):
     filter_fields = (
         filters.CategoryFilter(),
         filters.LapModeFilter(required=False),
+        filters.DateFilter(),
         filters.RegionFilter(ranked_only=False, required=False, auto=False),
     )
 
@@ -79,6 +80,7 @@ class TrackScoreListView(filters.FilterMixin, generics.ListAPIView):
     filter_fields = (
         filters.CategoryFilter(),
         filters.LapModeFilter(),
+        filters.DateFilter(),
         filters.RegionFilter(auto=False, required=False),
         filters.OffsetFilter(),
         filters.LimitFilter(),
@@ -121,6 +123,7 @@ class TrackTopsListView(filters.FilterMixin, generics.ListAPIView):
     filter_fields = (
         filters.CategoryFilter(),
         filters.LapModeFilter(),
+        filters.DateFilter(),
         filters.RegionFilter(ranked_only=True, auto=False, required=False),
     )
 
@@ -167,11 +170,12 @@ class RecordListView(filters.FilterMixin, generics.ListAPIView):
     filter_fields = (
         filters.CategoryFilter(),
         filters.LapModeFilter(required=False),
+        filters.DateFilter(),
         filters.RegionFilter(auto=False, required=False),
     )
 
     def get_queryset(self):
-        records = self.filter(models.Score.objects.all()).order_by(
+        records = self.filter(models.Score.objects).order_by(
             'track', 'is_lap', 'value', 'date'
         ).distinct(
             'track', 'is_lap'
