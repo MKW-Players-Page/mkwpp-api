@@ -44,8 +44,8 @@ class AbstractScore(models.Model):
 
     is_lap = models.BooleanField(default=False, help_text=_("Off for 3lap, on for flap."))
 
-    player = models.ForeignKey(Player, related_name='%(class)s', on_delete=models.CASCADE)
-    track = models.ForeignKey(Track, related_name='%(class)s', on_delete=models.CASCADE)
+    player = models.ForeignKey(Player, related_name='%(class)ss', on_delete=models.CASCADE)
+    track = models.ForeignKey(Track, related_name='%(class)ss', on_delete=models.CASCADE)
 
     date = models.DateField(_("date set"), default=timezone.now)
 
@@ -91,7 +91,7 @@ class AbstractSubmission(models.Model):
 
     submitted_by = models.ForeignKey(
         User,
-        related_name='own_%(class)s',
+        related_name='own_%(class)ss',
         null=True,
         blank=True,
         on_delete=models.SET_NULL
@@ -103,7 +103,7 @@ class AbstractSubmission(models.Model):
 
     reviewed_by = models.ForeignKey(
         User,
-        related_name='reviewed_%(class)s',
+        related_name='reviewed_%(class)ss',
         null=True,
         blank=True,
         on_delete=models.SET_NULL
