@@ -1,10 +1,9 @@
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from django_cte import CTEManager
-
-from core.models import User
 
 from timetrials.models.categories import CategoryChoices
 from timetrials.models.players import Player
@@ -90,7 +89,7 @@ class AbstractSubmission(models.Model):
     )
 
     submitted_by = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         related_name='own_%(class)ss',
         null=True,
         blank=True,
@@ -102,7 +101,7 @@ class AbstractSubmission(models.Model):
     submitter_note = models.CharField(max_length=255, null=True, blank=True)
 
     reviewed_by = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         related_name='reviewed_%(class)ss',
         null=True,
         blank=True,

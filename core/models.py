@@ -4,6 +4,8 @@ from django.utils.translation import gettext_lazy as _
 
 from tinymce import models as tinymce_models
 
+from timetrials.models import Player
+
 
 class User(AbstractUser):
     # Make email required and add unique constraint
@@ -17,6 +19,14 @@ class User(AbstractUser):
     # Remove unwanted fields from AbstractUser
     first_name = None
     last_name = None
+
+    player = models.OneToOneField(
+        Player,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        help_text=_("Player profile associated with this user."),
+    )
 
     def get_full_name(self):
         """Return username."""

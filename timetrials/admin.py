@@ -49,7 +49,7 @@ class PlayerStatsInline(admin.TabularInline):
 @admin.register(models.Player)
 class PlayerAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('name', 'region', 'user')}),
+        (None, {'fields': ('name', 'region')}),
         ("Other info", {'fields': ('alias', 'bio')}),
         ("Important dates", {'fields': ('joined_date', 'last_activity')}),
     )

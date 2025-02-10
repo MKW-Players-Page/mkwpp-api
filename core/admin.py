@@ -23,6 +23,7 @@ class CoreUserAdmin(UserAdmin):
             },
         ),
         (_("Important dates"), {'fields': ('last_login', 'date_joined')}),
+        (_("Profile info"), {'fields': ('player',)})
     )
     add_fieldsets = (
         (
@@ -39,7 +40,7 @@ class CoreUserAdmin(UserAdmin):
             },
         ),
     )
-    list_display = ('username', 'email', 'is_verified', 'is_staff', 'is_superuser')
+    list_display = ('username', 'email', 'is_verified', 'is_staff', 'is_superuser', 'player')
     search_fields = ('username', 'email')
     ordering = ('username',)
 

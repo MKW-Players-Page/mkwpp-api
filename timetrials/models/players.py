@@ -1,20 +1,12 @@
+from django.conf import settings
 from django.db import models
 from django.utils.timezone import datetime
 from django.utils.translation import gettext_lazy as _
 
-from core.models import User
 from timetrials.models.regions import Region, RegionTypeChoices
 
 
 class Player(models.Model):
-    user = models.OneToOneField(
-        User,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        help_text=_("User account associated with this player profile.")
-    )
-
     name = models.CharField(max_length=64, unique=True)
 
     region = models.ForeignKey(
@@ -75,7 +67,7 @@ class PlayerSubmitter(models.Model):
     )
 
     submitter = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         related_name='submittees',
         on_delete=models.CASCADE,
         help_text=_("The user being granted permission to create submissions for the player."),
