@@ -16,6 +16,7 @@ COUNTRY_MAP = {
     "Bosnia": "Bosnia and Herzegovina",
 }
 
+
 def import_from_old_parser(data: str):
     """Import times using the CSV output of the old site parser."""
 

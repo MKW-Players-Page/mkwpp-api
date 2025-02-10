@@ -23,7 +23,7 @@ class MKWPPAdminSite(admin.AdminSite):
                     **context,
                 }
                 return func(request, context, *args, **kwargs)
-            
+
             self._custom_views[route] = wrapped
 
             return wrapped
