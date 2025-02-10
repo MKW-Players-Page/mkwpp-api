@@ -1,0 +1,13 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div>
+  <p>Import times using old site parser. Paste the output of the parser in the box below.</p>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <textarea name="data" rows="10" cols="50"></textarea>
+    <br>
+    <input type="submit">
+  </form>
+</div>
+{% endblock %}

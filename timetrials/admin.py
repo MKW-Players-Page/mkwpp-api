@@ -1,9 +1,11 @@
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
+from django.contrib import messages
+from django.shortcuts import render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from timetrials import models
+from timetrials import imports, models
 
 
 # Filters
@@ -254,3 +256,24 @@ class StandardLevelAdmin(admin.ModelAdmin):
     list_filter = ('is_legacy',)
     search_fields = ('name', 'code')
     ordering = ('is_legacy', 'value')
+
+
+# Custom views
+
+@admin.site.register_view(route='timeimport/', title="Time Importer")
+def timeimport(request, context, *args, **kwargs):
+    if request.method == 'POST':
+        if 'data' not in request.POST or len(request.POST['data']) == 0:
+            messages.add_message(request, messages.WARNING,
+                                 "Please paste the parser output into the text box below.")
+
+        else:
+            try:
+                imports.import_from_old_parser(request.POST['data'])
+                messages.add_message(request, messages.SUCCESS, "Imported times successfully.")
+
+            except ValueError as e:
+                messages.add_message(request, messages.ERROR,
+                                     f"An error occured during import. {e}")
+
+    return render(request, 'timetrials/admin/timeupdates.html', context)

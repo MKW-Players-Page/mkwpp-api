@@ -41,7 +41,7 @@ FRONTEND_URL = os.environ.get('DJANGO_FRONTEND_URL', 'http://localhost:3000')
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'mkwpp.admin.MKWPPAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
