@@ -12,6 +12,9 @@ from knox.auth import TokenAuthentication
 from timetrials import filters, models, serializers
 
 
+MAX_PENDING_SUBMISSIONS = 100
+
+
 def can_create_submission(user, player):
     if hasattr(user, 'player') and user.player == player:
         return True
@@ -27,6 +30,12 @@ class ScoreSubmissionCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         if not can_create_submission(self.request.user, serializer.validated_data['player']):
             raise ValidationError(_("You may not create submissions for this player."))
+
+        pending_submissions = self.request.user.own_scoresubmissions.filter(
+            status=models.ScoreSubmissionStatus.PENDING
+        )
+        if pending_submissions.count() >= MAX_PENDING_SUBMISSIONS:
+            raise ValidationError(_("You have reached the pending score submission limit."))
 
         return serializer.save(submitted_by=self.request.user)
 
@@ -75,6 +84,12 @@ class EditScoreSubmissionCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         if not can_create_submission(self.request.user, serializer.validated_data['score'].player):
             raise ValidationError(_("You may not create submissions for this player."))
+
+        pending_submissions = self.request.user.own_editscoresubmissions.filter(
+            status=models.ScoreSubmissionStatus.PENDING
+        )
+        if pending_submissions.count() >= MAX_PENDING_SUBMISSIONS:
+            raise ValidationError(_("You have reached the pending edit submission limit."))
 
         return serializer.save(submitted_by=self.request.user)
 
