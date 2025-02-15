@@ -6,6 +6,10 @@ from core import views
 urlpatterns = [
     path('login/', views.CoreLoginView.as_view(), name='login'),
     path('logout/', views.CoreLogoutView.as_view(), name='logout'),
+    path('password/change/', views.PasswordChangeView.as_view(), name='password-change'),
+    path('password/reset/request/', views.PasswordResetRequestView.as_view(),
+         name='password-reset-request'),
+    path('password/reset/', views.PasswordResetView.as_view(), name='password-reset'),
     path('signup/', views.CreateUserView.as_view(), name='create-user'),
     path('verify/', views.VerifyUserView.as_view(), name='verify-user'),
     path('user/', views.CurrentUserView.as_view(), name='current-user'),
