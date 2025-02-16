@@ -74,3 +74,16 @@ class PasswordResetView(TokenVerifiedView):
         user.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@extend_schema(responses={
+    204: OpenApiResponse(description=_("Provided token is valid.")),
+    401: OpenApiResponse(description=_("Provided token is invalid.")),
+})
+class PasswordResetVerifyView(TokenVerifiedView):
+    serializer_class = serializers.TokenSerializer
+
+    token_salt = TOKEN_SALT
+    token_max_age = TOKEN_MAX_AGE
+
+    verify_only = True

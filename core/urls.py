@@ -9,6 +9,8 @@ urlpatterns = [
     path('password/change/', views.PasswordChangeView.as_view(), name='password-change'),
     path('password/reset/request/', views.PasswordResetRequestView.as_view(),
          name='password-reset-request'),
+    path('password/reset/verify/', views.PasswordResetVerifyView.as_view(),
+         name='password-reset-verify'),
     path('password/reset/', views.PasswordResetView.as_view(), name='password-reset'),
     path('signup/', views.CreateUserView.as_view(), name='create-user'),
     path('verify/', views.VerifyUserView.as_view(), name='verify-user'),

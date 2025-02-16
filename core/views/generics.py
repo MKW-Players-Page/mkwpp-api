@@ -68,6 +68,8 @@ class TokenVerifiedView(views.APIView):
 
     serializer_class = serializers.TokenSerializer
 
+    verify_only = False
+
     def get_token(self, data) -> str:
         return data['token']
 
@@ -92,8 +94,9 @@ class TokenVerifiedView(views.APIView):
             if saved_token.used:
                 raise exceptions.AuthenticationFailed(self.USED_TOKEN_MESSAGE)
 
-            saved_token.used = True
-            saved_token.save()
+            if not self.verify_only:
+                saved_token.used = True
+                saved_token.save()
 
         except Token.DoesNotExist:
             raise exceptions.AuthenticationFailed(self.BAD_TOKEN_MESSAGE)
@@ -117,5 +120,8 @@ class TokenVerifiedView(views.APIView):
         token = self.get_token(serializer.validated_data)
         username = self.validate_token(token)
         user = self.get_user(username)
+
+        if self.verify_only:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
         return self.on_success(user, serializer.validated_data)
