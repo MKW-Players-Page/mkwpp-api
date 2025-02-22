@@ -8,6 +8,8 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 
 from core.models import BlogPost, User
 
+from timetrials.models import Player
+
 
 # Fields
 
@@ -77,6 +79,18 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True},
         }
+
+
+# Profiles
+
+class ProfileCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Player
+        fields = ['id', 'name', 'region', 'alias']
+
+
+class ProfileClaimSerializer(serializers.Serializer):
+    player = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Player.objects.all())
 
 
 # Blog posts
