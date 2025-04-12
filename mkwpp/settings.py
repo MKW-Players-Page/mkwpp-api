@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'knox',
     'tinymce',
     'multiselectfield',
+    'django_celery_beat',
     'django_celery_results',
     'core',
     'timetrials',
@@ -216,7 +217,7 @@ DEFAULT_FROM_EMAIL = "noreply@mariokart64.com"
 # Celery
 # https://docs.celeryq.dev/en/latest/userguide/configuration.html#configuration
 
-CELERY_RESULTS_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'redis://cache:6379')
 
 
