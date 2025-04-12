@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.timezone import datetime
 from django.utils.translation import gettext_lazy as _
 
-from timetrials.models.regions import Region, RegionTypeChoices
+from timetrials.models.regions import Region
 
 
 class Player(models.Model):
@@ -12,7 +12,6 @@ class Player(models.Model):
     region = models.ForeignKey(
         Region,
         related_name='players',
-        limit_choices_to={'type__in': (RegionTypeChoices.COUNTRY, RegionTypeChoices.SUBNATIONAL)},
         null=True,
         blank=False,
         on_delete=models.SET_NULL

@@ -32,9 +32,25 @@ class RecursiveRegionFilter(admin.SimpleListFilter):
 
 # Model admins
 
+@admin.register(models.PlayerStatsGroup)
+class PlayerStatsGroupAdmin(admin.ModelAdmin):
+    fields = ('created_at', 'completed')
+    readonly_fields = ('created_at', 'completed')
+    list_display = ('id', 'created_at', 'completed')
+
+    def get_deleted_objects(self, objs, request):
+        return objs, dict(), set(), list()
+
+
 class PlayerStatsInline(admin.TabularInline):
     model = models.PlayerStats
     classes = ['collapse']
+
+    def get_queryset(self, request):
+        group = models.PlayerStatsGroup.objects.filter(
+            completed=True
+        ).order_by('-created_at').first()
+        return super().get_queryset(request).filter(group=group)
 
     def has_add_permission(self, *args, **kwargs):
         return False
