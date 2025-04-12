@@ -5,11 +5,9 @@ volumes:
 
 services:
   cache:
-    image: memcached:latest
-    expose:
-      - 11211:11211
-    command:
-      - "-m 128"
+    image: redis:7.4.2
+    ports:
+      - 6379:6379
 
   app:
     build:

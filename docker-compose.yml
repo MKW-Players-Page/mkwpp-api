@@ -15,11 +15,9 @@ services:
       - POSTGRES_PASSWORD=postgres
 
   cache:
-    image: memcached:latest
+    image: redis:7.4.2
     ports:
-      - 11211:11211
-    command:
-      - "-m 128"
+      - 6379:6379
 
   smtp:
     image: rnwood/smtp4dev:latest

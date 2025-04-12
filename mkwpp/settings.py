@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'knox',
     'tinymce',
     'multiselectfield',
+    'django_celery_results',
     'core',
     'timetrials',
     'drf_spectacular',
@@ -111,8 +112,8 @@ DATABASES = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': 'cache:11211',
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://cache:6379',
     }
 }
 
@@ -210,6 +211,13 @@ SPECTACULAR_SETTINGS = {
 EMAIL_HOST = 'smtp'
 EMAIL_PORT = 25
 DEFAULT_FROM_EMAIL = "noreply@mariokart64.com"
+
+
+# Celery
+# https://docs.celeryq.dev/en/latest/userguide/configuration.html#configuration
+
+CELERY_RESULTS_BACKEND = 'django-db'
+CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'redis://cache:6379')
 
 
 # TinyMCE

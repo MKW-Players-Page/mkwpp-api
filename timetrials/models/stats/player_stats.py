@@ -79,7 +79,7 @@ class PlayerStats(models.Model):
         verbose_name_plural = _("player stats")
 
 
-def generate_all_player_stats():
+def generate_all_player_stats(group=None):
     """Recalculate player stats for all players"""
 
     track_ids = tuple(Track.objects.values_list('pk', flat=True))
@@ -175,7 +175,8 @@ def generate_all_player_stats():
                     record_bucket = mapped_records[score['track']][score['is_lap']][category]
                     record_bucket[region.id] = score['value']
 
-    group = PlayerStatsGroup.objects.create()
+    if group is None:
+        group = PlayerStatsGroup.objects.create()
 
     stats_objects = list()
 
