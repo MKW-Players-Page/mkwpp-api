@@ -6,5 +6,5 @@ from timetrials.models.scores import (
 )
 from timetrials.models.sitechamp import SiteChampion
 from timetrials.models.standards import Standard, StandardLevel
-from timetrials.models.stats import PlayerStats, RegionStats
+from timetrials.models.stats import PlayerStats, PlayerStatsGroup, RegionStats
 from timetrials.models.tracks import Track, TrackCup

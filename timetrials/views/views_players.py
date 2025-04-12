@@ -76,8 +76,11 @@ class PlayerStatsRetrieveView(filters.FilterMixin, generics.RetrieveAPIView):
     )
 
     def get_queryset(self):
+        group = models.PlayerStatsGroup.objects.filter(
+            completed=True
+        ).order_by('-created_at').first()
         # Temporarily hardcode rank to 1
-        return self.filter(models.PlayerStats.objects.all()).annotate(rank=Value(1))
+        return self.filter(models.PlayerStats.objects.filter(group=group)).annotate(rank=Value(1))
 
     def get_object(self):
         return get_object_or_404(self.get_queryset(), player=self.kwargs['pk'])
