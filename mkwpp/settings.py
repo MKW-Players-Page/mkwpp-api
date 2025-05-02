@@ -211,9 +211,12 @@ SPECTACULAR_SETTINGS = {
 # Email
 # https://docs.djangoproject.com/en/5.1/ref/settings/#email
 
-EMAIL_HOST = 'smtp'
-EMAIL_PORT = 25
-DEFAULT_FROM_EMAIL = "noreply@mariokart64.com"
+EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST', 'smtp')
+EMAIL_PORT = int_or_default(os.environ.get('DJANGO_EMAIL_PORT', ''), 25)
+EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = os.environ.get('DJANGO_EMAIL_USE_TLS', '').lower() == 'true'
+DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'default@localhost')
 
 
 # Celery

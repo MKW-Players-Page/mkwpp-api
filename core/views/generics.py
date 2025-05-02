@@ -1,8 +1,7 @@
-from datetime import datetime
-
 from django.conf import settings
 from django.core import signing
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import exceptions, status, views
@@ -22,7 +21,7 @@ class TokenGeneratorView(views.APIView):
             raise NotImplementedError("View must declare 'token_salt' and 'token_max_age'.")
 
         token = signing.dumps(obj=user.get_username(), salt=self.token_salt)
-        expiry = datetime.now() + self.token_max_age
+        expiry = timezone.now() + self.token_max_age
 
         Token.objects.create(
             token=token,
