@@ -55,15 +55,6 @@ class AbstractScore(models.Model):
 
     admin_note = models.CharField(max_length=255, null=True, blank=True)
 
-    class Meta:
-        abstract = True
-
-
-class Score(AbstractScore):
-    objects = CTEManager()
-
-    initial_rank = models.IntegerField(null=True, blank=True)
-
     @property
     def overall_rank(self) -> int:
         """Calculate the overall rank of this score."""
@@ -73,6 +64,15 @@ class Score(AbstractScore):
             category__lte=self.category,
             value__lt=self.value,
         ).order_by('player', 'value').distinct('player').count() + 1
+
+    class Meta:
+        abstract = True
+
+
+class Score(AbstractScore):
+    objects = CTEManager()
+
+    initial_rank = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return value_to_string(self.value)

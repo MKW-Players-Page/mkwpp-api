@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from timetrials import imports, models
+from timetrials import imports, models, queries
 
 
 # Filters
@@ -144,8 +144,8 @@ class ScoreAdmin(admin.ModelAdmin):
 
 
 class SubmissionAdmin(admin.ModelAdmin):
-    submission_add_fieldset = (None, {'fields': ('submitter_note',)})
-    submission_change_fieldset = (None, {'fields': (
+    submission_add_fieldset = ("Review", {'fields': ('submitter_note',)})
+    submission_change_fieldset = ("Review", {'fields': (
         'status', 'submitted_by', 'submitted_at', 'submitter_note', 'reviewed_by', 'reviewed_at',
         'reviewer_note'
     )})
@@ -156,8 +156,8 @@ class SubmissionAdmin(admin.ModelAdmin):
 
     def get_fieldsets(self, request, obj=None):
         if obj is None:
-            return (self.submission_add_fieldset, *self.fieldsets)
-        return (self.submission_change_fieldset, *self.fieldsets)
+            return (*self.fieldsets, self.submission_add_fieldset)
+        return (*self.fieldsets, self.submission_change_fieldset)
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None:
@@ -207,6 +207,40 @@ class ScoreSubmissionAdmin(SubmissionAdmin):
     list_display_links = ('__str__',)
     list_filter = ('status', 'track', 'category', 'is_lap')
     search_fields = ('player__name', 'player__alias')
+
+    def change_view(self, request, object_id=None, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        instance_set = self.model.objects.filter(id=object_id)
+        if instance_set.exists():
+            category = instance_set.values_list('category', flat=True)[0]
+            instance_set = queries.annotate_scores_standard(instance_set, category, legacy=True)
+            instance_set = queries.annotate_scores_record_ratio(instance_set, category)
+            instance = instance_set.first()
+            instance.standard = models.StandardLevel.objects.get(id=instance.standard)
+            instance.record_ratio *= 100
+
+            current_score_set = models.Score.objects.filter(
+                player=instance.player,
+                track=instance.track,
+                is_lap=instance.is_lap,
+                category__lte=instance.category,
+            ).order_by('value')[:1]
+            current_score_set = queries.annotate_scores_standard(
+                current_score_set, category, legacy=True)
+            current_score_set = queries.annotate_scores_record_ratio(current_score_set, category)
+            current_score = current_score_set.first()
+            current_score.standard = models.StandardLevel.objects.get(id=current_score.standard)
+            current_score.record_ratio *= 100
+
+            extra_context['submission'] = instance
+            extra_context['current_score'] = current_score
+            extra_context['difference'] = {
+                'value': instance.value - current_score.value,
+                'overall_rank': instance.overall_rank - current_score.overall_rank,
+                'standard': instance.standard.value - current_score.standard.value,
+                'record_ratio': instance.record_ratio - current_score.record_ratio,
+            } if current_score else None
+        return super().change_view(request, object_id, form_url, extra_context)
 
 
 @admin.register(models.EditScoreSubmission)

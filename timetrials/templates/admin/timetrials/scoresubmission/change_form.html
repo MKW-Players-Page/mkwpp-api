@@ -1,0 +1,69 @@
+{% extends "admin/change_form.html" %}
+{% load admin_urls score_helpers %}
+
+{% block content_title %}<h1>Review submission</h1>{% endblock %}
+{% block content_subtitle %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+{% if submission %}
+  <div class="module inline-related tabular">
+    <fieldset class="module aligned">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>New</th>
+            <th>Change</th>
+            <th>Current</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Time</b></td>
+            <td>{{ submission.value|format_score }}</td>
+            <td>
+              {% if difference %}{{ difference.value|format_score_diff }}{% else %}N/A{% endif %}
+            </td>
+            <td>
+              {% if current_score %}{{ current_score.value|format_score }}{% else %}N/A{% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td><b>Rank</b></td>
+            <td>{{ submission.overall_rank }}</td>
+            <td>
+              {% if difference %}{{ difference.overall_rank }}{% else %}N/A{% endif %}
+            </td>
+            <td>
+              {% if current_score %}{{ current_score.overall_rank }}{% else %}N/A{% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td><b>Standard</b></td>
+            <td>{{ submission.standard.name }}</td>
+            <td>
+              {% if difference %}{{ difference.standard }}{% else %}N/A{% endif %}
+            </td>
+            <td>
+              {% if current_score %}{{ current_score.standard.name }}{% else %}N/A{% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td><b>PR:WR</b></td>
+            <td>{{ submission.record_ratio|floatformat:2 }}%</td>
+            <td>
+              {% if difference %}{{ difference.record_ratio|floatformat:2 }}%{% else %}N/A{% endif %}
+            </td>
+            <td>
+              {% if current_score %}{{ current_score.record_ratio|floatformat:2 }}%{% else %}N/A{% endif %}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+  </div>
+{% endif %}
+{{ block.super }}
+</div>
+{% endblock %}
